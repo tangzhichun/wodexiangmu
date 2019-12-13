@@ -1,0 +1,32 @@
+section {
+  padding: 15px;
+  counter-increment: c1 1;
+  counter-reset: c2;
+}
+h1 {
+  padding: 10px 0;
+}
+h1:before {
+  content: counter(c1) "、";
+}
+h2 {
+  padding: 6px 0;
+  counter-increment: c2 1;
+  counter-reset: c3;
+}
+h2:before {
+  content: counter(c1) "." counter(c2) "、";
+}
+h3 {
+  padding: 4px 0;
+  counter-increment: c3 1;
+}
+h3:before {
+  content: counter(c1) "." counter(c2) "." counter(c3) "、";
+}
+.el-col {
+  padding: 3px;
+}
+.el-col span {
+  font-size: 12px;
+}

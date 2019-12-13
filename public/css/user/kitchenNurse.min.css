@@ -1,0 +1,37 @@
+.kitchenNurse .el-table__row.expanded .el-table__expand-column .el-table__expand-icon {
+  display: block;
+}
+.kitchenNurse .el-table__expanded-cell {
+  padding: 0;
+}
+.kitchenNurse .el-table__expanded-cell .demo-table-expand {
+  padding-left: 120px;
+  padding-bottom: 12px;
+}
+.kitchenNurse .el-table__expanded-cell .demo-table-expand .el-form-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 30px;
+  margin: 0;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-flex-wrap: nowrap;
+      -ms-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+}
+.kitchenNurse .el-table__expanded-cell .demo-table-expand .el-form-item > div {
+  height: 30px;
+  line-height: 30px;
+}
+.kitchenNurse .el-table__expanded-cell .demo-table-expand .el-form-item .el-form-item__label {
+  width: 80px;
+  min-width: 80px;
+  padding-right: 20px;
+  line-height: 30px;
+  color: #C0C4CC;
+  box-sizing: border-box;
+}

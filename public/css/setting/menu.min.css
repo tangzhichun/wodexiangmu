@@ -1,0 +1,153 @@
+#app .menu {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100%;
+}
+#app .menu .el-date-editor .el-range-input {
+  width: 38%;
+}
+#app .menu .menu-side {
+  height: 100%;
+  width: 264px;
+}
+#app .menu .menu-side .scope-name {
+  height: 50px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+  padding: 0 20px;
+}
+#app .menu .menu-side .scope-name .icon {
+  background: #F4F7FA;
+  color: #aeaeae;
+  border-radius: 50%;
+}
+#app .menu .menu-side .scope-name.active .icon {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+  background: #ebf5fe;
+  color: #94ccfe;
+}
+#app .menu .menu-side .menu-list {
+  padding: 5px 0;
+}
+#app .menu .menu-side .menu-list .menu-node {
+  clear: both;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 20px 0 40px;
+  cursor: pointer;
+}
+#app .menu .menu-side .menu-list .menu-node.active {
+  background: #f9fafc;
+}
+#app .menu .menu-side .menu-list .menu-node.active .menu-operations {
+  display: block;
+}
+#app .menu .menu-side .menu-list .menu-node .menu-name {
+  float: left;
+}
+#app .menu .menu-side .menu-list .menu-node .menu-operations {
+  float: right;
+  display: none;
+}
+#app .menu .menu-side .menu-list .menu-node .menu-operations i {
+  cursor: pointer;
+}
+#app .menu .menu-side .menu-list .menu-node .menu-operations i:hover {
+  color: #008bff;
+}
+#app .menu .menu-side .menu-list .no-result {
+  text-align: center;
+}
+#app .menu .menu-main {
+  width: 100%;
+  height: 100%;
+  padding-left: 280px;
+  box-sizing: border-box;
+  margin-left: -264px;
+}
+#app .menu .menu-main > .el-card > .el-card__body > .el-tabs {
+  height: 100%;
+}
+#app .menu .menu-main > .el-card .column {
+  padding-bottom: 32px;
+}
+#app .menu .menu-main > .el-card .column > .title {
+  font-size: 20px;
+  padding-left: 40px;
+}
+#app .menu .menu-main > .el-card .column > .el-row {
+  padding: 32px 0 0;
+}
+#app .menu .menu-main > .el-card .column > .el-row > .el-col {
+  font-size: 14px;
+  height: 32px;
+}
+#app .menu .menu-main > .el-card .column > .el-row > .el-col.el-col-2 > div {
+  text-align: right;
+  line-height: 32px;
+}
+#app .menu .menu-main > .el-card .column > .el-row > .el-col.el-col-2 > div > i {
+  color: #F56C6C;
+  padding-right: 5px;
+}
+#app .menu .menu-main > .el-card .column > .el-row > .el-col.el-col-4 {
+  white-space: nowrap;
+}
+#app .menu .menu-main > .el-card .column > .el-row > .el-col.text > div {
+  text-align: right;
+  line-height: 32px;
+}
+#app .menu .menu-main > .el-card .column > .el-row > .el-col.text > div > i {
+  color: #F56C6C;
+  padding-right: 5px;
+}
+#app .menu .menu-main > .el-card .column > .el-row > .el-col > .el-radio + .el-radio {
+  margin-left: 3px;
+  /* text-align: center; */
+  line-height: 32px;
+}
+#app .menu .menu-main > .el-card .btn-add {
+  margin: 20px 0 0 20px;
+}
+#app .menu .filter-ul {
+  height: calc(100% - 52px);
+  overflow: auto;
+  padding-right: 8px;
+}
+#app .menu .li-employees {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  cursor: pointer;
+  margin: 0 20px;
+  padding: 6px 0;
+  border-bottom: 1px solid #F4F7FA;
+}
+#app .menu .li-employees:hover {
+  background: #F4F7FA;
+}
+#app .menu .body100 .el-card__body {
+  height: 100%;
+}
+#app .menu .body100 .el-card__body .el-table__row {
+  cursor: pointer;
+}

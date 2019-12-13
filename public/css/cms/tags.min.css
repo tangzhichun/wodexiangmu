@@ -1,0 +1,255 @@
+.tag-app {
+  background: #fff;
+  height: 100%;
+  padding: 0 20px;
+}
+.tag-app .avatar-uploader {
+  max-height: 100%;
+}
+.tag-app .el-upload {
+  max-height: 100%;
+  height: 120px;
+  line-height: 120px;
+  background: #e0eaf4;
+}
+.tag-app .el-upload img {
+  height: 120px;
+}
+.tag-app .have .el-upload {
+  background: transparent;
+}
+.tag-app .height-el-upload144 .el-upload {
+  max-height: 100%;
+  height: 144px;
+}
+.tag-app .avatar-uploader .el-upload {
+  width: 100%;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.tag-app .avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+.tag-app .avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 100%;
+  text-align: center;
+}
+.tag-app .header {
+  height: 60px;
+  box-sizing: border-box;
+  font-size: 16px;
+  border-bottom: 1px solid #ebeef5;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.tag-app .header .categoriesTab {
+  position: relative;
+  color: #909399;
+  margin-right: 15px;
+  cursor: pointer;
+}
+.tag-app .header .active {
+  color: #008bff;
+}
+.tag-app .header .activeLine {
+  position: absolute;
+  bottom: -18px;
+  border-radius: 1px;
+  height: 2px;
+  background: #008bff;
+  width: 100%;
+}
+.tag-app .header .categoriesTab:hover {
+  color: #008bff;
+}
+.tag-app .tag-box {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: calc(100% - 67px);
+}
+.tag-app .tag-box > div {
+  padding: 0 20px;
+  height: 100%;
+  border-right: 1px solid #ebeef5;
+  box-sizing: border-box;
+}
+.tag-app .tag-box .tag-group {
+  width: 306px;
+  padding-left: 0;
+}
+.tag-app .tag-box .tag-list {
+  width: 400px;
+}
+.tag-app .tag-box .article {
+  padding-right: 0;
+  width: calc(100% - 665px);
+  border-right: none;
+}
+.tag-app .tag-box .tag-inner-header {
+  height: 60px;
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.tag-app .tag-box .tag-inner-header .icon-plus {
+  box-sizing: border-box;
+  border: 1px solid #c7e2ff;
+  border-radius: 2px;
+  line-height: 30px;
+  text-align: center;
+  width: 48px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 10px;
+  color: #409eff  ;
+}
+.tag-app .tag-box .tag-inner-body {
+  box-sizing: border-box;
+  height: calc(100% - 60px);
+  width: calc(100% + 20px);
+  padding-right: 20px;
+  overflow-y: auto;
+}
+.tag-app .tag-box .tag-inner-body .tag-inner-body-li {
+  border-radius: 4px;
+  padding: 0 16px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 48px;
+  font-size: 14px;
+  color: #303133;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  background: #f9fafc;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+.tag-app .tag-box .tag-inner-body .tag-inner-body-li.active {
+  background: #e0eaf4;
+}
+.tag-app .tag-box .tag-inner-body .tag-inner-body-li:hover {
+  background: #e0eaf4;
+}
+.tag-app .tag-box .tag-inner-body-li-editBtn {
+  padding: 16px ;
+  margin-right: -16px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.tag-app .tag-box .tag-inner-body-li-editBtn span:hover {
+  color: #3a8ee6;
+}
+.tag-app .tag-box .tag-inner-body-liEdit {
+  padding: 20px 22px ;
+  background: #f9fafc;
+  border-radius: 4px;
+  margin: 0;
+  margin-bottom: 20px;
+}
+.tag-app .tag-box .tag-inner-body-liEdit > .dsp-form_body {
+  padding: 0;
+  margin: 0;
+}
+.tag-app .tag-box .tag-inner-body-liEdit > .dsp-form_body .el-row {
+  padding-top: 0;
+  padding-bottom: 20px;
+}
+.tag-app .tag-box .tag-inner-body-liEdit > .dsp-form_body .el-row:last-child {
+  padding: 0;
+}
+.tag-app .tag-box .tag-inner-body-liEdit > div {
+  margin: 20px 0;
+}
+.tag-app .tag-box .tag-inner-body-liEdit.tag-inner-body-liEdit-tagGroup > div {
+  margin: 10px 0;
+}
+.tag-app .tag-box .tag-inner-article-center {
+  min-height: calc(100% - 120px);
+  max-height: calc(100% - 120px);
+  overflow-y: auto;
+}
+.tag-app .tag-box .tag-inner-article-center .tag-inner-article-center-cell {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  height: 130px;
+  padding: 20px 30px 20px 16px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.tag-app .tag-box .tag-inner-article-center .tag-inner-article-center-cell .requestarticle-left {
+  width: 140px;
+  height: 90px;
+  margin: 0 20px;
+}
+.tag-app .tag-box .tag-inner-article-center .tag-inner-article-center-cell .requestarticle-right {
+  margin-left: auto;
+  cursor: pointer;
+}
+.tag-app .tag-box .tag-inner-article-center .tag-inner-article-center-cell:nth-child(2n) {
+  background: #f9fafc;
+  border-radius: 2px;
+}
+.tag-app .tag-box .tag-inner-article-bottom {
+  line-height: 60px;
+  height: 60px;
+  box-sizing: border-box;
+}
+.tag-app .tag-box .tag-inner-article-bottom .el-pagination {
+  padding: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 60px;
+}
+.tag-app .tag-box .tag-inner-article-bottom .el-pagination .el-pager {
+  height: 28px;
+}
+.tag-app .dragenter {
+  border: 1px dotted #ccc;
+}

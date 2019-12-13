@@ -1,0 +1,78 @@
+.dealerUser {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  background: #f5f7fa;
+}
+.dealerUser .dealerUser-aside {
+  width: 240px;
+  background: #fff;
+}
+.dealerUser .dealerUser-list {
+  margin-left: 20px;
+  background: #fff;
+  padding: 0 20px;
+  box-sizing: border-box;
+  width: calc(100% - 260px);
+}
+.dealerUser .edit-cell span {
+  cursor: pointer;
+}
+.dealerUser .edit-cell span:hover {
+  color: #008bff;
+}
+.dealerUser .renzheng {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.dealerUser .renzheng .img1 {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.add-dialog-form .add-dialog-form-cell {
+  margin: 20px 0;
+}
+.box-card-f-l .el-card__body {
+  overflow: hidden;
+}
+.box-card-f-l .filter {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 10px 20px;
+}
+.box-card-f-l .ul-box {
+  overflow-y: auto;
+  height: calc(100% - 52px);
+}
+.box-card-f-l .list-li {
+  padding: 0 20px;
+  height: 42px;
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+}
+.box-card-f-l .list-li.active {
+  background: #f5f7fa;
+}

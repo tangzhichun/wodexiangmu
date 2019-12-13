@@ -1,0 +1,110 @@
+.stylist {
+  font-family: MicrosoftYaHei;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+}
+.stylist div {
+  box-sizing: border-box;
+}
+.stylist > div {
+  min-width: 50%;
+  max-width: 50%;
+  max-height: 100%;
+  min-height: 100%;
+  height: 100%;
+  padding: 0 30px 0 10px;
+  /*推荐名单列表*/
+  /*认证设计师名单*/
+}
+.stylist > div .header {
+  height: 60px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  color: #909399;
+  line-height: 60px;
+  font-size: 14px;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.stylist > div .bodyLeft {
+  margin-right: -30px;
+  padding-right: 30px;
+  max-height: calc(100% - 60px);
+  overflow-y: auto;
+}
+.stylist > div .bodyRight {
+  max-height: calc(100% - 110px);
+  min-height: calc(100% - 110px);
+  overflow-y: auto;
+}
+.stylist > div .cms-table-table-pagination .el-pager,
+.stylist > div .cms-table-table-pagination .btn-prev,
+.stylist > div .cms-table-table-pagination .btn-next {
+  float: right;
+}
+.stylist > div .body-li {
+  -moz-user-select: none;
+  /**ff*/
+  -webkit-user-select: none;
+  /**chrome、safari、360极速*/
+  margin-bottom: 20px;
+  background: #f9fafc;
+  height: 48px;
+  max-height: 48px;
+  line-height: 48px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 14px;
+  color: #606266;
+  cursor: pointer;
+}
+.stylist > div .body-li > div {
+  max-height: 48px;
+}
+.stylist > div .body-li .body-li-index {
+  width: 50px;
+  padding-left: 12px;
+}
+.stylist > div .body-li .body-li-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+}
+.stylist > div .body-li .body-li-name {
+  padding-left: 10px;
+  min-width: 100px;
+  width: 10%;
+}
+.stylist > div .body-li .body-li-addr {
+  min-width: 110px;
+  width: 30%;
+}
+.stylist > div .body-li .body-li-move {
+  margin-left: auto;
+  font-size: 20px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+.stylist > div .body-li-target {
+  border: 1px dotted #ccc;
+}
+.stylist .stylist-left {
+  border-right: 1px solid #EBEEF5 ;
+}
+.stylist .stylist-right {
+  padding-left: 30px;
+  padding-right: 10px;
+}

@@ -1,0 +1,164 @@
+#app {
+  width: 100%;
+  height: 100%;
+}
+.login {
+  font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  width: 100%;
+  height: 100%;
+  min-width: 1366px;
+  min-height: 600px;
+  position: relative;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background: #666666;
+}
+.login .img-box {
+  width: 900px;
+  height: 500px;
+  min-width: 225px;
+  min-height: 386px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+  position: absolute;
+}
+.login .img-box .img-box-title {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 36px;
+  color: #fff;
+  z-index: 10;
+}
+.login .img-box .img-box-left {
+  position: absolute;
+  left: 0;
+  width: 600px;
+  height: 100%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/images/bg_login.png");
+}
+.login .img-box .login-box {
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  background: #fff;
+  box-sizing: border-box;
+}
+.login .img-box .login-box .password-box,
+.login .img-box .login-box .mobile-box {
+  position: relative;
+  min-height: 40px;
+  margin: 6% auto;
+}
+.login .img-box .login-box .password-box .el-input,
+.login .img-box .login-box .mobile-box .el-input {
+  position: relative;
+}
+.login .img-box .login-box .password-box .el-input__inner,
+.login .img-box .login-box .mobile-box .el-input__inner {
+  min-height: 40px;
+  padding-left: 30px;
+}
+.login .img-box .login-box .passwordIf {
+  margin: 10px 0 20px;
+  height: 14px;
+  box-sizing: border-box;
+}
+.login .img-box .login-box .passwordIf .new-password {
+  float: right;
+  color: #333;
+  font-size: 14px;
+}
+.login .img-box .login-box .passwordIf .el-checkbox {
+  float: left;
+}
+.login .img-box .login-box .passwordIf .el-checkbox-group {
+  display: inline-block;
+}
+.login .img-box .login-box .passwordIf .el-checkbox {
+  color: #333;
+}
+.clickValidation {
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+  height: 35px;
+  line-height: 35px;
+  box-sizing: border-box;
+  float: right;
+  width: 40%;
+  background: #ebf5fe;
+  border-radius: 4px;
+  color: #008bff;
+  border: 1px solid #008bff;
+}
+.validation-box {
+  margin: 6% auto;
+  height: 35px;
+  line-height: 35px;
+}
+.validation-box .el-input {
+  height: 35px;
+}
+.validation-box .el-input__inner {
+  height: 35px;
+}
+.validation {
+  width: 55%;
+  position: relative;
+  top: -1.99999998px;
+  height: 35px;
+  float: left;
+}
+.validation input {
+  padding: 0 0 0 30px;
+}
+.logo {
+  position: absolute;
+  top: 40px;
+  left: 60px;
+}
+.logo img {
+  min-width: 66px;
+  min-height: 22px;
+}
+.from {
+  overflow: hidden;
+  height: 100%;
+  width: 80%;
+  margin: 0 auto;
+}
+.login-title {
+  font-size: 32px;
+  color: #333;
+  margin: 12% 0 12%;
+  text-align: center;
+  min-width: 174px;
+}
+.xintitle {
+  height: 20px;
+  text-align: center;
+  color: #F56C6C;
+  margin: 20px 0;
+}
+.el-button .el-button--primary {
+  border: none;
+  width: 100%;
+}
+.el-button .el-button--primary span {
+  display: inline-block;
+  width: 100%;
+}
+.no-border {
+  border: none !important;
+}
+.el-button {
+  width: 100%;
+}

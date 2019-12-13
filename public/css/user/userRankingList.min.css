@@ -1,0 +1,66 @@
+.height100 {
+  height: 100%;
+  min-height: 100%;
+}
+.list-box {
+  background: #fff;
+  height: 100%;
+  min-height: 100%;
+  padding: 0 20px;
+}
+.list-box .header {
+  font-size: 24px;
+  color: #303133;
+  height: 66px;
+  box-sizing: border-box;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  line-height: 64px;
+  border-bottom: 2px solid #EBEEF5;
+}
+.list-box .header .el-icon-el-icon-question {
+  margin-left: auto;
+  color: #e5e5e5;
+  cursor: pointer;
+}
+.list-box .header .el-icon-el-icon-question:hover {
+  color: #008bff;
+}
+.list-box .query {
+  height: 95px;
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding-top: 26px;
+}
+.list-box .user-list {
+  min-height: calc(100% - 166px);
+  max-height: calc(100% - 166px);
+  overflow-y: auto;
+}
+.list-box .user-list .has-gutter {
+  display: none;
+}
+.list-box .user-list .el-table--enable-row-hover::before {
+  display: none;
+}
+.list-box .user-list::before {
+  display: none;
+}
+.list-box .el-table-cell-details {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}

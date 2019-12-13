@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="156px" height="140px" viewBox="0 0 156 140" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>errors</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="156" height="22.035503" rx="2.32835821"></rect>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="全局-浏览器不支持" transform="translate(-695.000000, -300.000000)">
+            <g id="Group-5" transform="translate(695.000000, 300.000000)">
+                <g id="errors">
+                    <g id="Group-21" transform="translate(5.820896, 124.674556)" fill="#C0C4CC">
+                        <path d="M0,4.64677307 C0,2.08043117 2.08624613,0 4.65696364,0 L34.9251259,0 C37.4970959,0 39.5820896,2.07707258 39.5820896,4.64677307 L39.5820896,14.4970414 L0,14.4970414 L0,4.64677307 Z" id="Rectangle-18"></path>
+                        <path d="M105.358209,4.64677307 C105.358209,2.08043117 107.444455,0 110.015173,0 L140.283335,0 C142.855305,0 144.940299,2.07707258 144.940299,4.64677307 L144.940299,14.4970414 L105.358209,14.4970414 L105.358209,4.64677307 Z" id="Rectangle-18"></path>
+                    </g>
+                    <g id="Group-20" transform="translate(14.552239, 58.568047)" fill="#C0C4CC">
+                        <rect id="Rectangle-20" x="0" y="0" width="20.9552239" height="69.0059172"></rect>
+                        <rect id="Rectangle-20" x="105.940299" y="0" width="20.9552239" height="69.0059172"></rect>
+                    </g>
+                    <g id="大柱子" transform="translate(9.895522, 23.775148)" fill="#C0C4CC">
+                        <rect id="Rectangle-18" x="0" y="0" width="30.2686567" height="38.2721893" rx="3.49253731"></rect>
+                        <rect id="Rectangle-18" x="105.940299" y="0" width="30.2686567" height="38.2721893" rx="3.49253731"></rect>
+                    </g>
+                    <g id="横栏" transform="translate(0.000000, 37.692308)">
+                        <g id="Rectangle-22">
+                            <rect id="Path" fill="#EBEEF5" x="0" y="0" width="156" height="24.3550296" rx="4.65671642"></rect>
+                            <polygon fill="#C0C4CC" transform="translate(7.188431, 16.756661) rotate(46.000000) translate(-7.188431, -16.756661) " points="0.714489958 -24.4864982 13.6623727 -24.3433751 13.6623727 57.9998201 0.714489958 57.8566971"></polygon>
+                            <polygon fill="#C0C4CC" transform="translate(41.098879, 21.756661) rotate(46.000000) translate(-41.098879, -21.756661) " points="34.6249377 -19.4864982 47.5728205 -19.3433751 47.5728205 62.9998201 34.6249377 62.8566971"></polygon>
+                            <polygon fill="#C0C4CC" transform="translate(120.845148, -3.243339) rotate(46.000000) translate(-120.845148, 3.243339) " points="114.371206 -44.4864982 127.319089 -44.3433751 127.319089 37.9998201 114.371206 37.8566971"></polygon>
+                            <polygon fill="#C0C4CC" transform="translate(156.591416, 6.756661) rotate(46.000000) translate(-156.591416, -6.756661) " points="150.117475 -34.4864982 163.065358 -34.3433751 163.065358 47.9998201 150.117475 47.8566971"></polygon>
+                        </g>
+                        <g id="Rectangle-22" transform="translate(0.000000, 44.071006)">
+                            <rect id="下" x="0" y="0" width="156" height="22.035503" rx="2.32835821"></rect>
+                            <mask id="mask-2" fill="white">
+                                <use xlink:href="#path-1"></use>
+                            </mask>
+                            <use id="Mask" fill="#EBEEF5" xlink:href="#path-1"></use>
+                            <polygon fill="#C0C4CC" mask="url(#mask-2)" transform="translate(25.646785, 5.537592) rotate(46.000000) translate(-25.646785, -5.537592) " points="19.8666305 -35.7055672 31.4269396 -35.5624441 31.4269396 46.7807512 19.8666305 46.6376281"></polygon>
+                            <polygon fill="#C0C4CC" mask="url(#mask-2)" transform="translate(65.228875, 5.537592) rotate(46.000000) translate(-65.228875, -5.537592) " points="59.44872 -35.7055672 71.0090292 -35.5624441 71.0090292 46.7807512 59.44872 46.6376281"></polygon>
+                            <polygon fill="#C0C4CC" mask="url(#mask-2)" transform="translate(104.810964, 5.537592) rotate(46.000000) translate(-104.810964, -5.537592) " points="99.0308096 -35.7055672 110.591119 -35.5624441 110.591119 46.7807512 99.0308096 46.6376281"></polygon>
+                            <polygon fill="#C0C4CC" mask="url(#mask-2)" transform="translate(144.393054, 5.537592) rotate(46.000000) translate(-144.393054, -5.537592) " points="138.612899 -35.7055672 150.173208 -35.5624441 150.173208 46.7807512 138.612899 46.6376281"></polygon>
+                        </g>
+                    </g>
+                    <g id="！" transform="translate(44.820896, 15.988166)">
+                        <rect id="Rectangle-23" fill="#80BBF8" transform="translate(32.927958, 33.631463) rotate(-45.000000) translate(-32.927958, -33.631463) " x="9.64437548" y="10.4361962" width="46.5671642" height="46.3905325" rx="4.65671642"></rect>
+                        <g id="Group-23" transform="translate(29.104478, 19.964497)" fill="#FFFFFF">
+                            <rect id="Rectangle-24" x="0" y="0" width="6.98507463" height="16.7950909" rx="3.49253731"></rect>
+                            <rect id="Rectangle-24" x="0" y="19.7589305" width="6.98507463" height="6.91562568" rx="3.45781284"></rect>
+                        </g>
+                    </g>
+                    <g id="灯" transform="translate(11.641791, 0.000000)">
+                        <g id="Group-22">
+                            <ellipse id="Oval-4" fill="#C0C4CC" cx="13.3880597" cy="13.3372781" rx="13.3880597" ry="13.3372781"></ellipse>
+                            <ellipse id="Oval-4" fill="#FFFFFF" cx="13.3880597" cy="13.3372781" rx="5.82089552" ry="5.79881657"></ellipse>
+                        </g>
+                        <g id="Group-22" transform="translate(105.940299, 0.000000)">
+                            <ellipse id="Oval-4" fill="#C0C4CC" cx="13.3880597" cy="13.3372781" rx="13.3880597" ry="13.3372781"></ellipse>
+                            <ellipse id="Oval-4" fill="#FFFFFF" cx="13.3880597" cy="13.3372781" rx="5.82089552" ry="5.79881657"></ellipse>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

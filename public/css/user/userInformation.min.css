@@ -1,0 +1,231 @@
+.userInformation {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.userInformation .userInformation-l {
+  width: 400px;
+  min-width: 400px;
+  min-height: 100%;
+  background: #fff;
+}
+.userInformation .userInformation-l .userInformation-l-head {
+  box-sizing: border-box;
+  height: 140px;
+  padding: 30px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border-bottom: 1px solid #ebeef5;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.userInformation .userInformation-l .userInformation-l-head .addr {
+  margin-left: auto;
+  height: 28px;
+  line-height: 28px;
+  background: #f9fafc;
+  color: #909399;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 10px;
+  border-radius: 100px;
+}
+.userInformation .userInformation-l .userInformation-l-body {
+  max-height: calc(100% - 140px);
+  overflow-y: auto;
+  padding: 30px;
+  box-sizing: border-box;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item {
+  margin-bottom: 50px;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item .userInformation-l-body-item-title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 30px;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item .userInformation-l-body-item-line {
+  font-weight: normal;
+  color: #303133;
+  margin-bottom: 14px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 14px;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item .userInformation-l-body-item-line .font-label {
+  width: 102px;
+  min-width: 102px;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item .userInformation-l-body-item-line .font-label.w90 {
+  width: 90px;
+  min-width: 90px;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item .userInformation-l-body-item-line .cenxiang {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item .userInformation-l-body-item-line .cenxiang span {
+  cursor: pointer;
+  padding-right: 10px;
+  border-right: 1px solid #dcdfe6;
+  margin-right: 10px;
+  max-width: 74px;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item .userInformation-l-body-item-line .cenxiang span i:before {
+  color: #c0c4cc;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item .userInformation-l-body-item-line .cenxiang span:last-child {
+  border-right: 0;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item .userInformation-l-body-item-line:last-child {
+  margin-bottom: 0;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item.sheJiShi .userInformation-l-body-item-line .font-label {
+  width: 86px;
+  min-width: 86px;
+}
+.userInformation .userInformation-l .userInformation-l-body .userInformation-l-body-item:last-child {
+  margin-bottom: 0;
+}
+.userInformation .userInformation-R {
+  background: #fff;
+  margin-left: auto;
+  min-height: 100%;
+  width: calc(100% - 420px);
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+.userInformation .userInformation-R .has-gutter .cell {
+  font-weight: bold!important;
+}
+.userInformation .userInformation-R .other-list {
+  margin-top: 20px;
+}
+.userInformation .userInformation-R .other-list .other-list-title {
+  line-height: 60px;
+  font-size: 16px;
+  font-weight: bold;
+  padding-left: 10px;
+  background: #f1f2f6;
+}
+.userInformation .userInformation-R .other-list .el-table__header {
+  font-weight: bold;
+}
+.userInformation .userInformation-R .other-list .el-table::before {
+  background: transparent;
+}
+.userInformation .el-table__row.expanded .el-table__expand-column .el-table__expand-icon {
+  display: block;
+}
+.userInformation .demo-table-expand {
+  padding-left: 56px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+}
+.userInformation .demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.userInformation .demo-table-expand .el-form-item__content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.userInformation .demo-table-expand .el-form-item__content .dsp-img {
+  display: inline-block;
+  max-height: 30px;
+}
+.userInformation .demo-table-expand .el-form-item__content .dsp-img .el-card .el-card__body {
+  height: auto;
+}
+.userInformation .demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  width: 33%;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.userInformation .category {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+}
+.visit-message {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  line-height: 24px;
+}
+.visit-message span {
+  margin: 0 10px;
+}
+.visit-message .img1 {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.visit-message .img2 {
+  width: 70px;
+  height: 20px;
+}
+.monthBillD-group {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+}
+.monthBillD-group .el-radio {
+  margin: 0;
+}

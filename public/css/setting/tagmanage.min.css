@@ -1,0 +1,64 @@
+#app .tagmanageBox {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100%;
+}
+#app .dsp-list {
+  width: 70%;
+}
+#app .dsp-list .dsp-list_table .el-table {
+  height: calc(100% - 10px);
+}
+#app .addTagBox {
+  width: 70%;
+  background: #fff;
+  height: 100%;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+#app .lookTagList {
+  box-shadow: none;
+  width: calc(30% - 10px);
+  box-sizing: border-box;
+  background: #fff;
+  margin-left: 10px;
+  height: 100%;
+}
+#app .currentTagList {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0 20px ;
+  padding: 10px ;
+  cursor: pointer;
+  border-bottom: 1px solid #ebeef5;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+#app .currentTagList > div {
+  width: 33%;
+}
+#app .currentTagList:hover {
+  background: #f9fafc;
+}
+#app .bian:hover {
+  color: #008bff;
+}
+#app .font-success:hover {
+  color: #56BB8A;
+}
+#app .is-disabled:hover {
+  color: #c0c4cc;
+}
+#app .el-table__row {
+  cursor: pointer;
+}

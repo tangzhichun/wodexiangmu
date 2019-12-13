@@ -1,0 +1,49 @@
+.cms-card .header {
+  height: 60px;
+  box-sizing: border-box;
+  font-size: 16px;
+  border-bottom: 1px solid #ebeef5;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.cms-card .header .categoriesTab {
+  position: relative;
+  color: #303133;
+  margin-right: 15px;
+  height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+}
+.cms-card .header .categoriesTab-active {
+  color: #008bff;
+}
+.cms-card .header .categoriesTab-active:after {
+  content: '';
+  bottom: 0;
+  border-radius: 1px;
+  height: 2px;
+  background: #008bff;
+  width: 100%;
+  position: absolute;
+}
+.cms-card .header .categoriesTab:hover {
+  color: #008bff;
+}
+.cms-card .body {
+  overflow-y: auto;
+  min-height: calc(100% - 60px);
+  max-height: calc(100% - 60px);
+}

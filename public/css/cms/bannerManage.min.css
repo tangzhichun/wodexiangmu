@@ -1,0 +1,390 @@
+.column {
+  float: left;
+  height: 100%;
+}
+.column .title {
+  height: 60px;
+  line-height: 60px;
+  font-size: 14px;
+}
+img.banner_img {
+  width: 100%;
+}
+/*单张图片独占一行*/
+.banner_img,
+.banner_gutter_img {
+  width: 100%;
+  display: block;
+  margin-bottom: 15px;
+}
+.banner_gutter_img {
+  border-radius: 4px;
+}
+.edit_img {
+  cursor: pointer;
+  position: relative;
+}
+.edit_img:hover,
+.edit_img.active {
+  cursor: pointer;
+}
+.edit_img:hover:before,
+.edit_img.active:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #409eff;
+  opacity: 0.5;
+}
+.edit_img .some_img {
+  height: 120px;
+  background: #ebeef5;
+  text-align: center;
+  line-height: 120px;
+  color: #aeaeae;
+  margin-bottom: 15px;
+}
+.auto_scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.edit_pages {
+  width: 220px;
+  border-right: 1px solid #EBEEF5;
+  box-sizing: border-box;
+}
+.edit_pages .content {
+  height: calc(100% - 60px);
+}
+.edit_pages .page_type {
+  background: #f9fafc;
+  height: 48px;
+  line-height: 48px;
+  width: 200px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #606266;
+  padding-left: 15px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.edit_pages .page_type.active {
+  background: #e0eaf4;
+}
+/*固定两边的padding*/
+.line {
+  width: 100%;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+.free_line {
+  width: 100%;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+.edit_banners {
+  width: calc(100% - 220px);
+}
+.edit_banners .title {
+  padding-left: 40px;
+}
+.edit_banners .edit_position,
+.edit_banners .edit_banner {
+  float: left;
+  height: calc(100% - 60px);
+}
+.edit_banners .edit_position {
+  width: 445px;
+  padding: 0 30px 0 40px;
+  box-sizing: border-box;
+}
+.edit_banners .edit_position .preview {
+  width: 100%;
+  height: 665px;
+  border-radius: 8px;
+  border: 1px solid #ffffff;
+  box-shadow: 0 2px 22px 0 #D3D3D3;
+}
+.edit_banners .edit_position .preview .preview_title {
+  height: 75px;
+}
+.edit_banners .edit_position .preview .preview_title .preview_title_nav {
+  padding: 0 5px;
+  font-size: 14px;
+  height: 35px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.edit_banners .edit_position .preview .preview_title .preview_title_name {
+  height: 40px;
+  line-height: 40px;
+  font-family: PingFangSC-Medium;
+  text-align: center;
+  font-size: 18px;
+}
+.edit_banners .edit_position .preview .chenjinshi {
+  background: transparent;
+  position: absolute;
+  z-index: 100;
+  width: 375px;
+}
+.edit_banners .edit_position .preview .preview_content {
+  height: calc(100% - 75px);
+}
+.edit_banners .edit_position .preview .preview_content.back {
+  background: url(/images/bj.png);
+  background-size: 100% auto;
+}
+.edit_banners .edit_position .preview .preview_content .preview_input {
+  line-height: 40px;
+  margin-bottom: 15px;
+  color: #c0c4cc;
+  font-size: 14px;
+  padding-left: 10px;
+  background: #ffffff;
+  text-align: center;
+  border-radius: 50px;
+}
+.edit_banners .edit_position .preview .preview_content .desc {
+  font-size: 14px;
+  color: #ffffff;
+  text-align: center;
+  line-height: 20px;
+}
+.edit_banners .edit_position .preview .preview_content .style_banner {
+  padding: 0 25px;
+  width: 100%;
+  overflow: hidden;
+}
+.edit_banners .edit_position .preview .preview_content .style_left,
+.edit_banners .edit_position .preview .preview_content .style_right {
+  width: 160px;
+  float: left;
+}
+.edit_banners .edit_position .preview .preview_content .style_left {
+  margin-right: 5px;
+}
+.edit_banners .edit_position .preview .preview_content .banner_1,
+.edit_banners .edit_position .preview .preview_content .banner_2,
+.edit_banners .edit_position .preview .preview_content .banner_3,
+.edit_banners .edit_position .preview .preview_content .banner_4 {
+  background: #ebeef5;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.edit_banners .edit_position .preview .preview_content .banner_1 .desc,
+.edit_banners .edit_position .preview .preview_content .banner_2 .desc,
+.edit_banners .edit_position .preview .preview_content .banner_3 .desc,
+.edit_banners .edit_position .preview .preview_content .banner_4 .desc {
+  color: #aeaeae;
+}
+.edit_banners .edit_position .preview .preview_content .banner_1 .ban_img,
+.edit_banners .edit_position .preview .preview_content .banner_2 .ban_img,
+.edit_banners .edit_position .preview .preview_content .banner_3 .ban_img,
+.edit_banners .edit_position .preview .preview_content .banner_4 .ban_img {
+  width: 100%;
+  display: block;
+}
+.edit_banners .edit_position .preview .preview_content .banner_1,
+.edit_banners .edit_position .preview .preview_content .banner_3 {
+  margin-bottom: 5px;
+}
+.edit_banners .edit_position .preview .preview_content .column_banners {
+  padding: 0 25px;
+  width: 100%;
+  overflow: hidden;
+}
+.edit_banners .edit_position .preview .preview_content .column_banners .column_banner {
+  background: #ebeef5;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  float: left;
+  height: 90px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+.edit_banners .edit_position .preview .preview_content .column_banners .column_banner.column_banner_5,
+.edit_banners .edit_position .preview .preview_content .column_banners .column_banner.column_banner_3 {
+  margin-right: 0;
+}
+.edit_banners .edit_position .preview .preview_content .column_banners .column_banner .desc {
+  color: #aeaeae;
+}
+.edit_banners .edit_position .preview .preview_content .column_banners .column_banner .ban_img {
+  width: 100%;
+  display: block;
+  border-radius: 4px;
+}
+.edit_banners .edit_banner {
+  width: calc(100% - 445px);
+  background: #ebeef5;
+  border-radius: 4px;
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.edit_banners .edit_banner .banner_title {
+  height: 40px;
+  font-size: 20px;
+  padding: 20px 0 0 17px;
+}
+.edit_banners .edit_banner .edit_content {
+  padding-left: 30px;
+}
+.edit_banners .edit_banner .edit_content .banner_position {
+  height: 75px;
+  font-size: 18px;
+  line-height: 75px;
+}
+.edit_banners .edit_banner .edit_content .edit_num {
+  overflow: hidden;
+}
+.edit_banners .edit_banner .edit_content .edit_num .edit_banner_title {
+  float: left;
+  color: #909399;
+  height: 40px;
+  font-size: 16px;
+  line-height: 40px;
+  padding-right: 20px;
+}
+.edit_banners .edit_banner .edit_content .edit_num .edit_banner_item {
+  float: left;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  background: #fff;
+  font-size: 18px;
+  color: #dde1ea;
+  margin-right: 2px;
+  text-align: center;
+  cursor: pointer;
+}
+.edit_banners .edit_banner .edit_content .edit_num .edit_banner_item.plus {
+  color: #409eff;
+}
+.edit_banners .edit_banner .edit_content .edit_num .edit_banner_item.active {
+  color: #ffffff;
+  background: #409eff;
+}
+.edit_banners .edit_banner .edit_content .current_image .select_page {
+  padding-bottom: 20px;
+}
+.edit_banners .edit_banner .edit_content .current_image .edit_current_image {
+  position: relative;
+  margin-bottom: 20px;
+}
+.edit_banners .edit_banner .edit_content .current_image .edit_current_image .empty_img {
+  margin-left: 52px;
+}
+.edit_banners .edit_banner .edit_content .current_image .edit_current_image .empty_img .avatar-uploader {
+  height: 100%;
+}
+.edit_banners .edit_banner .edit_content .current_image .edit_current_image .empty_img .show_img {
+  display: block;
+  width: 100%;
+}
+.edit_banners .edit_banner .edit_content .current_image .edit_current_image .empty_img .el-upload {
+  height: 100%;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.edit_banners .edit_banner .edit_content .current_image .edit_current_image .empty_img .upload {
+  display: inline-block;
+  height: 68px;
+  line-height: 68px;
+  width: 68px;
+  background: #ffffff;
+  border-radius: 50%;
+  margin: 40px 0;
+}
+.edit_banners .edit_banner .edit_content .current_image .edit_current_image .empty_img .upload .avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+}
+.edit_banners .edit_banner .edit_content .el-select.key_value {
+  width: 375px;
+}
+.edit_banners .edit_banner .edit_content .el-cascader.key_value {
+  width: 375px;
+  font-size: 14px;
+}
+.edit_banners .edit_banner .button_operate {
+  margin-left: 52px;
+  font-size: 14px;
+  overflow: hidden;
+}
+.edit_banners .edit_banner .button_operate .size_title,
+.edit_banners .edit_banner .button_operate .tip,
+.edit_banners .edit_banner .button_operate .size-num {
+  padding-right: 10px;
+  height: 40px;
+  line-height: 40px;
+  float: left;
+}
+.edit_banners .edit_banner .key_item {
+  overflow: hidden;
+}
+.edit_banners .edit_banner .key_item .key_name,
+.edit_banners .edit_banner .key_item .key_value {
+  float: left;
+  font-size: 16px;
+  height: 40px;
+  line-height: 40px;
+}
+.edit_banners .edit_banner .key_item .key_name {
+  color: #909399;
+  width: 68px;
+}
+.edit_banners .edit_banner .key_item .key_name.must {
+  color: #F56C6C;
+}
+.save {
+  padding-left: 52px;
+  width: 375px;
+}

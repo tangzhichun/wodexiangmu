@@ -1,0 +1,169 @@
+.cms-card {
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+.cms-card .font-weight {
+  font-weight: bold;
+  color: #303133;
+}
+.cms-card .color-gray-xl {
+  color: #606266;
+}
+.cms-card .editTemplate-body {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  overflow: visible;
+  height: 100%;
+}
+.cms-card .editTemplate-body .template {
+  padding-top: 30px;
+  min-width: 500px;
+  width: 500px;
+  position: relative;
+}
+.cms-card .editTemplate-body .template .template-mobile {
+  -moz-user-select: none;
+  /**ff*/
+  -webkit-user-select: none;
+  /**chrome、safari、360极速*/
+  overflow: hidden;
+  min-width: 10px;
+  border-radius: 4px;
+  box-shadow: 0.1px 2px 22px 0.1px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  position: absolute;
+}
+.cms-card .editTemplate-body .template .template-mobile .beijingtu {
+  width: 1800px;
+  background: #d2d6d9;
+  color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.cms-card .editTemplate-body .template .template-mobile .baiBianY {
+  z-index: 10;
+  width: 100%;
+  height: 5px;
+  position: absolute;
+  top: 0;
+  background: #fff;
+}
+.cms-card .editTemplate-body .template .template-mobile .baiBianY1 {
+  top: 600px;
+}
+.cms-card .editTemplate-body .template .template-mobile .baiBianY2 {
+  top: 1200px;
+}
+.cms-card .editTemplate-body .template .template-mobile .baiBian {
+  z-index: 10;
+  width: 5px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  background: #fff;
+}
+.cms-card .editTemplate-body .template .template-mobile .baiBian1 {
+  left: 600px;
+}
+.cms-card .editTemplate-body .template .template-mobile .baiBian2 {
+  left: 1200px;
+}
+.cms-card .editTemplate-body .template .template-mobile .move-div {
+  cursor: pointer ;
+  background: transparent;
+  position: absolute;
+}
+.cms-card .editTemplate-body .dsp-form {
+  padding: 0;
+  padding-top: 30px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+.cms-card .editTemplate-body .dsp-form .dsp-form_body {
+  padding: 0;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body {
+  padding: 0;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body .el-row {
+  padding: 0;
+  -webkit-flex-wrap: nowrap;
+      -ms-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 14px ;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body .el-row .form-label {
+  min-width: 96px;
+  padding-right: 10px;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body .el-row .el-col {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body .el-row .el-col-8 {
+  max-width: 300px;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body .el-row .el-col-4 {
+  max-width: 150px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body .el-row .el-col-4:last-child {
+  padding-right: 0;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body .el-row-margin-b-1 {
+  margin-bottom: 20px;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body .el-row-margin-b-2 {
+  margin-bottom: 60px;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body .el-row-margin-b-3 {
+  margin-bottom: 29px;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body .upload-btn {
+  background: #ffffff;
+  border: 1px solid #c7e2ff;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 38px;
+  width: 100% ;
+  color: #409eff;
+  height: 38px;
+}
+.cms-card .editTemplate-body .dsp-form .form-group_body .upload-btn div {
+  width: 100%;
+}
