@@ -1,0 +1,87 @@
+<!-- 暴露数据给前端页面 -->
+<script>{{{expose.script}}}</script>
+<div class="logo" style="position: absolute; left: 0; width: 160px;background:  #008bff;margin-right:  16px;">
+    <img src="/images/logo_img.svg" style="height: 34px;margin: 13px;">
+    <div style="display:  inline-block;"><img src="/images/logo_text.png" style="margin: 13px 15px 13px auto; height: 34px;"></div>
+</div>
+<div class="left">
+</div>
+<div class="right" >
+    <div class="qrCode">
+        <div class="layout-header-information kujile layout-header-gong" @click="gotoDSP">
+            <div class="shuxian"></div>
+            <span class="img" ></span>
+            <span class="font-size-s" style="margin-left: 4px">DSP</span>
+        </div>
+        <div class="user menu-group layout-header-gong">
+            <div class="shuxian"></div>
+            <a href="#" title="切换职位">
+                <img :src="DSP.user.imageUrl" :class="{'icon-head':!DSP.user.imageUrl}" style="width: 24px;border-radius: 50%;margin-right: 10px" >
+                <div class="single-line">
+                    {{#user.name}}{{.}}{{/user.name}}&nbsp;
+                    {{^user.name}}匿名用户{{/user.name}}
+                    {{#user.currPosition}}
+                    {{orgName}} &nbsp;<!-- {{positionName}} -->
+                    {{/user.currPosition}}
+                </div>
+                <i class="el-icon-arrow-down"></i>
+            </a>
+            <ul class="menu-dropdown single-line"  id="allheader">
+                {{#user.positions}}
+                <li class="sub-menu position single-line"  title="{{positionName}}"><i class="el-icon-check"></i>{{orgName}} {{positionName}}</li>
+                {{/user.positions}}
+                <li class="split-line"></li>
+                <li class="sub-menu modify-password"><i class="icon-password"></i><a> 修改密码</a></li>
+                <li class="sub-menu "><i class="icon-back"></i><a href="/logout"> 退出登录</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+
+<!--修改密码-->
+<script type="text/html" id="modifyPwdTemplate">
+    <div class="v-modal" tabindex="0" style="z-index: 2000;"></div>
+    <div class="el-dialog__wrapper" style="z-index: 2001;">
+        <div class="el-dialog" style="width: 320px; margin-top: 15vh;">
+            <div class="el-dialog__header"><span class="el-dialog__title">修改密码</span>
+                <button type="button" aria-label="Close" class="el-dialog__headerbtn" onclick="document.querySelector('.dsp-modify-password-dialog').remove()"><i class="el-dialog__close el-icon el-icon-close"></i></button>
+            </div>
+            <div class="el-dialog__body">
+                <div class="el-row" style="margin: 10px 0">
+                    <div class="el-col el-col-24">
+                        <input type="password" class="input-change-password" placeholder="旧密码" autocomplete="off">
+                    </div>
+                </div>
+                <div class="el-row" style="margin: 10px 0">
+                    <div class="el-col el-col-24">
+                        <input type="password" class="input-change-password" placeholder="新密码" autocomplete="off" maxlength="20">
+                    </div>
+                </div>
+                <div class="el-row" style="margin: 10px 0">
+                    <div class="el-col el-col-24">
+                        <input type="password" class="input-change-password" placeholder="确认新密码" autocomplete="off" maxlength="20">
+                    </div>
+                </div>
+                <div class="el-row" style="margin: 10px 0">
+                    <div class="el-col el-col-24">
+                        <span class="prompt-change-password font-danger">
+                            &nbsp;
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="el-dialog__footer">
+                <div class="dialog-footer align-left">
+                    <button type="button" role="submit" class="el-button el-button--primary">
+                        修改密码
+                    </button>
+                    <button type="button" role="cancel" class="el-button el-button--default" onclick="document.querySelector('.dsp-modify-password-dialog').remove()">
+                        取消
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

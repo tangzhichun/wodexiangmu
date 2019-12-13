@@ -1,0 +1,247 @@
+<link rel="stylesheet" href="/css/wxpublic/appmsgFodder.min.css">
+<div id="app" class="appmsgFodder" v-loading="views.saveLoading">
+    <div class="view-left" v-cloak>
+        <div class="appmsg-side-wrapper">
+            <div class="appmsg-item"
+                 :class="{'first-appmsg-item':idx<1,'curr-appmsg-item':information.zdyId === item.zdyId}"
+                 v-for="(item,idx) in  articlesList"
+                 @click="currentMsg(item)"
+            >
+                <!--第一个图文-->
+                <div class="card_appmsg_inner" v-if="idx < 1" style="background-size: cover" :style="'background-image: url('+imgurl(item.imageUrl && item.imageUrl.imageUrl)+');'">
+                    <div class="card_appmsg_title">
+                        {[item.title || '标题']}
+                    </div>
+                </div>
+                <!--第n个图文-->
+                <div class="card_appmsg_inner-n" v-if="idx > 0" >
+                    <div class="card_appmsg_title">
+                        {[item.title || '标题']}
+                    </div>
+                    <img style="width:48px;min-width:48px;height: 48px;margin-left: 10px" :src="imgurl(item.imageUrl && item.imageUrl.imageUrl)" alt="">
+                </div>
+                <div class="appmsg_edit_mask" @click.stop v-if="(sourceData && sourceData.newsPublish < 2) || !sourceData   ">
+                    <i class="el-icon-top" v-if="idx > 0" @click="move(idx,'up')"></i>
+                    <i class="el-icon-bottom" v-if="idx < articlesList.length -1" style="margin-right: auto"  @click="move(idx,'down')"></i>
+
+                    <i class="el-icon-delete" v-if="idx > 0" @click="delmsg(idx)"></i>
+                </div>
+            </div>
+            <!--增加-->
+            <div class="add-appmsg-container" @click="addMsg" v-if="articlesList && articlesList.length < 10 && ((sourceData && sourceData.newsPublish < 2) || !sourceData)">
+                <i class="el-icon-plus"></i>
+            </div>
+        </div>
+    </div>
+    <div class="view-right"  v-if="information"  >
+        <div class="dsp-form" v-dsp-form-validate v-cloak>
+            <div class="dsp-form_body">
+                <div class="form-group_body" >
+                    <div >
+                        <el-row :gutter="10">
+                            <el-col :span="3"  class="form-label required">标题</el-col>
+                            <el-col :span="5" v-dsp-validate="information.title" >
+                                <div >
+                                    <el-input type="text"  show-word-limit placeholder="标题" maxlength="64" v-model="information.title"></el-input>
+                                </div>
+                            </el-col>
+                            <el-col :span="3"  class="form-label ">作者</el-col>
+                            <el-col :span="5" >
+                                <div >
+                                    <el-input type="text" show-word-limit placeholder="请输入作者" maxlength="8" v-model="information.author"></el-input>
+                                </div>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col :span="3"  class="form-label ">摘要</el-col>
+                            <el-col :span="13" >
+                                <div >
+                                    <el-input type="textarea" resize="none" show-word-limit placeholder="选填，如果不填写会默认抓取正文前54个字" maxlength="120" v-model="information.digest"></el-input>
+                                </div>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col :span="3"  class="form-label ">链接</el-col>
+                            <el-col :span="13" >
+                                <div >
+                                    <el-input type="text" show-word-limit placeholder="图文消息的原文地址，即点击“阅读原文”后的URL" maxlength="200" v-model="information.content_source_url"></el-input>
+                                </div>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col :span="3"  class="form-label required">封面</el-col>
+                            <el-col :span="13" v-dsp-validate="information.imageUrl.imageUrl" dsp-err-required="请选择封面" >
+                                <div >
+                                    <dsp-cropper :value.sync="information.imageUrl" :ul="information.imageUrl" height="140px" :width="information.zdyId === articlesList[0].zdyId? '329px':'140px'"></dsp-cropper>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </div>
+                    <el-row :gutter="10">
+                        <el-col :span="3"  class="form-label ">&nbsp;</el-col>
+                        <el-col :span="13"  >
+                            <div id="div1" class="toolbar"></div>
+                            <div style="padding: 5px 0; color: #ccc">
+                                <div class="editor-xcx" @click="views.xcxDialog=true">
+                                    <i class="el-icon-paperclip"></i>
+                                    <div class="down">小程序</div>
+                                </div>
+                            </div>
+                            <div id="editor" class="text">
+                                <p v-html="information.content2"></p>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="10">
+                        <el-col :span="3"  class="form-label ">&nbsp;</el-col>
+                        <el-col :span="13" >
+                            <el-button type="primary"  @click="save" :loading="views.saveLoading">
+                                <i class="icon-save"></i><span>保存</span>
+                            </el-button>
+                            <el-button type="primary"  @click="saveWx" :loading="views.saveLoading" >
+                                <i class="icon-save"></i><span>保存并发布</span>
+                            </el-button>
+                            <el-button type="primary"  @click="xiagao" :loading="views.saveLoading" v-if="DSP.globalConfig.fileBaseUrl === 'https://test.yishimeijia.com/upload/'">
+                                <i class="icon-save"></i><span>发布到微信预览</span>
+                            </el-button>
+                        </el-col>
+                    </el-row>
+                </div>
+            </div>
+        </div>
+    </div>
+    <el-dialog
+            v-cloak
+            :title="'你本月还能群发'+(4-issueData.title)+'次消息'"
+            :visible.sync="views.issueDialog"
+            width="500px"
+            >
+        <div class="issueDialog">
+            <el-checkbox :indeterminate="issueData.isIndeterminate" v-model="issueData.checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+            <div style="margin: 15px 0;">
+                按用户所在地区
+            </div>
+            <el-checkbox-group v-model="issueData.checkedCities" @change="handleCheckedCitiesChange" v-if="issueData.userSortDict && issueData.userSortDict.city">
+                <el-checkbox v-for="item in issueData.userSortDict.city" :label="item.value" :key="item.value">{[item.name]} （{[item.num]}）人</el-checkbox>
+            </el-checkbox-group>
+            <div style="margin: 15px 0;">
+                按用户认证类型
+            </div>
+            <el-checkbox-group v-model="issueData.checkedCities" @change="handleCheckedCitiesChange" v-if="issueData.userSortDict && issueData.userSortDict.duct">
+                <el-checkbox v-for="item in issueData.userSortDict.duct" :label="item.value" :key="item.value">{[item.name]} （{[item.num]}）人</el-checkbox>
+            </el-checkbox-group>
+        </div>
+        <div slot="footer" class="dialog-footer right" >
+            <el-button @click="views.issueDialog = false">取消</el-button>
+            <el-button type="primary" @click="issueDialogSave" :loading="views.saveLoading">发布</el-button>
+        </div>
+    </el-dialog>
+
+    <!--小程序卡片-->
+    <el-dialog
+            title="填写详细信息"
+            :visible.sync="views.xcxDialog"
+            width="960px"
+            :close-on-press-escape="false"
+            :close-on-click-modal="false"
+            :show-close="false"
+            >
+        <div class="dsp-form" container="dialog" v-dsp-form-validate>
+            <div class="dsp-form_body">
+                <el-row >
+                    <el-col :span="4"  class="form-label required">
+                        小程序名称
+                    </el-col>
+                    <el-col :span="7" v-dsp-validate="information2.appid" dsp-err-required="选择小程序">
+                        <el-select  v-model="information2.appid" placeholder="请选择" @change="changeApp">
+                            <el-option
+                                    v-for="item in DSP.xcx"
+                                    :key="item.appId"
+                                    :label="item.name"
+                                    :value="item.appId">
+                            </el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="4"  class="form-label required">
+                        小程序路径
+                    </el-col>
+                    <el-col :span="7" v-dsp-validate="information2.xcxurl" dsp-err-required="小程序路径必须填写">
+                        <el-input type="text" maxlength="1024" show-word-limit placeholder="小程序首页" v-model="information2.xcxurl" v-dsp-input-trim></el-input>
+                    </el-col>
+                    <el-col :span="2">&nbsp;</el-col>
+                </el-row>
+                <el-row class="avatar-text">
+                    <el-col :span="4"  class="form-label required">
+                        展示方式
+                    </el-col>
+                    <el-col :span="7"
+                            v-dsp-validate="information2.xcxway"
+                            dsp-err-required="请选择展示方式"
+                            >
+                        <el-radio-group v-model="information2.xcxway">
+                            <el-radio label="text">文字</el-radio>
+                            <el-radio label="img">图片</el-radio>
+                            <el-radio label="card">小程序卡片</el-radio>
+                        </el-radio-group>
+                    </el-col>
+                </el-row>
+                <!--文字-->
+                <el-row v-if="information2 && information2.xcxway === 'text'">
+                    <el-col :span="4"  class="form-label required">
+                        文字内容
+                    </el-col>
+                    <el-col :span="7" v-dsp-validate="information2.text" dsp-err-required="请输入文字内容">
+                        <el-input type="text" maxlength="1024" show-word-limit placeholder="点击文字会打开小程序" v-model="information2.text" v-dsp-input-trim></el-input>
+                    </el-col>
+                </el-row>
+                <!--小程序-->
+                <el-row v-if="information2 && information2.xcxway === 'card'">
+                    <el-col :span="4"  class="form-label required">
+                        卡片标题
+                    </el-col>
+                    <el-col :span="7" v-dsp-validate="information2.cardTitle" dsp-err-required="卡片标题">
+                        <el-input type="text" maxlength="1024" show-word-limit placeholder="点击小程序卡片会打开小程序" v-model="information2.cardTitle" v-dsp-input-trim></el-input>
+                    </el-col>
+                </el-row>
+                <el-row v-if="information2 && information2.xcxway === 'card'">
+                    <el-col :span="4"  class="form-label required">
+                        卡片图片
+                    </el-col>
+                    <el-col :span="7" v-dsp-validate="information2.cardimgUrl" dsp-err-required="卡片图片">
+                        <dsp-cropper :value.sync="information2.cardimgUrl" :ul="information2.cardimgUrl" height="80px" width="100px" type="poster"></dsp-cropper>
+                    </el-col>
+                </el-row>
+
+                <el-row v-if="information2 && information2.xcxway === 'img'">
+                    <el-col :span="4"  class="form-label required">上传图片</el-col>
+                    <el-col :span="7" v-dsp-validate="information2.imgimg" dsp-err-required="请上传图片">
+                        <el-upload
+                                dsp-err-required="上传图片"
+                                class="avatar-uploader"
+                                action="/api/file-service/file/wechat/admin/upload/"
+                                :show-file-list="false"
+                                :on-success="handleAvatarSuccess"
+                                :before-upload="beforeAvatarUpload">
+                            <img style="max-width: 220px" v-if="information2.imgimg" class="show_img" :src="DSP.globalConfig.fileBaseUrl + information2.imgimg" alt="">
+                            <div class="upload"  v-else>
+                                <i class="el-icon-upload avatar-uploader-icon"></i>
+                            </div>
+                        </el-upload>
+                    </el-col>
+                </el-row>
+            </div>
+        </div>
+
+        <div slot="footer" class="dialog-footer align-right">
+            <el-button @click="views.xcxDialog = false">取 消</el-button>
+            <el-button type="primary" @click="qeding">
+                <i class="icon-save"></i><span>确定</span>
+            </el-button>
+        </div>
+    </el-dialog>
+</div>
+<script src="/js/wxpublic/appmsgFodder.bundle.js"></script>
+

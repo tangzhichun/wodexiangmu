@@ -1,0 +1,470 @@
+<link rel="stylesheet" href="/vendor/element.min.css">
+<link rel="stylesheet" href="/css/global/ui.min.css">
+<link rel="stylesheet" href="/css/ui/demo.min.css">
+<div id="app" v-cloak>
+    <template>
+        <el-card class="box-card dsp-ui">
+            <el-collapse v-model="activeNames">
+                <el-collapse-item title="UI组件" name="1">
+                    <section>
+
+                        <h2>非Element组件</h2>
+                        <h3>日历组件</h3>
+                        <div>
+                            <input placeholder="第三方日历" name="dateDemo" id="dateDemo"/>
+                        </div>
+
+                        <h2>地图组件</h2>
+                        <h3>根据地址定位</h3>
+                        <div>
+                            <el-input style="width: 300px" size="small" placeholder="输入地址" v-model="component.model.map.addr"></el-input>
+                            <dsp-map :addr="component.model.map.addr" ></dsp-map>
+                        </div>
+                        <h3>根据地址定位，并返回经纬度</h3>
+                        <div>
+                            <el-input style="width: 300px" size="small" placeholder="输入地址" v-model="component.model.map.addr2"></el-input>
+                            {[component.model.map.warpWeft]}
+                            <dsp-map :addr="component.model.map.addr2" :result.sync="component.model.map.warpWeft" ></dsp-map>
+                        </div>
+                        <h3>根据多个地址定位</h3>
+                        <div>
+                            <dsp-map :addrs="component.model.map.addr3"></dsp-map>
+                        </div>
+                        <h3>根据经纬度定位</h3>
+                        <div>
+                            <dsp-map  :points="component.model.map.points4"></dsp-map>
+                        </div>
+                        <h3>根据多个经纬度定位</h3>
+                        <div>
+                            <dsp-map  :points="component.model.map.points5"></dsp-map>
+
+                        </div>
+                        <h3>改变地图尺寸</h3>
+                        <div>
+                            <dsp-map addr="西环南路" style="position:sticky;padding-top: 8%;height: 0; margin: 10px 0; width: 10%;"></dsp-map>
+                        </div>
+
+                        <!--<h2>时间轴组件</h2>-->
+                        <!--<dsp-time :list="component.model.eventList"></dsp-time>-->
+                        <!--<h2>附件列表</h2>-->
+                        <!--<dsp-attachment :list="component.model.attachmentList" :base="DSP.globalConfig.fileBaseUrl"></dsp-attachment>-->
+
+                        <h2>面板组件</h2>
+                        <h3>折叠面板</h3>
+                        <div>
+                            <div target="#body1" v-dsp-panel-collapsable>
+                                <i class="el-icon-arrow-right collapse-indicator"></i>
+                                点击折叠
+                            </div>
+                            <div id="body1">折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，</div>
+                        </div>
+                        <h3>默认折叠</h3>
+                        <div>
+                            <div target="#body2" collapsed="true" v-dsp-panel-collapsable>
+                                <i class="el-icon-arrow-right collapse-indicator"></i>
+                                默认折叠
+                            </div>
+                            <div id="body2" class="hide">折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，折叠面板内容，</div>
+                        </div>
+
+                        <h2>图片组件</h2>
+                        <h3>简单图片</h3>
+                        <dsp-img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527847719047&di=33c764afe2b359058dea03da8b2dc799&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F9345d688d43f8794fb05122ed01b0ef41bd53a33.jpg"></dsp-img>
+                        <h3>带标题的图片</h3>
+                        <dsp-img title="美的的地球" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527847719047&di=33c764afe2b359058dea03da8b2dc799&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F9345d688d43f8794fb05122ed01b0ef41bd53a33.jpg"></dsp-img>
+                        <h3>自定义图片大小</h3>
+                        <dsp-img title="美的的地球" width="500px" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527847719047&di=33c764afe2b359058dea03da8b2dc799&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F9345d688d43f8794fb05122ed01b0ef41bd53a33.jpg"></dsp-img>
+                        <h3>图片地址是null时，不显示裂图</h3>
+                        <dsp-img :src="null"></dsp-img>
+                        <h3>链接地址触发</h3>
+                        <dsp-img trigger="link" title="预览" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527847719047&di=33c764afe2b359058dea03da8b2dc799&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F9345d688d43f8794fb05122ed01b0ef41bd53a33.jpg"></dsp-img>
+
+                        <h2>上传组件</h2>
+                        <h3>上传单张图片</h3>
+                        <div>
+                            <el-row>
+                                <el-col :span="6">
+                                    <el-upload
+                                            class="dsp-img-uploader"
+                                            action='/file/upload/unsafe'
+                                            :data="component.model.uploadFile"
+                                            :before-upload="beforeUpload"
+                                            :on-success="uploadSucceed"
+                                            :on-error="uploadFailed"
+                                            :show-file-list="false">
+                                        <i></i>
+                                        <img v-if="component.model.imageUrl" :src="component.model.imageUrl" class="img-preview">
+                                        <i v-else class="el-icon-plus img-uploader-icon"></i>
+                                    </el-upload>
+                                </el-col>
+                                <el-col :span="18">
+                                    {[component.model.imageUrl]}
+
+                                    {[DSP.globalConfig.fileBaseUrl + '/aaa']}
+                                </el-col>
+                            </el-row>
+                        </div>
+
+                        <h2>组织机构组件</h2>
+                        <h3>树形结构</h3>
+                        <el-row>
+                            <el-col :span="6">
+                                <dsp-org placeholder="树形结构部门或门店" cascader ='cascader'  size="small" :value.sync="component.model.orgId0" ></dsp-org>
+                            </el-col>
+                            <el-col :span="18">
+                                <span v-if="component.model.orgId0">所选部门：{[component.model.orgId0]}</span>
+                            </el-col>
+                        </el-row>
+
+                        <h3>无限制</h3>
+                        <el-row>
+                            <el-col :span="6">
+                                <dsp-org placeholder="选择部门或门店" size="small" :value.sync="component.model.orgId"></dsp-org>
+                            </el-col>
+                            <el-col :span="18">
+                                <span v-if="component.model.orgId">所选部门：{[component.model.orgId]}</span>
+                            </el-col>
+                        </el-row>
+
+                        <h3>选择门店</h3>
+                        <div>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-org placeholder="选择所有门店" size="small" type="SHOP" :value.sync="component.model.shopId0"></dsp-org>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.shop1">所选门店：{[component.model.shopId0]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-org placeholder="选择索菲亚门店" size="small" type="SHOP" brand="SOGAL" :value.sync="component.model.shopId1"></dsp-org>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.shop1">所选门店：{[component.model.shop1]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-org placeholder="选择司米门店" size="small" type="SHOP" brand="SCHMIDT" :value.sync="component.model.shop2"></dsp-org>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.shop2">所选门店：{[component.model.shop2]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-org placeholder="选择米兰纳门店" size="small" type="SHOP" brand="MILANA" :value.sync="component.model.shop3"></dsp-org>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.shop3">所选门店：{[component.model.shop3]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-org placeholder="选择大家居店" size="small" type="P_SHOP" :value.sync="component.model.shop4"></dsp-org>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.shop4">所选门店：{[component.model.shop4]}</span>
+                                </el-col>
+                            </el-row>
+                        </div>
+
+                        <h2>选择员工</h2>
+                        <h3>不限制</h3>
+                        <div>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-emp placeholder="选择员工" size="small" :value.sync="component.model.emp0"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp0">所选员工：{[component.model.emp0]}</span>
+                                </el-col>
+                            </el-row>
+                        </div>
+
+                        <h3>按职位标签限定</h3>
+                        <div>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-emp placeholder="选择设计师" size="small" type="DESIGNER_TEAM_LEADER,DESIGNER" :value.sync="component.model.emp1"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp1">所选员工：{[component.model.emp1]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-emp placeholder="选择设计纵队长" size="small" type="DESIGNER_TEAM_LEADER" :value.sync="component.model.emp2"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp2">所选员工：{[component.model.emp2]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-emp placeholder="选择销售" size="small" type="GUIDE_TEAM_LEADER,GUIDE" :value.sync="component.model.emp3"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp3">所选员工：{[component.model.emp3]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-emp placeholder="选择销售纵队长" size="small" type="GUIDE_TEAM_LEADER" :value.sync="component.model.emp4"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp4">所选员工：{[component.model.emp4]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-emp placeholder="选择销售或设计师" size="small" type="GUIDE_TEAM_LEADER,GUIDE,DESIGNER_TEAM_LEADER,DESIGNER" :value.sync="component.model.emp5"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp5">所选员工：{[component.model.emp5]}</span>
+                                </el-col>
+                            </el-row>
+                        </div>
+
+                        <h3>下拉选项副标题</h3>
+                        <div>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-emp placeholder="副标题显示员工职位" size="small" tip="position" :value.sync="component.model.emp6"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp6">所选员工：{[component.model.emp6]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-emp placeholder="副标题显示员工所属纵队" size="small" type="DESIGNER" tip="team" :value.sync="component.model.emp7"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp7">所选员工：{[component.model.emp7]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-emp placeholder="副标题显示员工手机号" size="small" type="DESIGNER" tip="mobile" :value.sync="component.model.emp8"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp8">所选员工：{[component.model.emp8]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <!--" type="GUIDE" 目前只有导购有对接小组6/20号-->
+                                    <dsp-emp placeholder="副标题显示对接小组" size="small" type="GUIDE"  tip="connectorTeam" :value.sync="component.model.emp10"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp10">所选员工：{[component.model.emp10]}</span>
+                                </el-col>
+                            </el-row>
+                        </div>
+
+                        <h3>选择指定部门的人员</h3>
+                        <div>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-org placeholder="选择大家居店" size="small" type="P_SHOP" :value.sync="component.model.shop9"></dsp-org>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.shop9">所选门店：{[component.model.shop9]}</span>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-emp placeholder="选择指定店面的销售" size="small" :org="component.model.shop9 ? component.model.shop9.value : null" org-required="true" type="GUIDE" tip="organization" :value.sync="component.model.emp9"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp9">所选员工：{[component.model.emp9]}</span>
+                                </el-col>
+                            </el-row>
+
+                            <el-row>
+                                <el-col :span="6">
+                                    <dsp-emp placeholder="选择设计纵队长（不含已其它纵队成员）" size="small" :org="component.model.shop9 ? component.model.shop9.value : null" org-required="true" type="DESIGNER_TEAM_LEADER" is-column-emp="false" tip="organization" :value.sync="component.model.emp9"></dsp-emp>
+                                </el-col>
+                                <el-col :span="18">
+                                    <span v-if="component.model.emp9">所选员工：{[component.model.emp9]}</span>
+                                </el-col>
+                            </el-row>
+                        </div>
+                        <h3>地图搜索</h3>
+                        <div>
+                            <dsp-location placeholder="搜索地址" :address.sync="component.model.map.addr0" style="width: 322px"></dsp-location>
+                            {[component.model.map.addr0]}
+                        </div>
+                        <h2>功能按钮</h2>
+                        <h3>弹出面板</h3>
+                        <div>
+                            <el-row>
+                                <el-col :span="6">
+                                    <el-button @click="component.model.popoverPanelVisible = true">弹出来吧</el-button>
+                                </el-col>
+                            </el-row>
+
+
+                            <!--弹出面板-->
+                            <div class="dsp-panel-popover" :class="{'active': component.model.popoverPanelVisible}">
+                                <div class="dsp-panel-popover_header">
+                                    <span>面板标题</span>
+                                    <i class="el-icon-close" @click="component.model.popoverPanelVisible = false" ></i>
+                                </div>
+
+                                <div class="dsp-panel-popover_body">
+                                    面板内容
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="no-print">打印</h3>
+                        <div class="no-print">
+                            <el-row>
+                                <el-col :span="6">
+                                    <el-button @click="window.print()">打印</el-button>
+                                </el-col>
+                                <el-col :span="18">
+                                    <h4 class="no-print">这句话不会被打印出来，不信你试试</h4>
+                                    <span class="no-print">换一种HTML标签，这句话也不会被打印出来，不信你试试</span>
+                                    <div class="no-print">只要有no-print这个css类，这句话就不会被打印出来，不信你试试</div>
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </section>
+                </el-collapse-item>
+                <el-collapse-item title="Vue组件" name="2">
+                    <section>
+                        <h1>Vue组件</h1>
+                        <h2>过滤器</h2>
+                        <h3>日期格式化</h3>
+                        <el-row>
+                            <el-col :span="4">
+                                原始数据：{[ extension.model.currTime ]}
+                            </el-col>
+                            <el-col :span="4">
+                                日期格式：{[ extension.model.currTime | date ]}
+                            </el-col>
+                            <el-col :span="6">
+                                日期时间格式：{[ extension.model.currTime | datetime ]}
+                            </el-col>
+                        </el-row>
+
+                        <h3>金额格式化</h3>
+                        <el-row>
+                            <el-col :span="4">
+                                原始数据：{[ extension.model.amount ]}
+                            </el-col>
+                            <el-col :span="4">
+                                格式化后：{[ extension.model.amount | amount ]}
+                            </el-col>
+                        </el-row>
+
+                        <h3>面积格式化</h3>
+                        <el-row>
+                            <el-col :span="4">
+                                原始数据：{[ extension.model.amount ]}
+                            </el-col>
+                            <el-col :span="4">
+                                格式化后：{[ extension.model.amount | area ]}
+                            </el-col>
+                        </el-row>
+
+                        <h3>数字格式化</h3>
+                        <el-row>
+                            <el-col :span="4">
+                                原始数据：{[ extension.model.amount ]}
+                            </el-col>
+                            <el-col :span="4">
+                                向下取整：{[ extension.model.amount | integer ]}
+                            </el-col>
+                            <el-col :span="6">
+                                保留两位小数：{[ extension.model.amount | float ]}
+                            </el-col>
+                        </el-row>
+
+                        <h3>数组过滤</h3>
+                        <el-row>
+                            <el-col :span="24">
+                                原始数组：{[ extension.model.array ]}
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                包含A的元素：{[ extension.model.array | filter('A') ]}
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                包含B的元素：{[ extension.model.array.filter(i => i.indexOf('B') != -1) ]}
+                            </el-col>
+                        </el-row>
+
+                        <h2>指令</h2>
+                        <h3>手机号</h3>
+                        <el-row>
+                            <el-col :span="6">
+                                <el-input v-model="extension.model.mobile" v-dsp-input-mobile="extension.model.mobile" size="small" placeholder="只能输入手机号"></el-input>
+                            </el-col>
+                        </el-row>
+                        <h3>整数</h3>
+                        <el-row>
+                            <el-col :span="6">
+                                <el-input v-model="extension.model.integer" v-dsp-input-integer="extension.model.integer" size="small" placeholder="只能输入整数"></el-input>
+                            </el-col>
+                        </el-row>
+                        <h3>整数或小数</h3>
+                        <el-row>
+                            <el-col :span="6">
+                                <el-input v-model="extension.model.number" v-dsp-input-number="extension.model.number" size="small" placeholder="只能输入数字，整数或小数"></el-input>
+                            </el-col>
+                        </el-row>
+                        <h3>短信验证码</h3>
+                        <el-row>
+                            <el-col :span="6">
+                                <el-input v-model="extension.model.captcha" v-dsp-input-captcha="extension.model.captcha" size="small" placeholder="只能输入6位的手机短信验证码" :maxlength="6"></el-input>
+                            </el-col>
+                        </el-row>
+                        <h3>编码</h3>
+                        <el-row>
+                            <el-col :span="6">
+                                <el-input v-model="extension.model.code" v-dsp-input-code="extension.model.code" size="small" placeholder="只能输入字母和数字"></el-input>
+                            </el-col>
+                        </el-row>
+                        <h3>禁止输入空格</h3>
+                        <el-row>
+                            <el-col :span="6">
+                                <el-input   v-dsp-input-trim="extension.model.code" size="small" placeholder="禁止输入空格"></el-input>
+                            </el-col>
+                        </el-row>
+
+                    </section>
+                </el-collapse-item>
+                <el-collapse-item title="典型页面" name="3">
+                    <section>
+                        <h2>列表页面</h2>
+                        <h3><a href="/ui/list/simple" target="_blank">简单列表</a></h3>
+                        <h3><a href="/ui/list/query" target="_blank">带查询条件的列表</a></h3>
+                        <h3><a href="/ui/list/complex" target="_blank">带很多查询条件的列表</a></h3>
+                        <h3><a href="/ui/list/tab" target="_blank">多标签页列表</a></h3>
+                        <h3><a href="/ui/list/complex/tab" target="_blank">多标签页带查询条件的列表</a></h3>
+                        <h3><a href="/ui/list/card" target="_blank">左面是卡片的列表</a></h3>
+                        <h2>表单页面</h2>
+                        <h3><a href="/ui/form/page" target="_blank">整页表单</a></h3>
+                        <h3><a href="/ui/form/popover" target="_blank">弹出面板表单</a></h3>
+                        <h3><a href="/ui/form/dialog" target="_blank">对话框表单</a></h3>
+                        <h3>复杂表单校验</h3>
+                        <h2>intro.js新手指导</h2>
+                        <h3><a href="/ui/form/introJS" target="_blank">intro简单用法</a></h3>
+                    </section>
+                </el-collapse-item>
+            </el-collapse>
+        </el-card>
+
+    </template>
+</div>
+<script type="text/javascript" src="/vendor/laydate/laydate.js"></script>
+<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=A9f77664caa0b87520c3708a6750bbdb"></script>
+<script src="/js/ui/ui.bundle.js"></script>

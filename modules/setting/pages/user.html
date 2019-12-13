@@ -1,0 +1,170 @@
+<link rel="stylesheet" href="/css/setting/user.min.css">
+
+<div id="app" v-cloak>
+    <div class="dsp-list">
+        <!--头部-->
+        <div class="dsp-list_header">
+            <div class="dsp-list_header-query">
+                <dsp-org placeholder="所属部门"  cascader="cascader" size="small"  :value.sync="query.orgId"></dsp-org>
+            </div>
+            <div class="dsp-list_header-query">
+                <el-input v-model="query.name" placeholder="姓名" size="small" maxlength="10" clearable="true"></el-input>
+            </div>
+            <div class="dsp-list_header-query">
+                <el-input v-model="query.mobile" placeholder="手机号码" size="small" maxlength="11" clearable="true"></el-input>
+            </div>
+            <div class="dsp-list_header-query">
+                <el-select v-model="query.positionId" placeholder="职位" filterable size="small" clearable>
+                    <el-option
+                            v-for="item in DSP.positionlist"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                    </el-option>
+                </el-select>
+            </div>
+            <div class="dsp-list_header-query" @click="doQuery">
+                <el-button type="primary" icon="el-icon-search" size="small"></el-button>
+            </div>
+        </div>
+
+        <div class="dsp-list_table">
+            <!--表格-->
+            <el-table
+                    :data="tableData"
+                    stripe
+                    style="width: 100%">
+                <el-table-column label="序号" type="index" :index="indexMethod" width="60" class-name="index"></el-table-column>
+                <el-table-column  label="用户名" >
+                    <template slot-scope="scope">
+                            <img v-if="scope.row.imageUrl" :src="scope.row.imageUrl" style="width: 20px;height: 20px;border-radius:50%"/>
+                            <span >{[scope.row.employee && scope.row.employee.name]}</span>
+                            <span >{[scope.row.mobile]}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="employee.position.name" label="任职" >
+                    <template slot-scope="scope">
+                        <span>{[scope.row.employee && scope.row.employee.organization && scope.row.employee.organization.name]}</span><br/>
+                        <el-popover
+                        placement="top"
+                        width="400"
+                        trigger="click">
+                            <div>主职位
+                                <div style="margin: 4px 0;cursor: pointer;color: #008bff" @click="administrationPosition('zhu',scope.row.employee)">
+                                    {[scope.row.employee && scope.row.employee.organization && scope.row.employee.organization.name]}-{[scope.row.employee && scope.row.employee.position && scope.row.employee.position.name]}
+                                </div>
+                            </div>
+                            <div>副职位
+                                <div style="margin: 4px 0;cursor: pointer;color: #008bff" @click="administrationPosition('fu',position)" v-if="allPosition && allPosition.length > 0" v-for="position in allPosition">
+                                    {[position.orgName]}-{[position.positionName]}&nbsp;
+                                </div>
+                                <span v-if="!allPosition || allPosition.length < 1" >无</span>
+                            </div>
+                        <a slot="reference" style="cursor: pointer" @click="clickPosition(scope.row)">{[scope.row.employee && scope.row.employee.position && scope.row.employee.position.name]}</a>
+                        </el-popover>
+                    </template>
+                </el-table-column>
+                <!--<el-table-column width="60" label="状态">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<span v-if="scope.row && scope.row.employee && scope.row.employee.status">{[$translate(meta.EMPLOYEE_STATUS,scope.row.employee.status)]}</span>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <el-table-column prop="lastLoginTime" label="上次登录时间" width="140">
+                    <template slot-scope="scope">
+                        <span> {[scope.row.lastLoginTime && new Date(parseInt(scope.row.lastLoginTime)).format('yyyy-MM-dd hh:mm')]}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        width="420"
+                        label="操作">
+                    <template slot-scope="scope">
+                        <div style="letter-spacing:0px">
+                            <el-button @click="disable(scope.row)" :type="scope.row.valid  ? 'danger' : 'success' " plain size="small">{[ scope.row.valid  ? '禁用' : '启用']}</el-button>
+                            <el-button @click="reset(scope.row)" type="primary" plain size="small" v-show="scope.row.valid">重置密码</el-button>
+                            <el-button @click="distributionRole(scope.row)" type="primary" plain size="small" v-show="scope.row.valid">分配角色</el-button>
+                            <el-button @click="lookPrivilege(scope.row)" type="primary" plain size="small" v-show="scope.row.valid">查看权限</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!--弹出框-->
+            <el-dialog
+                    :visible.sync="role.visibleBox"
+                    title="分配角色"
+                    width="540px">
+                <el-transfer v-model="role.value" :data="role.data"
+                             :titles="['未拥有角色', '已拥有角色']"
+                             filterable
+                             filter-method='filterMethod'
+                             filter-placeholder='请输入角色'
+                             style="height: 400px">
+                </el-transfer>
+                <div slot="footer" class="align-right">
+                    <el-button @click="role.visibleBox=false" plain>取消</el-button>
+                    <el-button @click="roleConfirm()" type="primary">确认</el-button>
+                </div>
+            </el-dialog>
+            <!--权限弹出框-->
+            <el-dialog
+                    :visible.sync="view.privilege"
+                    title="拥有的权限"
+                    width="1000px">
+                <div v-if="privilege.myRoleList && privilege.myRoleList.length>0" class="user-privilege-title">
+                    当前用户角色为<span @click.stop="urlRole(role)" style="color: #008bff;cursor: pointer" v-for="role in privilege.myRoleList">{[role.name]}&nbsp;</span>所拥有的权限如下
+                </div>
+                <div style="max-height: 500px;overflow-y: auto" class="user-privilege-box">
+                    <el-tree
+                            :data="privilege.myPrivilege"
+                            check-strictly="false"
+                            node-key="id"
+                            default-expand-all
+                            :props="defaultProps"
+                            :expand-on-click-node="false">
+                        <div  slot-scope="{ node, data }" style="width: 100%">
+							<span>
+								<small style="color: #008bff; width: 26px; display: inline-block" v-if="data.parentId">
+								  <i class="icon-menu" v-show="data.type=='MENU'"></i>
+								</small>
+								{[ node.label ]}
+								<span  style="font-size: 12px;margin-left: 10px;color: #aeaeae">{[data.privilege]}</span>
+							</span>
+                            <div style="float: right" v-if="data.user && data.user.length > 5">
+                                <el-popover
+                                        placement="top-start"
+                                        title="标题"
+                                        width="400"
+                                        trigger="hover"
+                                >
+                                    <span style="font-size: 12px;margin-left:4px;color: #008bff;"  @click.stop="urlRole(ro)" v-for="ro in data.user">{[ro.name]}</span>
+                                    <div slot="reference" class="single-line" style="width: 500px">
+                                        <span style="font-size: 12px;margin-left:4px;color: #008bff"  @click.stop="urlRole(ro)" v-for="ro in data.user">{[ro.name]}</span>
+                                    </div>
+                                </el-popover>
+                            </div>
+                            <div style="float: right" v-if="data.user && data.user.length < 6">
+                                <span style="font-size: 12px;margin-left:4px;color: #008bff;float: right"  @click.stop="urlRole(ro)" v-for="ro in data.user">{[ro.name]}</span>
+                            </div>
+                        </div>
+                    </el-tree>
+                </div>
+
+            </el-dialog>
+            <!--分页-->
+            <div class="dsp-list_table-pagination">
+                <el-pagination
+                        @size-change="onSizeChange"
+                        @current-change="onCurrentChange"
+                        :current-page="query.currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size="query.pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="query.totalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/setting/user.bundle.js"></script>
+

@@ -1,0 +1,98 @@
+@import "../../global/styles/global";
+.stylist{
+  font-family: MicrosoftYaHei;
+  display: flex;
+  box-sizing: border-box;
+  div{
+    box-sizing: border-box;
+  }
+  & > div{
+    min-width: 50%;
+    max-width: 50%;
+    max-height: 100%;
+    min-height: 100%;
+    height: 100%;
+    padding: 0 30px 0 10px;
+    .header{
+      height: 60px;
+      display: flex;
+      color: @color-gray-l;
+      line-height: 60px;
+      font-size: 14px;
+      justify-content: space-between;
+    }
+    /*推荐名单列表*/
+    .bodyLeft{
+      margin-right: -30px;
+      padding-right: 30px;
+      max-height: calc(~'100% - 60px');
+      overflow-y: auto;
+    }
+    /*认证设计师名单*/
+    .bodyRight{
+      max-height: calc(~'100% - 110px');
+      min-height: calc(~'100% - 110px');
+      overflow-y: auto;
+    }
+    //分页
+    .cms-table-table-pagination{
+      .el-pager,.btn-prev,.btn-next{
+        float: right;
+      }
+    }
+    //每一个设计师
+    .body-li{
+      -moz-user-select:none;/**ff*/
+      -webkit-user-select:none;/**chrome、safari、360极速*/
+      margin-bottom: 20px;
+      background: @color-gray-s;
+      height: 48px;
+      max-height: 48px;
+      line-height: 48px;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: @color-gray-xl;
+      cursor: pointer;
+      & > div{
+        max-height: 48px;
+      }
+      //排序
+      .body-li-index{
+        width: 50px;
+        padding-left: 12px;
+      }
+      //头像
+      .body-li-avatar{
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+      }
+      .body-li-name{
+        padding-left: 10px;
+        min-width: 100px;
+        width: 10%;
+      }
+      .body-li-addr{
+        min-width: 110px;
+        width: 30%;
+      }
+      .body-li-move{
+        margin-left: auto;
+        font-size: 20px;
+        margin-right: 20px;
+        cursor: pointer;
+      }
+    }
+    .body-li-target{
+      border: 1px dotted #ccc;
+    }
+  }
+  .stylist-left{
+    border-right: 1px solid #EBEEF5 ;
+  }
+  .stylist-right{
+    padding-left: 30px;
+    padding-right: 10px;
+  }
+}

@@ -1,0 +1,196 @@
+<div class="dsp-form" id="app" v-dsp-form-validate v-cloak>
+	<div class="dsp-form_header">
+		新增客户
+	</div>
+	<div class="dsp-form_body">
+		<!--客户资料-->
+		<div class="form-group_header">
+			客户资料
+		</div>
+		<div class="form-group_body">
+			<el-row :gutter="10">
+				<el-col :span="2"  class="form-label required">
+					客户姓名
+				</el-col>
+				<el-col :span="5"
+						v-dsp-validate="information.name"
+						dsp-err-required="客户姓名必须填写"
+						dsp-err-minlength="客户姓名须至少2个字">
+					<el-input size="small"
+							  placeholder="姓名或尊称"
+							  maxlength="10"
+							  v-model="information.name"
+							  v-dsp-input-trim>
+					</el-input>
+				</el-col>
+				<el-col :span="2"  class="form-label required">
+					手机号码
+				</el-col>
+				<el-col :span="5"
+						v-dsp-validate="information.mobile"
+						dsp-err-required="手机号码必须填写"
+						dsp-err-remote="手机号码重复"
+						dsp-err-minlength="手机号码须至少11位">
+					<el-input size="small" v-model="information.mobile" :maxlength=11 placeholder="请输入电话号码"  v-dsp-input-mobile="information.mobile"></el-input>
+				</el-col>
+				<el-col :span="2"  class="form-label">
+					备用手机号
+				</el-col>
+				<el-col :span="5"
+						v-dsp-validate="information.mobileAlt"
+						dsp-err-minlength="手机号码须至少11位"
+						dsp-err-customize="备用手机号不可与手机号码相同"
+						dsp-err-remote="手机号码重复">
+					<el-input size="small" v-model="information.mobileAlt" :maxlength=11 placeholder="请输入电话号码"  v-dsp-input-mobile="information.mobileAlt"></el-input>
+				</el-col>
+			</el-row>
+			<el-row  :gutter="10">
+				<el-col :span="2"  class="form-label required">
+					年龄段
+				</el-col>
+				<el-col :span="5"
+						v-dsp-validate="information.ageRange"
+						dsp-err-required="年龄段必须填写">
+					<el-select size="small" v-model="information.ageRange" placeholder="请选择">
+						<el-option
+								v-for="item in meta.AGES"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+						</el-option>
+					</el-select>
+				</el-col>
+				<el-col :span="2"  class="form-label required">
+					意向品类
+				</el-col>
+				<el-col :span="5"
+						v-dsp-validate="information.wechat"
+						dsp-err-required="意向品类必须填写">
+					<el-select size="small" v-model="information.wechat"
+							   multiple
+							   placeholder="请选择意向品类（可多选）">
+						<el-option
+								v-for="item in meta.BRAND"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+						</el-option>
+					</el-select>
+				</el-col>
+				<el-col :span="2"  class="form-label">
+					性别
+				</el-col>
+				<el-col :span="5" class="form-value">
+					<el-radio v-model="information.gender" label="MALE">男</el-radio>
+					<el-radio v-model="information.gender" label="FEMALE">女</el-radio>
+				</el-col>
+			</el-row>
+		</div>
+
+		<!--销售机会-->
+		<div class="form-group_header" style="padding-right: 10px">
+			销售机会
+            <span class="pull-right">
+			    <a href="javascript:void(0)" @click="addOpportunity"><i class="el-icon-plus"></i> 添加房屋</a>
+            </span>
+		</div>
+		<div class="form-group_body">
+			<div v-for="(oppor,idx) in information.houses" :key="oppor.id" :style="{ background: (idx != 0 && idx == information.houses.length - 1) ? '#f5f7fa' : '#fff', 'padding-bottom': information.houses.length > 1 ? '20px' : '0', 'padding-top': idx > 0 ? '20px' : '0' }">
+				<el-row :gutter="10">
+					<el-col :span="2"  class="form-label">
+						装修风格
+					</el-col>
+					<el-col :span="5">
+						<el-date-picker
+								size="small"
+								v-model="information.houses[idx].houseStyle"
+								type="date"
+								:picker-options="pickerOptions"
+								placeholder="选择日期">
+						</el-date-picker>
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						装修预算
+					</el-col>
+					<el-col :span="5">
+						<el-select size="small" v-model="information.houses[idx].amount" placeholder="请选择">
+							<el-option
+									v-for="item in meta.DECORATION_BUDGET"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						装修进度
+					</el-col>
+					<el-col :span="5">
+						<el-select size="small" v-model="information.houses[idx].houseStage" placeholder="请选择">
+							<el-option
+									v-for="item in meta.DECORATION_STAGE"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+				</el-row>
+				<el-row :gutter="10">
+					<el-col :span="2"  class="form-label required">
+						意向品类
+					</el-col>
+					<el-col :span="5"
+							v-dsp-validate="information.houses[idx].brand"
+							:dsp-index-idx="idx"
+							dsp-err-required="意向品类必须填写">
+						<el-select size="small" v-model="information.houses[idx].brand"
+								   multiple
+								   placeholder="请选择意向品类（可多选）">
+							<el-option
+									v-for="item in meta.BRAND"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="2"  class="form-label required">
+						意向品类
+					</el-col>
+					<el-col :span="12">
+						<el-select size="small" v-model="information.houses[idx].intentions"
+								   multiple
+								   placeholder="请选择意向品类（可多选）">
+							<el-option
+									v-for="item in meta.INTENTION"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+
+
+				</el-row>
+			</div>
+		</div>
+
+		<div class="column" style="margin-bottom: 10px; ">
+			<el-row :gutter="10">
+				<el-col :span="2" :push="2">
+					<el-button type="primary" :loading="saveLoading" @click="saveIt($event)">
+						<i class="icon-save"></i><span>保存</span>
+					</el-button>
+				</el-col>
+				<el-col :span="2" :push="2">
+					<el-button type="default" @click="reset" plain>
+						重置校验
+					</el-button>
+				</el-col>
+			</el-row>
+		</div>
+	</div>
+</div>
+
+<script src="/js/ui/form_complex.bundle.js"></script>

@@ -1,0 +1,267 @@
+<div id="app" class="dsp-form-scrollable-container">
+	<div class="dsp-form" v-dsp-form-validate v-cloak>
+		<div class="dsp-form_header">
+			新增客户
+		</div>
+
+		<div class="dsp-form_body">
+
+			<div class="form-abstract">
+				<el-row :gutter="10">
+					<el-col :span="2"  class="form-label">
+						客户姓名
+					</el-col>
+					<el-col :span="5" class="form-value">
+						张三丰
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						手机号码
+					</el-col>
+					<el-col :span="5" class="form-value">
+						13312345678
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						安装地址
+					</el-col>
+					<el-col :span="8" class="form-value">
+						北京市大兴区拉克丝第六季拉斯蒂芬施蒂利克接口收到
+					</el-col>
+				</el-row>
+				<el-row :gutter="10">
+					<el-col :span="2"  class="form-label">
+						客户姓名
+					</el-col>
+					<el-col :span="5" class="form-value">
+						张三丰
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						手机号码
+					</el-col>
+					<el-col :span="5" class="form-value">
+						13312345678
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						安装地址
+					</el-col>
+					<el-col :span="8" class="form-value">
+						北京市大兴区拉克丝第六季拉斯蒂芬施蒂利克接口收到
+					</el-col>
+				</el-row>
+			</div>
+
+			<div class="form-group_header">
+				小尺寸输入框 <small>要记得在 dsp-form 或 form-group_body 加上：size="small"</small>
+			</div>
+			<div class="form-group_body" size="small">
+				<el-row :gutter="10">
+					<el-col :span="2"  class="form-label required">
+						客户姓名
+					</el-col>
+					<el-col :span="5"
+							v-dsp-validate="information.name"
+							dsp-err-required="客户姓名必须填写"
+							dsp-err-minlength="客户姓名须至少2个字">
+						<el-input size="small"
+								  placeholder="姓名或尊称"
+								  maxlength="10"
+								  v-model="information.name"
+								  v-dsp-input-trim>
+						</el-input>
+					</el-col>
+					<el-col :span="2"  class="form-label required">
+						手机号码
+					</el-col>
+					<el-col :span="5"
+							v-dsp-validate="information.mobile"
+							dsp-err-required="手机号码必须填写"
+							dsp-err-remote="手机号码重复"
+							dsp-err-customize="自定义校验错误消息"
+							dsp-err-minlength="手机号码须至少11位">
+						<el-input size="small" v-model="information.mobile" :maxlength=11 placeholder="请输入电话号码"  v-dsp-input-mobile="information.mobile"></el-input>
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						备用手机号
+					</el-col>
+					<el-col :span="5"
+							v-dsp-validate="information.mobileAlt"
+							dsp-err-remote="手机号码重复"
+							dsp-err-customize="备用手机号不可与手机号码相同"
+							dsp-err-minlength="手机号码须至少11位">
+						<el-input size="small" v-model="information.mobileAlt" :maxlength=11 placeholder="请输入电话号码" v-dsp-input-mobile="information.mobileAlt"></el-input>
+					</el-col>
+				</el-row>
+				<el-row  :gutter="10">
+					<el-col :span="2"  class="form-label required">
+						年龄段
+					</el-col>
+					<el-col :span="5"
+							v-dsp-validate="information.ageRange"
+							dsp-err-required="年龄段必须填写">
+						<el-select size="small" v-model="information.ageRange" placeholder="请选择">
+							<el-option
+									v-for="item in meta.AGES"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="2"  class="form-label required">
+						意向品类
+					</el-col>
+					<el-col :span="5"
+							v-dsp-validate="information.wechat"
+							dsp-err-required="意向品类必须填写">
+						<el-select size="small" v-model="information.wechat"
+								   placeholder="请选择意向品类（可多选）">
+							<el-option
+									v-for="item in meta.BRAND"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						性别
+					</el-col>
+					<el-col :span="5" class="form-value">
+						<el-radio v-model="information.gender" label="MALE">男</el-radio>
+						<el-radio v-model="information.gender" label="FEMALE">女</el-radio>
+					</el-col>
+				</el-row>
+				<el-row class="form-split" :gutter="10">
+					<el-col :span="2"  class="form-label">
+						家庭构成
+					</el-col>
+					<el-col :span="5">
+						<el-select size="small" v-model="information.family" placeholder="请选择">
+							<el-option
+									v-for="item in meta.FAMILY_COMPOSITION"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						老人
+					</el-col>
+					<el-col :span="5" class="input-group">
+						<el-input size="small" v-model="information.old" maxlength="2" v-dsp-input-integer="information.old"></el-input>
+						<div class="unit">位</div>
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						小孩
+					</el-col>
+					<el-col :span="5" class="input-group">
+						<el-input size="small" v-model="information.child" maxlength="2" v-dsp-input-integer ></el-input>
+						<div class="unit">位</div>
+					</el-col>
+				</el-row>
+				<el-row :gutter="10">
+					<el-col :span="2"  class="form-label">
+						家庭住址
+					</el-col>
+					<el-col :span="19">
+						<el-input size="small" v-model="information.address" maxlength="20"></el-input>
+					</el-col>
+				</el-row>
+			</div>
+
+			<div class="form-group_header">
+				大尺寸输入框
+			</div>
+			<div class="form-group_body">
+				<el-row :gutter="10">
+					<el-col :span="2"  class="form-label">
+						职业
+					</el-col>
+					<el-col :span="5">
+						<el-select v-model="information.job" placeholder="请选择">
+							<el-option
+									v-for="item in meta.PROFESSION"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						公司
+					</el-col>
+					<el-col :span="12">
+						<el-input v-model="information.company" maxlength="20"></el-input>
+					</el-col>
+				</el-row>
+				<el-row :gutter="10">
+					<el-col :span="2"  class="form-label">
+						办公地址
+					</el-col>
+					<el-col :span="19">
+						<el-input v-model="information.companyAddress" maxlength="2"></el-input>
+					</el-col>
+				</el-row>
+			</div>
+
+			<div class="form-group_header">
+				信息展示区
+			</div>
+			<div class="form-group_body" readonly>
+				<el-row :gutter="10">
+					<el-col :span="2"  class="form-label">
+						职业
+					</el-col>
+					<el-col :span="5" class="form-value">
+						司机
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						公司
+					</el-col>
+					<el-col :span="5" class="form-value">
+						索菲亚
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						办公地址
+					</el-col>
+					<el-col :span="5" class="form-value">
+						大兴区
+					</el-col>
+				</el-row>
+				<el-row :gutter="10">
+					<el-col :span="2"  class="form-label">
+						职业
+					</el-col>
+					<el-col :span="5" class="form-value">
+						司机
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						公司
+					</el-col>
+					<el-col :span="5" class="form-value">
+						索菲亚
+					</el-col>
+					<el-col :span="2"  class="form-label">
+						办公地址
+					</el-col>
+					<el-col :span="5" class="form-value">
+						大兴区
+					</el-col>
+				</el-row>
+			</div>
+		</div>
+
+		<div class="dsp-form_footer">
+			<el-row :gutter="10">
+				<el-col :span="2" :push="2">
+					<el-button type="primary" :loading="saveLoading" @click="save">
+						<i class="icon-save"></i><span>保存</span>
+					</el-button>
+				</el-col>
+			</el-row>
+		</div>
+	</div>
+</div>
+
+
+<script src="/js/ui/form_page.bundle.js"></script>

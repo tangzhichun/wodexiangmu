@@ -1,0 +1,116 @@
+@import "../../global/styles/global";
+.specialManage{
+  //查询条件
+  .list-query{
+    float: right;
+    display: flex;
+    align-items: center;
+    .label{
+      color: #606266 ;
+      font-size: 14px;
+      white-space :  nowrap;
+      margin:0 18px 0 16px;
+    }
+  }
+  .specialManage-card-box{
+    box-sizing: border-box;
+    max-height:calc(~'100% - 48px') ;
+    overflow-y: auto;
+    padding-top: 26px ;
+    //卡片
+    display: flex;
+    flex-wrap:  wrap;
+    .specialManage-el-card{
+      position: relative;
+      margin-right: 18px;
+      margin-bottom: 60px;
+      margin-top:0;
+      min-width: 400px;
+      max-width: 400px;
+      min-height: 320px;
+      max-height: 320px;
+      .el-card__body{
+        height:100%;
+        overflow: hidden;
+        //上面图片
+        .image{
+          display: block;
+          width: 100%;
+          height: 224px;
+        }
+        //卡片下面
+        .specialManage-card-bottom{
+          display: flex;
+          height: 96px;
+          width: 100%;
+          align-items: center;
+          padding: 24px 24px 22px;
+          box-sizing: border-box;
+          //里面的图标框
+          .card-icon-box{
+            min-width: 50px;
+            min-height: 50px;
+            max-height: 50px;
+            max-width: 50px;
+            line-height: 50px;
+            text-align: center;
+            font-size: 30px;
+            margin-right: 13px;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
+
+  .gengduo-box{
+      width: 40px;
+      height: 40px;
+      text-align: right;
+      cursor: auto;
+      padding-right: 20px;
+      margin-right: -20px;
+    .gengduo-box-cell{
+      height: 10px;
+      margin-top: 10px;
+    }
+  }
+}
+
+//
+.stylist{
+  display: flex;
+
+  .form-label{
+    box-sizing: border-box;
+    min-width: 100px;
+    max-width: 100px;
+    padding-right: 16px;
+    font-weight: bold;
+    text-align: right !important;
+  }
+  .stylist-img{
+    min-width: 250px;
+    max-width: 250px  ;
+  }
+  .stylist-from{
+    width: 100%;
+    .el-row{
+      margin-bottom: 30px;
+      padding: 0;
+      .form-label{
+        color :#303133;
+        font-size:14px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  //简介
+  .intro-textarea{
+    textarea{
+      resize: none;
+    }
+  }
+
+}

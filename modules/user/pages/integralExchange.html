@@ -1,0 +1,138 @@
+
+<link rel="stylesheet" href="/css/user/kitchenNurse.min.css">
+<div id="app" v-cloak class="kitchenNurse">
+    <div class="dsp-list">
+        <!--头部-->
+        <div class="dsp-list_header">
+            <div class="dsp-list_header-tabs">
+                <div class="dsp-list_header-tabs-item" v-for="tab in tabList" :class="{active: tab.id == query.currentTab}" @click="showTab(tab.id)">{[tab.title]}</div>
+            </div>
+
+            <!--查询条件区域-->
+            <dsp-criteria :criteria="criteria[query.currentTab]" v-on:remove="removeCriteria"></dsp-criteria>
+
+            <!--按钮区域-->
+            <div class="pull-right">
+                <el-button size="small" type="primary" plain @click="showFilterPanel">
+                    <i class="icon-filter"></i> 筛选
+                </el-button>
+            </div>
+        </div>
+        <!--待发货 ok-->
+        <div class="dsp-list_table" :key="query.currentTab" v-if="query.currentTab === 'tab1'">
+            <!--表格-->
+            <el-table
+                    :data="tableData[query.currentTab]"
+                    v-loading="views.loading"
+                    stripe
+                    style="width: 100%">
+                <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
+                <el-table-column label="订单号"></el-table-column>
+                <el-table-column label="收货人"></el-table-column>
+                <el-table-column label="收货地址"></el-table-column>
+                <el-table-column label="兑换商品"></el-table-column>
+                <el-table-column label="兑换时间">
+                    <template slot-scope="scope">
+                    </template>
+                </el-table-column>
+                <el-table-column label="供应商"></el-table-column>
+                <el-table-column label="备注"></el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <a class="list-link " href="javascript:void(0)"  @click="openshouLiDialog(scope.row)">发货</a>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <!--分页-->
+            <div class="dsp-list_table-pagination">
+                <el-pagination
+                        @size-change="fetchData"
+                        @current-change="fetchData"
+                        :current-page.sync="query[query.currentTab].currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size.sync="query[query.currentTab].pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total.sync="query[query.currentTab].totalSize">
+                </el-pagination>
+            </div>
+        </div>
+        <!--已发货 ok-->
+        <div class="dsp-list_table" :key="query.currentTab" v-if="query.currentTab === 'tab2'">
+            <!--表格-->
+            <el-table
+                    :data="tableData[query.currentTab]"
+                    v-loading="views.loading"
+                    stripe
+                    style="width: 100%">
+                <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
+                <el-table-column label="订单号"></el-table-column>
+                <el-table-column label="收货人"></el-table-column>
+                <el-table-column label="收货地址"></el-table-column>
+                <el-table-column label="兑换商品"></el-table-column>
+                <el-table-column label="供应商"></el-table-column>
+                <el-table-column label="快递信息"></el-table-column>
+                <el-table-column label="发货时间"></el-table-column>
+                <el-table-column label="物流状态">
+                    <template slot-scope="scope">
+                        <a class="list-link " href="javascript:void(0)"  @click="openpaigongDialog(scope.row)">查看物流</a>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <!--分页-->
+            <div class="dsp-list_table-pagination">
+                <el-pagination
+                        @size-change="fetchData"
+                        @current-change="fetchData"
+                        :current-page.sync="query[query.currentTab].currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size.sync="query[query.currentTab].pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total.sync="query[query.currentTab].totalSize">
+                </el-pagination>
+            </div>
+        </div>
+        <!--筛选面板-->
+        <div class="dsp-panel-popover" :class="{'active': views.filterPanelVisible}">
+            <div class="dsp-panel-popover_header">
+                <span>筛选</span>
+                <i class="el-icon-close" @click="hideFilterPanel" ></i>
+            </div>
+
+            <div class="dsp-panel-popover_body">
+                <div class="filter-row">
+                    <el-input v-model="query[query.currentTab].name" placeholder="订单编号"  maxlength="30" clearable="true" ></el-input>
+                </div>
+                <div class="filter-row">
+                    <el-input v-model="query[query.currentTab].name" placeholder="联系人姓名"  maxlength="30" clearable="true" ></el-input>
+                </div>
+                <div class="filter-row">
+                    <el-input v-model="query[query.currentTab].name" placeholder="联系人电话"  maxlength="30" clearable="true" ></el-input>
+                </div>
+                <div class="filter-row">
+                    <el-input v-model="query[query.currentTab].name" placeholder="服务地址"  maxlength="30" clearable="true" ></el-input>
+                </div>
+                <div class="filter-row">
+                    <el-input v-model="query[query.currentTab].name" placeholder="服务商"  maxlength="30" clearable="true" ></el-input>
+                </div>
+                <div class="filter-row">
+                    <el-input v-model="query[query.currentTab].name" placeholder="工人"  maxlength="30" clearable="true" ></el-input>
+                </div>
+                <div class="filter-row">
+                    <el-input v-model="query[query.currentTab].name" placeholder="评价等级"  maxlength="30" clearable="true" ></el-input>
+                </div>
+                <!--查询重置-->
+                <div class="filter-row button-row">
+                    <!--查询-->
+                    <el-button @click="doQuery" type="primary">查询</el-button>
+                    <el-button @click="doReset">重置</el-button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/user/integralExchange.bundle.js"></script>

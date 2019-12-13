@@ -1,0 +1,90 @@
+<!--todo Tabs 标签页-->
+<link rel="stylesheet" href="/css/cms/innerRecommend.min.css">
+<div id="app" class="cms-card" v-cloak style="padding:0 20px">
+    <header class="cms-card-header">
+        <!--:class="{'cms-card-header-categoriesTab-active':item.value===query.currTab}"-->
+        <div class="cms-card-header-categoriesTab"
+             v-for="item in tab"
+             @click="change(item.value)">
+            {[item.label]}
+        </div>
+    </header>
+    <!--关注后回复-->
+    <div class="cms-card-body stylist" v-if="query.currTab ==='tab1'">
+        <!--推荐名单-->
+        <div class="stylist-left">
+            <!--头部-->
+            <div class="header">
+                <span>推荐名单（{[query.leftListTotalSize]}）</span>
+                <el-link :underline="false" @click="views.sort = !views.sort">
+                    <span class="font-label font-size-s">{[views.sort ? '列表' : '排序']}</span>
+                </el-link>
+            </div>
+            <!--列表-->
+            <div class="bodyLeft" v-loading="views.leftList">
+                <div class="body-li" :class="{'body-li-target':upAndDownShift.targetData && upAndDownShift.targetData.id === item.id}" v-for="(item,i) in leftList"  draggable="true" @dragstart="dragstart(event,item,i)"  @dragend="dragend(event,item,i)" @dragenter="dragenter(event, item,i)">
+                    <div class="body-li-index">{[i*1+1]}</div>
+                    <img :src="DSP.globalConfig.fileBaseUrl + item.avatarUrl" alt="" class="body-li-avatar" v-if="item.avatarUrl" >
+                    <img src="/images/head_portrait.jpg" alt="" class="body-li-avatar" v-if="!item.avatarUrl"  >
+                    <div class="body-li-name single-line">
+                        <el-link :underline="false" :href="'/user/userInformation?userId='+item.uId" target="_blank"> {[item.name]}</el-link>
+                    </div>
+                    <div class="body-li-addr single-line">
+                        {[item.addr]}
+                    </div>
+                    <div class="body-li-addr single-line">
+                        {[item.company]}
+                    </div>
+
+                    <div style="margin-left: auto; white-space: nowrap;" >
+                        <el-link :underline="false" v-show="!views.sort" class="body-li-move" @click="putLeftShift(item.id,'rightShift')"><i class="icon-right"></i></el-link>
+                        <el-link :underline="false" v-show="views.sort && i < query.leftListTotalSize-1" class="body-li-move" @click="putUpAndDownShift(item,i+1)"><i class="el-icon-sort-down"></i></el-link>
+                        <el-link :underline="false" v-show="views.sort && i > 0" class="body-li-move" @click="putUpAndDownShift(item,i-1)"><i class="el-icon-sort-up"></i></el-link>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--认证设计师-->
+        <div class="stylist-right" v-loading="views.rightList">
+            <!--头部-->
+            <div class="header">
+                <span>认证设计师（{[query.rightListTotalSize]}个）</span>
+                <el-input style="width: 240px" v-model="query.name" clearable placeholder="姓名/地区/公司" @change="getRightList(1)"></el-input>
+            </div>
+            <!--列表-->
+            <div class="bodyRight" >
+                <div class="body-li" v-for="item in rightList" style="cursor: auto">
+                    <img :src="DSP.globalConfig.fileBaseUrl + item.avatarUrl" alt="" class="body-li-avatar" v-if="item.avatarUrl"  style="margin-left: 20px">
+                    <img src="/images/head_portrait.jpg" alt="" class="body-li-avatar" v-if="!item.avatarUrl"  style="margin-left: 20px">
+                    <div class="body-li-name single-line">
+                        <el-link :underline="false" :href="'/user/userInformation?userId='+item.uId" target="_blank"> {[item.name]}</el-link>
+                    </div>
+                    <div class="body-li-addr single-line">
+                        {[item.addr]}
+                    </div>
+                    <div class="body-li-addr single-line">
+                        {[item.company]}
+                    </div>
+                    <el-link :underline="false" class="body-li-move" @click="putLeftShift(item.id,'leftShift')"><i class="icon-left"></i></el-link>
+                </div>
+            </div>
+            <div class="cms-table-table-pagination">
+                <el-pagination
+                        @size-change="getRightList"
+                        @current-change="getRightList"
+                        :current-page.sync="query.currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size.sync="query.pageSize"
+                        layout= "total,sizes,next,pager,prev"
+                        :total.sync="query.rightListTotalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+    <!--关键词回复-->
+    <div class="cms-card-body" v-if="query.currTab ==='tab2'">
+
+    </div>
+</div>
+<script src="/js/cms/innerRecommend.bundle.js"></script>

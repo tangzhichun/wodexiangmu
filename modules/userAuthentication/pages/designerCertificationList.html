@@ -1,0 +1,64 @@
+<div id="app" v-cloak>
+    <div class="dsp-list">
+        <div class="dsp-list_header">
+            设计师
+            <!--按钮区域-->
+            <div class="pull-right">
+                <div class="dsp-list_header-query">
+                    <el-input v-model="query.name" placeholder="姓名或手机号" size="small" maxlength="10" clearable="true" @change="fetchData(1)"></el-input>
+                </div>
+
+            </div>
+        </div>
+        <div class="dsp-list_table" >
+            <!--表格-->
+            <el-table
+                    :data="tableData"
+                    v-loading="views.loading"
+                    stripe
+                    style="width: 100%">
+                <el-table-column label="序号" type="index" :index="indexMethod" width="80" ></el-table-column>
+                <el-table-column  prop="name" label="姓名/电话/级别">
+                    <template slot-scope="scope">
+                        <div style="display: flex;align-items: center;">
+                            <span>{[scope.row.name]}</span>
+                            <span style="margin: 0 4px 0 8px">{[scope.row.mobile]}</span>
+                            <img :src="'/images/'+scope.row.level+'.png'" alt="" width="40px" height="17px">
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="addr" label="地区"></el-table-column>
+                <el-table-column prop="company"  label="公司/门店"></el-table-column>
+                <el-table-column label="用户认证">
+                    <template slot-scope="scope">
+                        <a v-for="item in scope.row.list"  style="display: flex;line-height: 28px" :href="'/user/userInformation?userId='+item.id" target="_blank">
+                            <el-avatar :size="30" :src="item.avatarUrl"></el-avatar>
+                            <span style="margin: 0 7px 0 10px">{[item.name || item.nickName]}</span>
+                        </a>
+                        <span v-if="scope.row.list.length < 1">未认证</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="公众号">
+                    <template slot-scope="scope">
+                        <el-avatar  :size="36" :src="item" v-for="item in scope.row.follow" style="margin-right: 4px"></el-avatar>
+                        <span v-if="scope.row.follow.length < 1">未关注</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!--分页-->
+            <div class="dsp-list_table-pagination">
+                <el-pagination
+                        @size-change="fetchData"
+                        @current-change="fetchData"
+                        :current-page.sync="query.currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size.sync="query.pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="query.totalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/userAuthentication/designerCertificationList.bundle.js"></script>

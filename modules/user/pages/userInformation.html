@@ -1,0 +1,1124 @@
+<link rel="stylesheet" href="/css/user/userInformation.min.css">
+<div id="app" v-cloak>
+    <div  class="userInformation">
+        <div class="userInformation-l"  v-loading="!userData" >
+            <!--头像简单信息-->
+            <header v-if="userData && DSP.userId" class="userInformation-l-head">
+                <img v-if="userData.avatarUrl" :src="userData.avatarUrl" width="80px" height="80px" style="border-radius: 4px">
+                <img v-else src="/images/head_portrait.jpg" width="80px" height="80px" style="border-radius: 4px">
+                <div style="margin-left: 20px;line-height: 24px;">
+                    <p class="font-size-s font-value">
+                        {[userData.nickName]} {[userData.mobile]}
+                        <i class="icon-male" v-if="userData.gender === 1"></i>
+                        <i class="icon-female font-danger"  v-if="userData.gender === 2"></i>
+                    </p>
+                    <p class="font-size-ms font-label" >
+                        {[userData.mpCountry]}
+                        {[userData.mpProvince]}
+                        {[userData.mpCity]}
+                    </p>
+                </div>
+            </header>
+            <header v-if="userData && !DSP.userId" class="userInformation-l-head">
+                <img v-if="userData.headImgUrl" :src="userData.headImgUrl" width="80px" height="80px" style="border-radius: 4px">
+                <img v-else src="/images/head_portrait.jpg" width="80px" height="80px" style="border-radius: 4px">
+                <div style="margin-left: 20px;line-height: 24px;max-width: 140px">
+                    <p class="font-size-s font-value">
+                        {[userData.nickName]} {[userData.mobile]}
+                        <i class="icon-male" v-if="userData.sex === 1"></i>
+                        <i class="icon-female font-danger"  v-if="userData.sex === 2"></i>
+                    </p>
+                    <p class="font-size-ms font-label" >
+                        {[userData.country]}
+                        {[userData.province]}
+                        {[userData.city]}
+                    </p>
+                </div>
+            </header>
+            <!--详细信息-->
+            <div v-if="userData" class="userInformation-l-body">
+                <!--创新合伙人-->
+                <div class="userInformation-l-body-item" v-if="userData.promotionStatus == 1">
+                    <div class="userInformation-l-body-item-title">
+                        <span class="font-weight font-size-m">创薪合伙人</span>
+
+                        {{#contains user.privileges 'XCX_USER_PROMOTION_CANCEL'}}
+                        <a class="link-warn" style="cursor: pointer" @click="delPromotion">取消认证</a>
+                        {{/contains}}
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label ">身份</p>
+                        <dsp-img trigger="link" v-if="userData.positionUrl" :title="$translate(meta.position,userData.promotionPosition) " :src="DSP.globalConfig.fileBaseUrl + userData.positionUrl"></dsp-img>
+                        <span v-else>{[$translate(meta.position,userData.promotionPosition)]}</span>
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-if="userData.recommendInfo">
+                        <p class="font-label ">推荐人</p>
+                        <a :href="'/user/userInformation?userId=/'+userData.recommendInfo.id" target='_blank'>{[userData.recommendInfo.nickName]}</a>
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label ">渠道</p>
+                        {[$translate(meta.KHLY,userData.promotionSource) || '自然客流']}
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label ">审核通过日期</p>{[$localDateTimeNumber(userData.promotionTimeCreated) | datetime ]}
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label ">等级</p>
+                        <img style="height: 21px;width: 51px" v-if="userData.promotionLevel" :src="'/images/partner_grade_'+userData.promotionLevel+'.png'" >
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label ">公众号</p>已关注
+                    </div>
+                </div>
+                <!--设计师认证-->
+                <div class="userInformation-l-body-item sheJiShi" v-if="userData.designerStatus ==='PASSED' && userData.promotionStatus != 1">
+                    <div class="userInformation-l-body-item-title">
+                        <span class="font-weight font-size-m">设计师认证</span>
+                        {{#contains user.privileges 'XCX_USER_DESIGNER_DEIT'}}
+                            <el-dropdown trigger="click" @command="sjs">
+                                  <span class="el-dropdown-link" style="cursor: pointer">
+                                    操作<i class="el-icon-arrow-down el-icon--right"></i>
+                                  </span>
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item  command="a">取消认证</el-dropdown-item>
+                                    <el-dropdown-item  command="b">修改资料</el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        {{/contains}}
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label">姓名</p>{[userData.designerName]}
+                        <img :src="'/images/'+userData.designerLevel+'.png'"  height="16px" style="margin-left:14px;border-radius: 4px">
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label">类别</p>
+                        {[$translate(meta.identityList,userData.distinguish) || '未知']}
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label">地区</p>{[userData.designerAddr]}
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label">公司/门店</p>{[userData.designerCompany]}
+                    </div>
+                    <div class="userInformation-l-body-item-line" style="align-items: unset;">
+                        <p class="font-label">简介</p>
+                       {[userData.designerBriefIntroduction]}
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label">案例</p>
+                        <div class="cenxiang">
+                            <el-tooltip class="item" effect="dark" :content="'属于该设计师的设计共'+(userData.designNum || 0)+'个'" placement="top">
+                                <span>
+                                    <i class="el-icon-picture-outline"></i>
+                                    {[userData.designNum || 0]}
+                                </span>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" :content="'共获取点赞数' + (userData.actualPraiseNumStr||0) " placement="top">
+                               <span>
+                                <i class="icon-thumbs-up"></i>
+                                {[userData.actualPraiseNumStr || '0']}
+                            </span>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" :content="'累计'+ (userData.actualCollectNumStr || 0) +'用户收藏'" placement="top">
+                                <span>
+                                <i class="el-icon-star-off"></i>
+                                    {[userData.actualCollectNumStr || '0']}
+                                </span>
+                            </el-tooltip>
+                        </div>
+                    </div>
+                </div>
+                <!--基础认证-->
+                <div class="userInformation-l-body-item" v-if="userData.isEmissary  && userData.promotionStatus != 1">
+                    <div class="userInformation-l-body-item-title">
+                        <span class="font-weight font-size-m">基础认证</span>
+                        {{#contains user.privileges 'XCX_USER_TO_BE_EMISSARY_DEl'}}
+                        <a class="link-warn" style="cursor: pointer" @click="delSpread"
+                           v-if="userData.designerStatus !=='PASSED' && userData.promotionStatus != 1 && DSP.userId">取消认证</a>
+                        {{/contains}}
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label w90">类型</p>{[userData.emissaryType]}
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label w90">姓名</p>{[userData.name]}
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label w90">电话</p>{[userData.mobile]}
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-if="userData.company">
+                        <p class="font-label w90">部门</p>
+                        {[$translate(meta.position,userData.company)]}
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-if="userData.dealerCode">
+                        <p class="font-label w90">经销商</p>
+                        {[$translate(DSP.dealerEnums,userData.dealerCode)]}
+                    </div>
+                </div>
+                <!--用户信息-->
+                <div class="userInformation-l-body-item" v-if="userData.promotionStatus != 1">
+                    <div class="userInformation-l-body-item-title font-weight font-size-m">
+                        <el-dropdown trigger="click"   @visible-change="handleClick" @command="handleCommand" v-if="userData.unionId || userData.unionid">
+                          <span class="el-dropdown-link category">
+                            {[$translate(meta.xianshangmei,userData.category) ]}<i class="el-icon-arrow-down el-icon--right"></i>
+                          </span>
+                            <el-dropdown-menu slot="dropdown" >
+                                <el-dropdown-item icon="el-icon-loading" v-if="meta.xiaochengxu.length < 1"></el-dropdown-item>
+                                <el-dropdown-item v-for="item in meta.xiaochengxu" :key="meta.xiaochengxu" :command="item">{[$translate(meta.xianshangmei,item.category) ]}</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                        <span v-else>
+                            {[$translate(meta.xianshangmei,userData.category) ]}
+                        </span>
+
+                        <el-dropdown trigger="click"  @command="handleCommandfu" >
+                          <span class="el-dropdown-link" style="cursor: pointer;font-size:16px;font-weight: normal">
+                            操作<i class="el-icon-arrow-down el-icon--right"></i>
+                          </span>
+                            <el-dropdown-menu slot="dropdown" >
+                                <el-dropdown-item command="openId">复制openId</el-dropdown-item>
+                                <el-dropdown-item command="unionId" v-show="userData.unionId || userData.unionid">复制unionId</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label">注册时间</p>
+                        <span v-if="DSP.userId">{[userData && userData.timeCreated && $localDateTimeNumber(userData.timeCreated) | datetime ]}</span>
+                        <span v-else>{[userData.subscribeTime && userData.subscribeTime.substr(0, userData.subscribeTime.length - 2) ]}</span>
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-if="DSP.userId">
+                        <p class="font-label">总打开次数</p>{[userData.totalClickNum || 0]}次
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-if="DSP.userId">
+                        <p class="font-label">总访问时长</p>{[(userData.totalBrowseTime || 0) | formatseconds]}
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-if="DSP.userId">
+                        <p class="font-label">最后访问时间</p>
+                        {[userData.lastVisitTime && $localDateTimeNumber(userData.lastVisitTime) | datetime ]}
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-if="DSP.userId">
+                        <p class="font-label">最后访问时长</p>{[(userData.lastBrowseTime || 0) | formatseconds]}
+                    </div>
+                    <div class="userInformation-l-body-item-line"  v-if="DSP.userId">
+                        <p class="font-label">最近推荐人</p>
+                        <a v-if="userData.latestSharerName || userData.latestSharerNickName" :href="'/user/userInformation?userId='+userData.latestSharerId" target='_blank'>{[userData.latestSharerName || userData.latestSharerNickName]}</a>
+                        <span v-else>无</span>
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-else>
+                        <p class="font-label">最近推荐人</p>
+                        <span v-if="userData.lastReferrer ">{[userData.lastReferrer ]}</span>
+                        <span v-else>无</span>
+                    </div>
+
+                    <div class="userInformation-l-body-item-line"  v-if="DSP.userId">
+                        <p class="font-label">最早推荐人</p>
+                        <a v-if="userData.firstSharerName || userData.firstSharerNickName" :href="'/user/userInformation?userId='+userData.firstSharerId" target='_blank'>{[userData.firstSharerName || userData.firstSharerNickName]}</a>
+                        <span v-else>无</span>
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-else>
+                        <p class="font-label">最早推荐人</p>
+                        <span v-if='userData.referrer'>{[userData.referrer]}</span>
+                        <span v-else>无</span>
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-show="DSP.userId">
+                        <p class="font-label">使用地区</p>
+                        <i class="el-icon-location-outline" style="margin-right: 4px;color: #C0C4CC;"></i>{[userData.userCity || '未知']}
+                    </div>
+
+                    <div v-if="!DSP.userId">
+                        <div class="userInformation-l-body-item-line">
+                            <p class="font-label">关注状态</p>{[userData.subscribe == 1 ? '已关注' : '未关注']}
+                        </div>
+                        <div class="userInformation-l-body-item-line">
+                            <p class="font-label">来源方式</p>
+                            {[$translate(meta.gzhLaiyuan,userData.subscribeScene) ]}
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--创新合伙人推广效果-->
+                <div class="userInformation-l-body-item" v-if="userData.promotionStatus == 1">
+                    <div class="userInformation-l-body-item-title">
+                        <span class="font-weight font-size-m">推广效果</span>
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label ">累计带客</p>{[userData.count]}人
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label ">累计带单</p>{[userData.orderNum]}单
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label ">累计推荐成交</p>{[userData.dealAmount]}元
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label ">累计获得奖励</p>{[userData.faceCash]}元
+                    </div>
+                </div>
+                <!--创新合伙人 实名认证-->
+                <div class="userInformation-l-body-item" v-if="userData.promotionStatus == 1">
+                    <div class="userInformation-l-body-item-title font-weight font-size-m">
+                        <el-dropdown trigger="click"   @visible-change="handleClick" @command="handleCommand" v-if="userData.unionId || userData.unionid">
+                          <span class="el-dropdown-link category">
+                            {[$translate(meta.xianshangmei,userData.category) ]}<i class="el-icon-arrow-down el-icon--right"></i>
+                          </span>
+                            <el-dropdown-menu slot="dropdown" >
+                                <el-dropdown-item icon="el-icon-loading" v-if="meta.xiaochengxu.length < 1"></el-dropdown-item>
+                                <el-dropdown-item v-for="item in meta.xiaochengxu" :key="meta.xiaochengxu" :command="item">{[$translate(meta.xianshangmei,item.category) ]}</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                        <span v-else>
+                            {[$translate(meta.xianshangmei,userData.category) ]}
+                        </span>
+
+                        <el-dropdown trigger="click"  @command="handleCommandfu" >
+                          <span class="el-dropdown-link" style="cursor: pointer;font-size:16px;font-weight: normal">
+                            操作<i class="el-icon-arrow-down el-icon--right"></i>
+                          </span>
+                            <el-dropdown-menu slot="dropdown" >
+                                <el-dropdown-item command="openId">复制openId</el-dropdown-item>
+                                <el-dropdown-item command="unionId" v-show="userData.unionId || userData.unionid">复制unionId</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                    <div class="userInformation-l-body-item-line">
+                        <p class="font-label">注册时间</p>
+                        <span v-if="DSP.userId">{[userData && userData.timeCreated && $localDateTimeNumber(userData.timeCreated) | datetime ]}</span>
+                        <span v-else>{[userData.subscribeTime && userData.subscribeTime.substr(0, userData.subscribeTime.length - 2) ]}</span>
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-if="DSP.userId">
+                        <p class="font-label">总打开次数</p>{[userData.totalClickNum || 0]}次
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-if="DSP.userId">
+                        <p class="font-label">总访问时长</p>{[(userData.totalBrowseTime || 0) | formatseconds]}
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-if="DSP.userId">
+                        <p class="font-label">最后访问时间</p>
+                        {[userData.lastVisitTime && $localDateTimeNumber(userData.lastVisitTime) | datetime ]}
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-if="DSP.userId">
+                        <p class="font-label">最后访问时长</p>{[(userData.lastBrowseTime || 0) | formatseconds]}
+                    </div>
+                    <div class="userInformation-l-body-item-line"  v-if="DSP.userId">
+                        <p class="font-label">最近推荐人</p>
+                        <a v-if="userData.latestSharerName || userData.latestSharerNickName" :href="'/user/userInformation?userId='+userData.latestSharerId" target='_blank'>{[userData.latestSharerName || userData.latestSharerNickName]}</a>
+                        <span v-else>无</span>
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-else>
+                        <p class="font-label">最近推荐人</p>
+                        <span v-if="userData.lastReferrer ">{[userData.lastReferrer ]}</span>
+                        <span v-else>无</span>
+                    </div>
+
+                    <div class="userInformation-l-body-item-line"  v-if="DSP.userId">
+                        <p class="font-label">最早推荐人</p>
+                        <a v-if="userData.firstSharerName || userData.firstSharerNickName" :href="'/user/userInformation?userId='+userData.firstSharerId" target='_blank'>{[userData.firstSharerName || userData.firstSharerNickName]}</a>
+                        <span v-else>无</span>
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-else>
+                        <p class="font-label">最早推荐人</p>
+                        <span v-if='userData.referrer'>{[userData.referrer]}</span>
+                        <span v-else>无</span>
+                    </div>
+                    <div class="userInformation-l-body-item-line" v-show="DSP.userId">
+                        <p class="font-label">使用地区</p>
+                        <i class="el-icon-location-outline" style="margin-right: 4px;color: #C0C4CC;"></i>{[userData.userCity || '未知']}
+                    </div>
+                    <!--<div class="userInformation-l-body-item-line">-->
+                        <!--<p class="font-label">实名认证</p>-->
+                        <!--李坤 132362199806063321-->
+                        <!--<a style="cursor: pointer;margin-left: 10px" class="icon-picture"></a>-->
+                    <!--</div>-->
+                    <!--<div class="userInformation-l-body-item-line">-->
+                        <!--<p class="font-label">银行卡</p>-->
+                        <!--中国工商银行 6222 3623 6666 8888-->
+                    <!--</div>-->
+                    <!--<div class="userInformation-l-body-item-line">-->
+                        <!--<p class="font-label">合同有效期</p>-->
+                        <!--2019-01-01至2020-01-01 <a style="cursor: pointer;margin-left: 10px" class="el-icon-tickets"></a>-->
+                    <!--</div>-->
+                </div>
+
+            </div>
+        </div>
+
+        <!--右侧-->
+        <div class="cms-card userInformation-R" style="min-width: 910px" >
+            <header class="cms-card-header">
+                <div v-for="item in tab"
+                     class="cms-card-header-categoriesTab"
+                     :class="{'cms-card-header-categoriesTab-active' : item.value === currtab}"
+                     v-if="!item.sjs || (item.sjs && userData && userData.designerStatus ==='PASSED')"
+                     @click="changeTab(item.value)">
+                    {[item.label]}
+                </div>
+                <div class="cms-card-header-categoriesTab"
+                     v-if = 'userData && userData.promotionStatus == 1'
+                     :class="{'cms-card-header-categoriesTab-active' : 'group' === currtab}"
+                     @click="changeTab('group')">
+                    团队
+                </div>
+                <div class="cms-card-header-categoriesTab"
+                     v-if = 'userData && userData.promotionStatus == 1'
+                     :class="{'cms-card-header-categoriesTab-active' : 'monthBill' === currtab}"
+                     @click="changeTab('monthBill')">
+                    月结账单
+                </div>
+
+                <!--访问记录-->
+                <div class="cms-card-header-query" style="min-width: 410px" v-if="currtab === 'visit'">
+                    <el-date-picker
+                            style="width: 300px"
+                            v-model="queryAll.visitQuery.time"
+                            clearable
+                            size="small"
+                            type="daterange"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
+                            start-placeholder="访问日期"
+                            @change="changeTab('visit',1)"
+                            >
+                    </el-date-picker>
+                </div>
+                <!--裂变图-->
+                <div class="cms-card-header-query" v-if="currtab === 'lieBianTu'">
+                <el-radio-group v-model="method" size="medium" @change="getcavas">
+                    <el-radio-button label="FIRST">最早优先</el-radio-button>
+                    <el-radio-button label="LAST">最近优先</el-radio-button>
+                </el-radio-group>
+                </div>
+                <!--推广方式-->
+                <div class="cms-card-header-query" style="min-width: 410px" v-if="currtab === 'generalize'">
+                    <el-date-picker
+                            @change="changeTab('generalize',1)"
+                            style="width: 354px"
+                            format="yyyy-MM-dd HH"
+                            value-format="yyyy-MM-dd HH"
+                            v-model="queryAll.generalizeQuery.time"
+                            size="small"
+                            type="datetimerange"
+                            start-placeholder="访问时间"
+                    >
+                    </el-date-picker>
+                    <el-select v-model="queryAll.generalizeQuery.methods" clearable placeholder="方式" size="small" style="width: 150px;margin-left: 10px"  @change="changeTab('generalize',1)">
+                        <el-option
+                                v-for="item in meta.shareMethod"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </div>
+                <!--用户报名-->
+                <div class="cms-card-header-query" style="min-width: 410px" v-if="currtab === 'user'">
+                    <el-date-picker
+                            style="width: 240px"
+                            v-model="queryAll.userQuery.time"
+                            size="small"
+                            type="daterange"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
+                            start-placeholder="报名日期"
+                            @change="changeTab('user',1)"
+                    >
+                    </el-date-picker>
+                </div>
+                <!--团队-->
+                <div class="cms-card-header-query" style="min-width: 410px" v-if="currtab === 'group'">
+                    <el-input size="small" placeholder="请输入内容" v-model="queryAll.groupQuery.promotionName" clearable  @change="changeTab('group',1)" style="width: 150px;"></el-input>
+                    <el-select size="small" v-model="queryAll.groupQuery.level" clearable placeholder="等级"  style="width: 150px;margin-left: 10px"  @change="changeTab('group',1)">
+                        <el-option
+                                v-for="item in meta.PROMOTIONLEVEL"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </div>
+                <div class="cms-card-header-query" style="min-width: 410px" v-if="currtab === 'monthBill'">
+                    <el-date-picker
+                            style="width: 200px"
+                            v-model="queryAll.monthBillQuery.currentYears"
+                            size="small"
+                            type="month"
+                            value-format="yyyy-M"
+                            format="yyyy-MM"
+                            placeholder="月份"
+                            @change="changeTab('monthBill',1)"
+                    >
+                    </el-date-picker>
+                </div>
+            </header>
+            <div class="cms-card-body" :key="currtab">
+                <!--访问记录-->
+                <div class="dsp-list" v-if="currtab === 'visit'">
+                    <div class="dsp-list_table" style="padding: 0">
+                    <!--表格-->
+                    <el-table
+                            :data="listAll.visitList"
+                            v-loading="loading.visit"
+                            stripe
+                            style="width: 100%;height: 100%">
+                        <el-table-column  label="序号" type="index" :index="(value)=> indexMethod(value,'visitQuery')" width="50px" ></el-table-column>
+                        <el-table-column  prop="designTitle" label="访问方式">
+                            <template slot-scope="scope">
+                                {[$translate(meta.shareMethod,scope.row.visitMethod) || '直接访问']}
+                            </template>
+                        </el-table-column>
+                        <el-table-column  prop="designTitle" label="场景值">
+                            <template slot-scope="scope">
+                                {[$sceneInfo(scope.row.sceneValue)]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column  prop="designTitle" label="访问文章">
+                            <template slot-scope="scope" >
+                                <a style="cursor: pointer" @click="lookDesign(scope.row)">{[scope.row.designTitle]}</a>
+                            </template>
+                        </el-table-column>
+                        <el-table-column  prop="mobile" label="访问时间">
+                            <template slot-scope="scope">
+                                {[userData.timeCreated && $localDateTimeNumber(scope.row.timeCreated) | datetime ]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column  prop="mobile" label="停留时间">
+                            <template slot-scope="scope">
+                                {[(scope.row.retentionTime || 0) | formatseconds]}
+                            </template>
+
+                        </el-table-column>
+                        <el-table-column  prop="mobile" label="推荐人">
+                            <template slot-scope="scope">
+                                <a :href="'/user/userInformation?userId='+scope.row.sharerId" target='_blank'>{[scope.row.sharerName || scope.row.sharerNickName]}</a>
+                            </template>
+
+                        </el-table-column>
+
+                    </el-table>
+                    <!--分页-->
+                    <div class="dsp-list_table-pagination">
+                        <el-pagination
+                                :key="queryAll.visitQuery.totalSize"
+                                @size-change="changeTab('visit')"
+                                @current-change="changeTab('visit')"
+                                :current-page.sync="queryAll.visitQuery.currentPage"
+                                :page-sizes="[15,30,50, 100]"
+                                :page-size.sync="queryAll.visitQuery.pageSize"
+                                layout= "total, sizes, prev, pager,next"
+                                :total.sync="queryAll.visitQuery.totalSize">
+                        </el-pagination>
+                    </div>
+                </div>
+                </div>
+                <!--裂变图-->
+                <div style='height: 100%'
+                     v-loading='loading.lieBianTuData'
+                     element-loading-text="拼命加载中"
+                     element-loading-spinner="el-icon-loading"
+                     v-if="currtab === 'lieBianTu'"
+                >
+                    <div id="main" v-if="currtab === 'lieBianTu'" style='height: 100%' ></div>
+                </div>
+                <!--方案-->
+                <div class="dsp-list" v-if="currtab === 'fangan'">
+                    <div class="dsp-list_table" style="padding: 0">
+                        <!--表格-->
+                        <el-table
+                                :data="listAll.fanganList"
+                                v-loading="loading.fangan"
+                                stripe
+                                style="width: 100%">
+                            <el-table-column  prop="title" label="标题">
+                                <template slot-scope="scope">
+                                    <span style="cursor: pointer" @click="lookDesign(scope.row)">{[scope.row.title]}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column  prop="designTitle" label="户型">
+                                <template slot-scope="scope" >
+                                    {[$translate(meta.FWHX, scope.row.houseType) || '无']}
+                                </template>
+                            </el-table-column>
+                            <el-table-column  prop="area" label="面积">
+                                <template slot-scope="scope">
+                                    {[scope.row.area && (scope.row.area + '㎡') || '无']}
+                                </template>
+                            </el-table-column>
+                            <el-table-column  prop="mobile" label="预算">
+                                <template slot-scope="scope">
+                                    {[ (scope.row.lprice / 10000).toFixed(0)]} ～{[(scope.row.hprice / 10000).toFixed(0) ]}万
+                                </template>
+
+                            </el-table-column>
+                            <el-table-column  prop="mobile" label="查看">
+                                <template slot-scope="scope">
+                                    {[scope.row.actualViewNumStr]}
+                                </template>
+
+                            </el-table-column>
+                            <el-table-column  prop="mobile" label="点赞">
+                                <template slot-scope="scope">
+                                    {[scope.row.actualPraiseNumStr]}
+                                </template>
+
+                            </el-table-column>
+                            <el-table-column  prop="mobile" label="收藏">
+                                <template slot-scope="scope">
+                                    {[scope.row.actualCollectNumStr]}
+                                </template>
+
+                            </el-table-column>
+                            <el-table-column  prop="mobile" label="转发">
+                                <template slot-scope="scope">
+                                    {[scope.row.shareNumStr]}
+                                </template>
+                            </el-table-column>
+
+                        </el-table>
+                        <!--分页-->
+                        <div class="dsp-list_table-pagination">
+                            <el-pagination
+                                    :key="queryAll.fanganQuery.totalSize"
+                                    @size-change="changeTab('fangan')"
+                                    @current-change="changeTab('fangan')"
+                                    :current-page.sync="queryAll.fanganQuery.currentPage"
+                                    :page-sizes="[15,30,50, 100]"
+                                    :page-size.sync="queryAll.fanganQuery.pageSize"
+                                    layout= "total, sizes, prev, pager,next"
+                                    :total="queryAll.fanganQuery.totalSize">
+                            </el-pagination>
+                        </div>
+                    </div>
+                </div>
+                <!--推广记录-->
+                <div class="dsp-list" v-if="currtab === 'generalize'" v-loading="loading.fangan"  element-loading-text="拼命加载中">
+                    <div class="dsp-list_table" style="padding: 0">
+                        <!--表格-->
+                        <el-table
+                                :data="listAll.generalizeList"
+                                stripe
+                                style="width: 100%;height: 100%">
+                            <el-table-column  label="序号" type="index" :index="(value)=> indexMethod(value,'generalizeQuery')" width="50px" ></el-table-column>
+                            <el-table-column   label="分享时间">
+                                <template slot-scope="scope">
+                                    {[scope.row.timeCreated | datetime ]}
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column  label="方式" >
+                                <template slot-scope="scope" >
+                                    {[$translate(meta.shareMethod,scope.row.method)]}
+                                </template>
+                            </el-table-column>
+                            <el-table-column   label="文章" >
+                                <template slot-scope="scope" >
+                                    <a  @click="lookDesign('a',scope.row.articleId)" v-if="scope.row.title" style="cursor: pointer" >{[scope.row.title]}</a>
+                                    <span v-if="scope.row.realmShareNo && !scope.row.title">
+                                         {[$translate(meta.generalizePage,scope.row.realmShareNo)]}
+                                    </span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column  label="次数" >
+                                <template slot-scope="scope">
+                                    <a @click="openVisitD(scope.row)" style="cursor: pointer" v-if="scope.row.visitNum > 0">{[ scope.row.visitNum]}</a>
+                                    <span v-else>{[ scope.row.visitNum]}</span>
+                                </template>
+                            </el-table-column>
+
+                        </el-table>
+                        <!--分页-->
+                        <div class="dsp-list_table-pagination">
+                            <el-pagination
+                                    :key="queryAll.generalizeQuery.totalSize"
+                                    @size-change="changeTab('generalize')"
+                                    @current-change="changeTab('generalize')"
+                                    :current-page.sync="queryAll.generalizeQuery.currentPage"
+                                    :page-sizes="[15,30,50, 100]"
+                                    :page-size.sync="queryAll.generalizeQuery.pageSize"
+                                    layout= "total, sizes, prev, pager,next"
+                                    :total.sync="queryAll.generalizeQuery.totalSize">
+                            </el-pagination>
+                        </div>
+                    </div>
+                </div>
+                <!--客户报名  报名时间、客户：头像、姓名、电话、地区、认证标识、来源页面-->
+                <div class="dsp-list" v-if="currtab === 'user'" v-loading="loading.fangan"  element-loading-text="拼命加载中">
+                    <div class="dsp-list_table" style="padding: 0">
+                        <!--表格-->
+                        <el-table
+                                :data="listAll.userList"
+                                v-loading="loading.fangan"
+                                stripe
+                                style="width: 100%">
+                            <el-table-column type="expand" >
+                                <template slot-scope="props">
+                                    <el-form label-position="left" inline class="demo-table-expand" v-if="props.row.userRequire">
+                                        <el-form-item label="房屋状况">
+                                            <span v-if="props.row.userRequire.decorationType">
+                                                {[$translate(meta.CUST_HOUSE_TYPE, props.row.userRequire.decorationType) || '无']}
+                                            </span>
+                                            <span v-else>未知 </span>
+                                        </el-form-item>
+                                        <el-form-item label="选择品类">
+                                            <div v-if="props.row.userRequire.productCategories">
+                                                <span v-for="(productCategorie ,i) in props.row.userRequire.productCategories.split(',')">
+                                                       {[$translate(meta.productCategorie, productCategorie)]}<span v-show="i < props.row.userRequire.productCategories.split(',').length -1">/</span>
+                                                </span>
+                                            </div>
+                                            <div v-else>未知</div>
+                                        </el-form-item>
+                                        <el-form-item label="户型">
+                                                <span style="margin-right: 10px">
+                                                 {[$translate(meta.FWHX, props.row.userRequire.houseType)]}
+                                            </span>
+                                            <dsp-img width="20px" v-if=" props.row.userRequire.houseTypeUrl"  :src="DSP.globalConfig.fileBaseUrl + props.row.userRequire.houseTypeUrl"></dsp-img>
+                                        </el-form-item>
+                                        <el-form-item label="喜欢风格">
+                                            <div v-if="props.row.userRequire.decorationStyles">
+                                                <!--{[ props.row.userRequire.decorationStyles.split(',')]}-->
+                                                <span v-for="(decorationStyle ,i) in props.row.userRequire.decorationStyles.split(',')">
+                                                       {[DSP.findSign.find(el => {return el.id === decorationStyle;}).value]}<span v-show="i < props.row.userRequire.decorationStyles.split(',').length -1">/</span>
+                                                </span>
+                                            </div>
+                                            <div v-else>未知</div>
+                                        </el-form-item>
+                                        <el-form-item label="预算">
+                                            <span v-if="props.row.userRequire.minBudget">{[ props.row.userRequire.minBudget]}-{[ props.row.userRequire.maxBudget]}万</span>
+                                            <span v-else=>不限</span>
+                                        </el-form-item>
+                                        <el-form-item label="特殊要求">
+                                            <span v-show="props.row.userRequire.oldPeople">{[ props.row.userRequire.oldPeople]}老人<span v-show="props.row.userRequire.child">/</span></span>
+                                            <span v-show="props.row.userRequire.child">{[ props.row.userRequire.child]}小孩</span>
+                                        </el-form-item>
+                                    </el-form>
+                                    </el-form>
+                                </template>
+                            </el-table-column>
+                            <el-table-column  label="序号" type="index" :index="(value)=> indexMethod(value,'userQuery')" width="50px" >
+                            </el-table-column>
+                            <el-table-column  label="报名日期" width="140px">
+                                <template slot-scope="scope">
+                                    {[scope.row.timeCreated | datetime ]}
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column  prop="methed" label="客户" min-width="140px">
+                                <template slot-scope="scope" >
+                                    <a :href="'/user/userInformation?userId='+scope.row.userId" target='_blank' class="visit-message">
+                                        <img :src="scope.row.avatarUrl || '/images/head_portrait.jpg'" class="img1">
+                                        <span>{[scope.row.name || scope.row.nickName]}</span>
+                                        <span style="min-width: 90px">{[scope.row.mobile]}</span>
+                                        <img src="/images/tui.png" class="img2" v-show="scope.row.isEmissary">
+                                    </a>
+                                </template>
+                            </el-table-column>
+                            <el-table-column  label="地址">
+                                <template slot-scope="scope" >
+                                    <div class="visit-message">
+                                        {[scope.row.userCity]}
+                                        {[scope.row.userArea]}
+                                        {[scope.row.userAddr]}
+                                    </div>
+                                </template>
+                            </el-table-column>
+                            <el-table-column  prop="sourcePage" label="来源页面"></el-table-column>
+                            <el-table-column  prop="sourcePage" label="状态">
+                                <template slot-scope="scope" >
+                                  {[$translate(meta.registerUserStage,scope.row.stage)]}
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                        <!--分页-->
+                        <div class="dsp-list_table-pagination">
+                            <el-pagination
+                                    :key="queryAll.userQuery.totalSize"
+                                    @size-change="changeTab('user')"
+                                    @current-change="changeTab('user')"
+                                    :current-page.sync="queryAll.userQuery.currentPage"
+                                    :page-sizes="[15,30,50, 100]"
+                                    :page-size.sync="queryAll.userQuery.pageSize"
+                                    layout= "total, sizes, prev, pager,next"
+                                    :total.sync="queryAll.userQuery.totalSize">
+                            </el-pagination>
+                        </div>
+                    </div>
+                </div>
+                <!--其他other-->
+                <div class="other" v-if="currtab === 'other' && otherList">
+                    <!--报名记录-->
+                    <div class="other-list">
+                        <div class="other-list-title">报名记录</div>
+                        <el-table :data="otherList.url1" stripe style="width: 100%" v-loading="loading.qturl1">
+                            <el-table-column prop="time" label="报名时间" >
+                                <template slot-scope="scope">
+                                    <span>{[scope.row.timeCreated | datetime]}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="地区" >
+                                <template slot-scope="scope">
+                                    <span>{[scope.row.userProvince+ ' '+ scope.row.userCity + ' ' + scope.row.userArea]}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="name" label="推荐人" >
+                                <template slot-scope="scope">
+                                    <a :href="'/user/userInformation?userId='+scope.row.referrerId" target='_blank' v-if="scope.row.referrerId">{[scope.row.referrerName || scope.row.referrerNickName]}</a>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="sourcePage" label="来源页面" ></el-table-column>
+                        </el-table>
+                    </div>
+                    <!--收藏-->
+                    <div class="other-list">
+                        <div class="other-list-title">收藏</div>
+                        <el-table :data="otherList.url2" stripe style="width: 100%" v-loading="loading.qturl2">
+                            <el-table-column  label="收藏时间">
+                                <template slot-scope="scope">
+                                    <span>{[scope.row.timeCreated | datetime]}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="收藏类别">
+                                <template slot-scope="scope">
+                                    {[scope.row.realm === 'WECHAT_SIGN' ? '标签' : '方案']}
+                                </template>
+                            </el-table-column>
+                            <el-table-column  label="收藏内容">
+                                <template slot-scope="scope">
+                                    <span v-if="scope.row.realm === 'WECHAT_SIGN'">{[scope.row.realmContent]}</span>
+                                    <span style="cursor: pointer" @click="lookDesign(scope.row,scope.row.realmId)">{[scope.row.realmContent]}</span>
+                                </template>
+                            </el-table-column>
+
+                        </el-table>
+                    </div>
+                    <!--订单-->
+                    <div class="other-list">
+                        <div class="other-list-title">订单</div>
+                        <el-table :data="otherList.url3" stripe style="width: 100%" v-loading="loading.qturl3">
+                            <el-table-column prop="orderNo" label="单号" width="138px"></el-table-column>
+                            <el-table-column prop="custName" label="客户姓名" min-width="60px"></el-table-column>
+                            <el-table-column prop="custMobile" label="手机号" min-width="60px"></el-table-column>
+                            <el-table-column prop="orderGuideName" label="销售店员"  min-width="60px"></el-table-column>
+                            <el-table-column prop="contractAmount" label="金额"  min-width="60px"></el-table-column>
+                            <el-table-column prop="contractDeliveryDate" label="送货日期"  min-width="60px"></el-table-column>
+                            <el-table-column prop="houseAddr" label="状态"  min-width="60px">
+                                <template slot-scope="scope">
+                                    <div  v-if="scope.row.orderStatus === 'WAIT_PLAN' || scope.row.orderStatus === 'WAIT_DELIVERY'">待送货</div>
+                                    <div  v-if="scope.row.orderStatus === 'WAIT_INSTALL'">待安装</div>
+                                    <div v-if="scope.row.orderStatus === 'INSTALLED' || scope.row.orderStatus === 'INTERVIEWED'">已安装</div>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="orderOrgName" label="门店" min-width="60px"></el-table-column>
+                            <el-table-column prop="houseAddr" label="客户地址" min-width="120px"></el-table-column>
+
+                        </el-table>
+                    </div>
+                    <!--优惠券-->
+                    <div class="other-list">
+                        <div class="other-list-title">优惠券</div>
+                        <el-table :data="otherList.url4" stripe style="width: 100%" v-loading="loading.qturl4">
+                            <el-table-column label="优惠">
+                                <template slot-scope="scope">
+                                        <i :class="'icon-' + scope.row.couponType"></i>
+                                        <span v-if="scope.row.couponType==='FULL_OFF'">满{[scope.row.discountcon]}元减{[scope.row.discount]}元</span>
+                                        <span v-if="scope.row.couponType==='FULL_DISCOUNT'">满{[scope.row.discountcon]}元{[scope.row.discount]}折</span>
+                                        <span v-if="scope.row.couponType==='CASH'">{[scope.row.discount]}元</span>
+                                        <span v-if="scope.row.couponType==='FIXED_PRICE'">{[scope.row.productName]}  {[scope.row.discount]} {[$translate(meta.UNIT, scope.row.productUnit)]}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="category" label="适用品牌" min-width="80">
+                                <template slot-scope="scope">
+                                    <span v-if="scope.row.brand"> {[$translate(meta.BRAND, scope.row.brand)]}</span>
+                                    <span v-else>所有品牌</span>
+                                </template>
+                            </el-table-column>
+
+
+                            <el-table-column prop="channel" label="适用渠道" min-width="70">
+                                <template slot-scope="scope">
+                                    <span v-if="scope.row.channel">{[$translate(meta.KHLY, scope.row.channel)]}</span>
+                                    <span v-else>所有渠道</span>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column  prop="activityRange" label="有效期至">
+                                <template slot-scope="scope">
+                                    <p v-if="scope.row.validType ==='ACTIVITY'">与活动权益相同</p>
+                                    <p v-if="scope.row.validType ==='FIXEDDATE'">{[scope.row.validDate | date ]}</p>
+                                    <p v-if="scope.row.validType ==='GET'">领取后{[scope.row.validDate]}{[$translate(meta.TIME_UNIT, scope.row.validDateUnit)]}</p>
+                                </template>
+                            </el-table-column>
+
+
+                            <el-table-column label="创建时间">
+                                <template slot-scope="scope">
+                                    {[ scope.row.timeCreated | date ]}
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
+                </div>
+                <!--团队 todo 只有创新合伙人才有-->
+                <div class="dsp-list" v-if="currtab === 'group'" v-loading="loading.group"  element-loading-text="拼命加载中">
+                    <div class="dsp-list_table" style="padding: 0">
+                        <!--表格-->
+                        <el-table
+                                :data="listAll.groupList"
+                                stripe
+                                style="width: 100%">
+                            <el-table-column  label="序号" type="index" :index="(value)=> indexMethod(value,'groupQuery')" width="50px" ></el-table-column>
+
+                            <el-table-column  label="团队成员" width="290" >
+                                <template slot-scope="scope" >
+                                    <div  class="visit-message">
+                                        <img :src="scope.row.userInfo && scope.row.userInfo.avatarUrl || '/images/head_portrait.jpg'" class="img1">
+                                        <span>{[scope.row.name || (scope.row.userInfo && scope.row.userInfo.nickName)]}</span>
+                                        <span style="min-width: 90px">{[scope.row.mobile]}</span>
+                                        <span class="font-warn" v-if="scope.row.status == 0">审核中</span>
+                                        <span class="font-danger" v-else-if="scope.row.status == 2">未通过</span>
+                                        <span class="font-danger" v-else-if="scope.row.status == 1 && scope.row.autoEvict==1">已离队</span>
+                                        <span class="font-warn" v-else-if="scope.row.status == 1 && scope.row.autoEvict !=1 && scope.row.remainDays"> 即将离队</span>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                            <el-table-column  label="等级" width="60">
+                                <template slot-scope="scope" >
+                                {[$translate(meta.PROMOTIONLEVEL,scope.row.level)]}
+                                </template>
+
+                            </el-table-column>
+                            <el-table-column  label="加入日期" width="100" >
+                                <template slot-scope="scope" >
+                                 {[$localDateTimeNumber(scope.row.authTime) | date]}
+                                </template>
+
+                            </el-table-column>
+                            <el-table-column  label="累计带客数" prop="count"></el-table-column>
+                            <el-table-column  label="累计带单数" prop="orderNum"></el-table-column>
+                            <el-table-column  label="累计成交额" prop="dealAmount"></el-table-column>
+                            <el-table-column  label="累计管理奖励" prop="rewardAmount"></el-table-column>
+                        </el-table>
+                        <!--分页-->
+                        <div class="dsp-list_table-pagination">
+                            <el-pagination
+                                    :key="queryAll.groupQuery.totalSize"
+                                    @size-change="changeTab('group')"
+                                    @current-change="changeTab('group')"
+                                    :current-page.sync="queryAll.groupQuery.currentPage"
+                                    :page-sizes="[15,30,50, 100]"
+                                    :page-size.sync="queryAll.groupQuery.pageSize"
+                                    layout= "total, sizes, prev, pager,next"
+                                    :total.sync="queryAll.groupQuery.totalSize">
+                            </el-pagination>
+                        </div>
+                    </div>
+                </div>
+                <!--月结账单 todo 只有创新合伙人才有-->
+                <div class="dsp-list" v-if="currtab === 'monthBill'" v-loading="loading.monthBill"  element-loading-text="拼命加载中">
+                    <div class="dsp-list_table" style="padding: 0">
+                        <!--表格-->
+                        <el-table
+                                :data="listAll.monthBillList"
+                                stripe
+                                style="width: 100%">
+                            <el-table-column  label="序号" type="index" :index="(value)=> indexMethod(value,'monthBillQuery')" width="50px" ></el-table-column>
+                            <el-table-column   label="月份" >
+                                <template slot-scope="scope" >
+                                    {[scope.row.currentYear+'年'+scope.row.currentMonth+'月']}
+                                </template>
+                            </el-table-column>
+                            <el-table-column   label="测量奖励" prop="measureReward"></el-table-column>
+                            <el-table-column   label="成交奖励"  prop="dealReward"></el-table-column>
+                            <el-table-column   label="团队管理奖励" prop="groupReward"></el-table-column>
+                            <el-table-column   label="总收入" >
+                                <template slot-scope="scope" >
+                                    <a style="cursor: pointer" @click="openMonthBillD(scope.row)">{[scope.row.faceCash]}</a>
+                                </template>
+                            </el-table-column>
+                            <el-table-column   label="税金" prop="taxAmount"></el-table-column>
+                            <el-table-column   label="实际到账" prop="realCash"></el-table-column>
+                            <el-table-column   label="状态">
+                                <template slot-scope="scope" >
+                                    <span v-if="scope.row.status==0">未结算</span>
+                                    <span v-if="scope.row.status==1">已结算</span>
+                                    <span v-if="scope.row.status==2">已到账</span>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                        <!--分页-->
+                        <div class="dsp-list_table-pagination">
+                            <el-pagination
+                                    :key="queryAll.monthBillQuery.totalSize"
+                                    @size-change="changeTab('monthBill')"
+                                    @current-change="changeTab('monthBill')"
+                                    :current-page.sync="queryAll.monthBillQuery.currentPage"
+                                    :page-sizes="[15,30,50, 100]"
+                                    :page-size.sync="queryAll.monthBillQuery.pageSize"
+                                    layout= "total, sizes, prev, pager,next"
+                                    :total.sync="queryAll.monthBillQuery.totalSize">
+                            </el-pagination>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--设计预览弹出框-->
+        <el-dialog
+                width="375px"
+                :show-close="false"
+                class="dsp-phone-box"
+                :visible.sync="loading.lookDesign"
+                v-loading.fullscreen.lock="loading.lookDesignView"
+        >
+            <dsp-phone :design-data="information" :width="375" :dsp="DSP" v-cloak ></dsp-phone>
+
+        </el-dialog>
+
+        <cms-sjsrz v-if="designData"  :cmsflag.sync="loading.setDesignDesign" :sjsdata.sync="designData" @sjsdata="saveStylist"></cms-sjsrz>
+
+    </div>
+    <!--访问记录-->
+    <el-dialog
+            width="1200px"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            :visible.sync="loading.visitD"
+            title="访问记录"
+    >
+        <div class="dsp-list_header" style="display: flex;margin-top: 10px">
+            <div class="dsp-list_header-query">
+                <el-date-picker
+                        @change="getVisit(1)"
+                        style="width: 354px"
+                        format="yyyy-MM-dd HH"
+                        value-format="yyyy-MM-dd HH"
+                        v-model="queryAll.visitDQuery.time"
+                        type="datetimerange"
+                        start-placeholder="访问时间"
+                >
+                </el-date-picker>
+            </div>
+            <div class="dsp-list_header-query">
+                <el-select v-model="queryAll.visitDQuery.visitMethods" clearable placeholder="访问方式"  style="width: 150px;margin-left: 10px"  @change="getVisit(1)">
+                    <el-option
+                            v-for="item in meta.shareMethod"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+        </div>
+        <div class="dsp-list"  v-loading="loading.visitL"  element-loading-text="拼命加载中" style='margin: 10px 0;min-height: 500px;height: 500px'>
+            <div class="dsp-list_table" style="padding: 0"
+            >
+                <!--表格-->
+                <el-table
+                        :data="listAll.visitDList"
+                        stripe
+                        style="width: 100%;height: 100%">
+                    <el-table-column  label="序号" type="index" :index="(value)=> indexMethod(value,'visitDQuery')" width="50px" >
+                    </el-table-column>
+
+                    <el-table-column  label="访问时间">
+                        <template slot-scope="scope">
+                            {[$localDateTimeNumber(scope.row.timeCreated) | datetime]}
+                            <!--{[scope.row.visitDate | datetime ]}-->
+                        </template>
+                    </el-table-column>
+                    <el-table-column  prop="designTitle" label="场景值">
+                        <template slot-scope="scope">
+                            {[$sceneInfo(scope.row.sceneValue)]}
+                        </template>
+                    </el-table-column>
+                    <el-table-column  label="访问方式" >
+                        <template slot-scope="scope" >
+                            {[$translate(meta.shareMethod,scope.row.visitMethod) || '直接访问']}
+                        </template>
+                    </el-table-column>
+                    <el-table-column  label="访问文章" >
+                        <template slot-scope="scope" >
+                            <a style="cursor: pointer" v-if="scope.row.designTitle" @click="lookDesign('a',scope.row.designId)">{[scope.row.designTitle]}</a>
+                        </template>
+                    </el-table-column>
+                    <el-table-column  label="停留时长" >
+                        <template slot-scope="scope">
+                            {[(scope.row.retentionTime || 0) | formatseconds]}
+                        </template>
+                    </el-table-column>
+                    <el-table-column  label="访客" min-width="140px">
+                        <template slot-scope="scope" >
+                            <div class="visit-message">
+                                <img :src="scope.row.visitorAvatarUrl || '/images/head_portrait.jpg'" class="img1">
+                                <a :href="'/user/userInformation?userId='+scope.row.visitorId" target='_blank' >
+                                    <span style="margin-right:0">{[scope.row.visitorAuthName || scope.row.visitorNickName]}</span>
+                                    <span >{[scope.row.visitorMobile || scope.row.visitorAuthMobile]}</span>
+                                </a>
+                                <img src="/images/tui.png" class="img2" v-show="scope.row.visitorIsEmissary">
+                            </div>
+                        </template>
+                    </el-table-column>
+
+                </el-table>
+                <!--分页-->
+                <div class="dsp-list_table-pagination">
+                    <el-pagination
+                            :key="queryAll.visitDQuery.totalSize"
+                            @size-change="getVisit"
+                            @current-change="getVisit"
+                            :current-page.sync="queryAll.visitDQuery.currentPage"
+                            :page-sizes="[15,30,50, 100]"
+                            :page-size.sync="queryAll.visitDQuery.pageSize"
+                            layout= "total, sizes, prev, pager,next"
+                            :total.sync="queryAll.visitDQuery.totalSize">
+                    </el-pagination>
+                </div>
+            </div>
+        </div>
+    </el-dialog>
+    <!--月结账单明细-->
+    <el-dialog
+            width="720px"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            :visible.sync="loading.monthBillD"
+            title="结算单明细"
+    >
+        <div class="dsp-list_header" style="display: flex;margin-top: 10px" @change="getMonthBillD">
+            <el-radio-group v-model="queryAll.monthBillDQuery.rewardType" v-if="queryAll && queryAll.monthBillDQuery && queryAll.monthBillDQuery.data" class="monthBillD-group">
+                <el-radio label="" border  >总收入{[queryAll.monthBillDQuery.data.faceCash]}</el-radio>
+                <el-radio label="1" border >测量奖励{[queryAll.monthBillDQuery.data.measureReward]}</el-radio>
+                <el-radio label="0" border >成交奖励{[queryAll.monthBillDQuery.data.dealReward]}</el-radio>
+                <el-radio label="2" border >团队管理奖励{[queryAll.monthBillDQuery.data.groupReward]}</el-radio>
+            </el-radio-group>
+        </div>
+        <div class="dsp-list"  v-loading="loading.monthBillL"  element-loading-text="拼命加载中" style='margin: 10px 0;min-height: 500px;height: 500px'>
+            <div class="dsp-list_table" style="padding: 0">
+                <!--表格-->
+                <el-table
+                        :data="listAll.monthBillDList"
+                        stripe
+                        style="width: 100%;height: 100%">
+                    <el-table-column  label="序号" type="index"  width="50px" >
+                    </el-table-column>
+
+                    <el-table-column  label="日期">
+                        <template slot-scope="scope">
+                            {[scope.row.rewardTime && scope.row.rewardTime.dayOfMonth]}日
+                        </template>
+                    </el-table-column>
+                    <el-table-column  label="奖励来源" prop="name"></el-table-column>
+                    <el-table-column  label="奖励类型" >
+                        <template slot-scope="scope">
+                            {[scope.row.rewardType == 0 && '成交奖励' || '']}
+                            {[scope.row.rewardType == 1 && '测量奖励'  || '']}
+                            {[scope.row.rewardType == 2 && '团队管理奖励'  || '']}
+                        </template>
+                    </el-table-column>
+                    <el-table-column  label="奖励金额" prop="rewardAmount" ></el-table-column>
+
+                </el-table>
+            </div>
+        </div>
+    </el-dialog>
+
+</div>
+<script src="/js/user/userInformation.bundle.js"></script>

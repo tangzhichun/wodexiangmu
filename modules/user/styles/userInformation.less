@@ -1,0 +1,202 @@
+
+.userInformation{
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  overflow: hidden;
+  box-sizing: border-box;
+  //todo 左侧
+  .userInformation-l{
+    width: 400px;
+    min-width: 400px;
+    min-height: 100%;
+    background: #fff;
+    //头
+    .userInformation-l-head{
+      box-sizing: border-box;
+      height: 140px;
+      padding: 30px;
+      display: flex;
+      border-bottom: 1px solid #ebeef5;
+      align-items: center;
+      .addr{
+        margin-left: auto;
+        height: 28px;
+        line-height: 28px;
+        background: #f9fafc;
+        white-space : nowrap;
+        color: #909399;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        padding: 0 10px;
+        border-radius: 100px;
+      }
+    }
+    //主体
+    .userInformation-l-body{
+      max-height: calc(~'100% - 140px');
+      overflow-y: auto;
+      padding: 30px;
+      box-sizing: border-box;
+      .userInformation-l-body-item{
+        margin-bottom: 50px;
+        .userInformation-l-body-item-title{
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 30px;
+        }
+        .userInformation-l-body-item-line{
+          font-weight: normal;
+          color: #303133;
+          margin-bottom: 14px;
+          align-items: center;
+          display: flex;
+          font-size: 14px;
+          .font-label{
+            width: 102px;
+            min-width: 102px;
+          }
+          .font-label.w90{
+            width: 90px;
+            min-width: 90px;
+          }
+          .cenxiang{
+            display: flex;
+            &  span{
+              cursor: pointer;
+              i:before{
+                color: #c0c4cc;
+              }
+              padding-right: 10px;
+              border-right: 1px solid #dcdfe6;
+              margin-right: 10px;
+              max-width: 74px;
+            }
+            &  span:last-child{
+              border-right:0;
+            }
+          }
+        }
+        .userInformation-l-body-item-line:last-child{
+          margin-bottom: 0;
+        }
+      }
+      .userInformation-l-body-item.sheJiShi{
+        .userInformation-l-body-item-line{
+          .font-label{
+            width: 86px;
+            min-width: 86px;
+          }
+        }
+      }
+      .userInformation-l-body-item:last-child{
+        margin-bottom: 0;
+      }
+    }
+  }
+  //todo 右侧
+  .userInformation-R{
+    background: #fff;
+    margin-left: auto;
+    min-height: 100%;
+    width: calc(~"100% - 420px");
+    box-sizing: border-box;
+    padding: 0 20px;
+    .has-gutter{
+      .cell{
+        font-weight: bold!important;
+      }
+    }
+
+    //  其他    统一样式
+    .other-list{
+      margin-top: 20px;
+      .other-list-title{
+        line-height: 60px;
+        font-size: 16px;
+        font-weight: bold;
+        padding-left: 10px;
+        background: rgb(241,242,246);
+      }
+      //表格header文字加粗
+      .el-table__header{
+        font-weight: bold;
+      }
+      //去除表格最下面那条横线
+      .el-table::before{
+        background: transparent;
+      }
+    }
+
+
+  }
+
+  .el-table__row.expanded  .el-table__expand-column .el-table__expand-icon{
+    display: block;
+  }
+  //表单折叠
+  .demo-table-expand{
+    padding-left: 56px;
+    display: flex;
+    flex-wrap: wrap;
+    label {
+      width: 90px;
+      color: #99a9bf;
+    }
+    .el-form-item__content{
+      display: flex;
+      align-items: center;
+      .dsp-img{
+        display: inline-block;
+        max-height: 30px;
+        .el-card .el-card__body{
+          height: auto;
+        }
+      }
+    }
+    .el-form-item {
+      margin-right: 0;
+      margin-bottom: 0;
+      display: flex;
+      box-sizing: border-box;
+      width: 33%;
+      align-items: center;
+
+    }
+  }
+
+//  下拉菜单切换是那个小程序那个公众号
+  .category{
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+  }
+}
+//  访问人信息
+.visit-message{
+  display: flex;
+  align-items: center;
+  line-height: 24px;
+  span{
+    margin: 0 10px;
+  }
+  .img1{
+    width: 30px;
+    height:30px;
+    border-radius: 50%;
+  }
+  .img2{
+    width: 70px;
+    height: 20px;
+  }
+}
+.monthBillD-group{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  .el-radio{
+    margin: 0;
+  }
+}

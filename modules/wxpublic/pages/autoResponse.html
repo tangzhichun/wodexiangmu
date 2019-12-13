@@ -1,0 +1,115 @@
+<link rel="stylesheet" href="/css/wxpublic/autoResponse.min.css">
+<link rel="stylesheet" href="/css/wxpublic/FollowReply.min.css">
+<div id="app" class="cms-card" v-cloak style="padding:0 20px">
+    <header class="cms-card-header">
+        <div class="cms-card-header-categoriesTab"
+             :class="{'cms-card-header-categoriesTab-active':item.appid=== (query.gzh && query.gzh.appid)}"
+             v-for="item in DSP.gzh"
+             @click="change(item)">
+            {[item.name]}
+        </div>
+    </header>
+    <!--关注后回复-->
+    <div class="cms-card-body " >
+        <div class="followReply" v-loading="views.getfindNews">
+            <!--page-->
+            <div class="add-keywordReply-page">
+                <div class="form-item">
+                    <div class="form-item-left">关注后自动回复</div>
+                    <div class="form-item-center" style="padding-left:15px ">
+                        <el-switch
+                                v-model="formData.reply">
+                        </el-switch>
+                    </div>
+                </div>
+                <p style="color: #999;font-size: 14px;margin-bottom: 10px">当用户关注公众号时会触发回复内容，最多可设置2条回复内容。</p>
+                <!--新增-->
+                <div class="form-item">
+                    <div class="form-item-left">回复内容</div>
+                    <div class="form-item-center" >
+                        <div class="type-box">
+                            <div class="type-item" @click="showAddReplyModal('miniprogrampage')">
+                                <span class="el-icon-bank-card"></span>
+                                <span class="type-name">小程序卡片</span>
+                            </div>
+                            <div class="type-item" @click="showAddReplyModal('text')">
+                                <span class="el-icon-edit"></span>
+                                <span class="type-name">文字</span>
+                            </div>
+                            <div class="type-item" @click="showAddReplyModal('image')">
+                                <span class="el-icon-picture-outline"></span>
+                                <span class="type-name">图片</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--插入的内容-->
+                <div class="form-item">
+                    <div class="form-item-left"></div>
+                    <div style="padding-left:15px ">
+                        <div v-for="(item,i) in replyModal">
+                            <!--卡片-->
+                            <div v-if="item.type === 'miniprogrampage'" class="item-box-warp">
+                                <div class="item-body ">
+                                    <div class="item-body-cardForm">
+                                        <div class="single-line" style="margin-bottom: 10px;font-size: 14px">
+                                            <i class="el-icon-link"></i>
+                                            {[item.title]}
+                                        </div>
+                                        <img :src="DSP.globalConfig.fileBaseUrl + item.mediaSourseUrl" alt="">
+                                    </div>
+                                </div>
+                                <el-link :underline="false"><i class="el-icon-edit edit-action" @click="showEditReplyModal(item,i)"></i></el-link>
+                                <el-link :underline="false"><i class="el-icon-delete edit-action" @click="delReplyPreviewTemplate(i)"></i></el-link>
+                            </div>
+                            <!--文字-->
+                            <div v-if="item.type === 'text'"  class="item-box-warp">
+                                <div class="item-body">
+                                    {[item.text]}
+                                </div>
+                                <el-link :underline="false"><i class="el-icon-edit edit-action" @click="showEditReplyModal(item,i)"></i></el-link>
+                                <el-link :underline="false"><i class="el-icon-delete edit-action" @click="delReplyPreviewTemplate(i)"></i></el-link>
+                            </div>
+                            <!--图片-->
+                            <div v-if="item.type === 'image'" class="item-box-warp">
+                                <div class="item-body">
+                                    <div class="item-body-cardForm">
+                                        <img :src="DSP.globalConfig.fileBaseUrl + item.mediaSourseUrl" alt="">
+                                    </div>
+                                </div>
+                                <el-link :underline="false"><i class="el-icon-edit edit-action" @click="showEditReplyModal(item,i)"></i></el-link>
+                                <el-link :underline="false"><i class="el-icon-delete edit-action" @click="delReplyPreviewTemplate(i)"></i></el-link>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--回复方式-->
+                <div class="form-item">
+                    <div class="form-item-left">回复方式</div>
+                    <div class="form-item-center">
+                        <el-radio v-model="formData.replyType" label="all">回复全部</el-radio>
+                        <el-radio v-model="formData.replyType" label="rand">随机回复一条</el-radio>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <div class="form-item-left"></div>
+                    <div class="form-item-center">
+                        <el-button type="primary" @click="save" :loading="views.save">保存</el-button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--对话框-->
+    <!--小程序卡片-->
+    <cms-mincade :cmsflag.sync="views.miniprogrampage" :mindata="miniprogrampage" @mindata="addCardForm"></cms-mincade>
+    <!--文字-->
+    <cms-mintext :cmsflag.sync="views.text" :mindata="text" @mindata="addCardForm"></cms-mintext>
+    <!--图片-->
+    <cms-minimage :cmsflag.sync="views.image" :mindata="image" @mindata="addCardForm"></cms-minimage>
+
+</div>
+<script src="/js/wxpublic/autoResponse.bundle.js"></script>
+

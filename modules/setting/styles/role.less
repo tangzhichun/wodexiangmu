@@ -1,0 +1,103 @@
+@import "../../global/styles/global";
+
+#app{
+  &>.role{
+    .el-date-editor .el-range-input{
+      width: 38%;
+    }
+    height: 100%;
+    display: flex;
+    &>.card-item{
+      height: 100%;
+      &.list {
+        width: 500px;
+        & > .el-card {
+          & > .el-card__header {
+            .text {
+              font-size: 18px;
+              line-height: 18px;
+              white-space: nowrap;
+            }
+          }
+          & > .el-card__body{
+            position: relative;
+            &>.input{
+              padding: 10px 20px;
+              box-sizing: border-box;
+              width: 100%;
+              position: absolute;
+              top: 0;
+            }
+            &> .role-list {
+              height: calc(~"100% - 52px");
+              overflow: auto;
+              &> .role-item {
+                padding:5px 20px;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                &>.buttons{
+                  display:none;
+                }
+                &>.title{
+                  line-height:32px;
+                }
+                &.active{
+                  background-color: @bg;
+                  &>.buttons{
+                    display:block;
+                  }
+                }
+              }
+            }
+        }
+        }
+      }
+      &.operation{
+        width: 100%;
+        padding-left: 280px;
+        box-sizing: border-box;
+        margin-left: -264px;
+        & > .el-card > .el-card__body{
+          .operationContent{
+            height: 100%;
+            overflow:auto;
+            padding: 20px 30px;
+            box-sizing: border-box;
+            .el-tree-node__content{
+              height: 30px;
+              &>.custom-tree-node{
+                display: flex;
+                width: 100%;
+                padding-right: 40px;
+                justify-content: space-between;
+              }
+            }
+          }
+        }
+      }
+    }
+    .li-employees{
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 6px 0;
+      border-bottom: 1px solid @color-gray-xs;
+      border-bottom: 1px solid @color-gray-xs;
+    }
+    .li-employees:hover{
+      background: @color-gray-xs;
+    }
+    .filter-ul{
+      height: calc(~"100% - 36px");
+      overflow: auto;
+      padding-right: 8px;
+    }
+  }
+
+  .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    background-color: #409EFF !important;
+    border-color: #409EFF !important;
+  }
+}

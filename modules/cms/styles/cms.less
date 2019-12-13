@@ -1,0 +1,40 @@
+.cms-card{
+  //头部
+  .header{
+    height: 60px;
+    box-sizing: border-box;
+    font-size: 16px;
+    border-bottom: 1px solid #ebeef5;
+    align-items: center;
+    display: flex;
+    .categoriesTab{
+      position: relative;
+      color: #303133;;
+      margin-right: 15px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .categoriesTab-active{
+      color: #008bff;
+    }
+    .categoriesTab-active:after{
+      content: '';
+      bottom: 0;
+      border-radius: 1px;
+      height: 2px;
+      background: #008bff;
+      width: 100%;
+      position: absolute;
+    }
+    .categoriesTab:hover{
+      color: #008bff;
+    }
+  }
+  .body{
+    overflow-y: auto;
+    min-height:  calc(~"100% - 60px");
+    max-height:  calc(~"100% - 60px");
+  }
+}

@@ -1,0 +1,113 @@
+<link rel="stylesheet" href="/css/setting/role.min.css">
+<div id="app" v-cloak>
+
+	<div class="role">
+		<div class="card-item list">
+			<el-card shadow="never">
+				<div slot="header" class="clearfix">
+					<span class="text">角色</span>
+					<div class="buttons">
+						<el-button size="mini" type="primary" plain  icon="el-icon-plus" @click="increate"></el-button>
+					</div>
+				</div>
+				<div class="filter">
+					<div class="input">
+						<el-input size="small"
+								  placeholder="输入关键字检索"
+								  v-model.trim="keyword"
+								  prefix-icon="el-icon-search"
+								  clearable="true">
+						</el-input>
+					</div>
+				</div>
+				<ul class="role-list">
+					<li class="role-item" v-for="(item,index) in  rolesFilter"
+						@click="changeList(item,index)"
+						:ref="item.id" :key="item.id">
+						<span class="title"><{[item.employeeNum]}>{[item.name]}<span v-show="!item.isAlive">(已禁用)</span></span>
+					</li>
+				</ul>
+			</el-card>
+		</div>
+		<div class="card-item operation" >
+			<el-card shadow="never">
+				<div slot="header" class="clearfix">
+					<!--编辑-->
+					<div class="operate"  style="display: flex" v-show="operateIt">
+						<el-input size="small" v-model="newRole.name" placeholder="请输入角色名称"></el-input>
+						<div style="width: 20px;"></div>
+						<el-input size="small" v-model="newRole.desc"  placeholder="请输入角色描述"></el-input>
+					</div>
+					<div class="buttons" v-show="operateIt">
+						<el-button size="small" type="primary" @click="submitForm" v-if="!editItem"><i class="icon-save"></i><span>保存</span></el-button>
+						<el-button size="small" type="primary" @click="editForm" v-if="editItem"><i class="icon-save"></i><span>保存</span></el-button>
+						<el-button size="small" @click="back">取消</el-button>
+					</div>
+					<!--查看-->
+					<div v-show="newRole.employees && !operateIt">
+						{[title]}<small v-show="newRole.desc">（ {[newRole.desc]} ）</small>
+					</div>
+					<div v-show="newRole.employees && !operateIt" class="buttons" >
+						<el-button @click.stop="delRole(newRole)" size="mini" type="danger" plain>删除</el-button>
+						<el-button v-show="!newRole.isAlive" @click.stop="changeStatus(newRole)" size="mini" type="success" plain>启用</el-button>
+						<el-button v-show="newRole.isAlive"  @click.stop="changeStatus(newRole)" size="mini" type="danger" plain>禁用</el-button>
+						<el-button v-show="newRole.isAlive"  @click.stop="editIt(newRole)" size="mini" type="primary" plain>编辑</el-button>
+					</div>
+				</div>
+				<div class="operationContent">
+					<el-row :gutter="20" style="height: 100%">
+						<el-col :span="24" style="max-height: 100%;overflow-y: auto" key="RoleMenuTrees">
+							<el-tree
+									:data="menuTrees"
+									show-checkbox
+									node-key="id"
+									ref="tree"
+									default-expand-all
+									:props="defaultProps"
+									:default-checked-keys="checkedKeys"
+									:expand-on-click-node="false">
+								<div class="custom-tree-node" slot-scope="{ node, data }">
+							<span>
+								<small style="color: #008bff; width: 26px; display: inline-block" v-if="data.parentId">
+								  <i class="icon-menu" v-show="data.type=='MENU'"></i>
+								</small>
+								{[ node.label ]}
+								<span  style="font-size: 12px;margin-left: 10px;color: #aeaeae">{[data.privilege]}</span>
+							</span>
+								</div>
+							</el-tree>
+						</el-col>
+					</el-row>
+				</div>
+			</el-card>
+		</div>
+
+		<div class="card-item list" style="margin-left: 16px" v-if="newRole.employees">
+			<el-card shadow="never">
+				<div slot="header" class="clearfix">
+					<span class="text">拥有<{[newRole.desc]}>角色的员工</span>
+				</div>
+				<div class="filter">
+					<div class="input">
+						<el-input size="small"
+								  placeholder="员工姓名电话搜索"
+								  v-model.trim="queryEmployees"
+								  prefix-icon="el-icon-search"
+								  clearable="true">
+						</el-input>
+					</div>
+				</div>
+				<ul  class="role-list">
+					<li v-for="employees in  newRole.employees.filter(it =>{return (it.name && it.name.indexOf(queryEmployees) > -1) || (it.mobile && it.mobile.indexOf(queryEmployees) > -1 )})" class="role-item">
+						<span>{[employees.name]}</span>
+						<span>{[employees.mobile]}</span>
+					</li>
+				</ul>
+			</el-card>
+		</div>
+
+	</div>
+
+
+</div>
+<script src="/js/setting/role.bundle.js"></script>

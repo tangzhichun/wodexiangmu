@@ -1,0 +1,105 @@
+<link rel="stylesheet" href="/css/cms/specialDetails.min.css">
+<div id="app" class="specialDetails" v-cloak>
+    <div class="specialDetails-left"  v-cloak>
+        <header class="specialDetails-header">
+            专题详情
+        </header>
+        <div style="max-height: calc(100% - 62px);overflow-y: auto" v-if="specialDetails">
+            <div class="left-cell">
+                <div class="left-cell-label">专题封面</div>
+                <img :src="DSP.globalConfig.fileBaseUrl+specialDetails.imageUrl" alt="" width="259px" height="176px" style="border-radius: 4px">
+            </div>
+            <div class="left-cell">
+                <div class="left-cell-label">详情页配图</div>
+                <img :src="DSP.globalConfig.fileBaseUrl+specialDetails.detailUrl" alt="" width="370px" height="210px" style="border-radius: 4px">
+            </div>
+            <div class="left-cell">
+                <div class="left-cell-label">专题名称</div>
+                <div >{[specialDetails.name]}</div>
+            </div>
+            <div class="left-cell">
+                <div class="left-cell-label">专题类别</div>
+                <div >
+                    <span v-if="specialDetails.kind.split('.')[1]">{[$translate(meta.cmsColumn,specialDetails.kind.split('.')[0])]}/</span>{[$translate(meta.cmsColumn,specialDetails.kind)]}
+                </div>
+            </div>
+            <div class="left-cell">
+                <div class="left-cell-label">文章数量</div>
+                <div >{[specialDetails.designCount]}篇</div>
+            </div>
+            <div class="left-cell" >
+                <div class="left-cell-label">专题状态</div>
+                <el-switch
+                        :disabled="views.disabledPublishStatus"
+                        @change="editPublishStatus"
+                        v-model="specialDetails.publishStatusFlag"
+                       >
+                </el-switch>
+            </div>
+        </div>
+    </div>
+    <el-card class="specialDetails-right"  v-cloak>
+        <div slot="header" class="clearfix" style="justify-content: flex-start ">
+            文章
+            <el-input placeholder="文章标题" suffix-icon="el-icon-search" style="width: 260px;margin-left: auto" v-model="query.title" @change="fetchData"></el-input>
+        </div>
+        <div class="cms-list_table">
+            <div class="cms-list_table-cell-box">
+                <el-table
+                        v-if="tableData && tableData.length > 0"
+                        :data="tableData"
+                        stripe
+                        style="width: 100%">
+                    <el-table-column label="序号" type="index" :index="indexMethod" width="50" class-name="index" ></el-table-column>
+                    <!--封面-->
+                    <el-table-column class-name="fengmian" width="150" >
+                        <template slot-scope="scope">
+                            <div class="quan">
+                                <a v-if="scope.row.panorama" :href="scope.row.panorama" target="view_window">
+                                    <img :src="scope.row.reduceUrl | url" alt="" width="140px" height="90px">
+                                </a>
+                                <img v-else :src="scope.row.reduceUrl | url" alt="" width="140px" height="90px">
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column >
+                        <template slot-scope="scope">
+                            <a style="cursor: pointer" @click="lookDesign(scope.row.designId)" >{[scope.row.title]}</a>
+                            <div class="font-label">{[scope.row.contentSyllabus]}</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column  width="50" >
+                        <template slot-scope="scope">
+                            <el-link class="el-icon-delete" :underline="false" type="danger" @click="del(scope.row)"></el-link>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <empty v-if="tableData && tableData.length < 1"></empty>
+            </div>
+
+            <div class="cms-pagination">
+                <el-pagination
+                        @size-change="fetchData"
+                        @current-change="fetchData"
+                        :current-page="query.currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size="query.pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="query.totalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </el-card>
+    <!--设计预览弹出框-->
+    <el-dialog
+            width="375px"
+            :show-close="false"
+            class="dsp-phone-box"
+            :visible.sync="views.lookDesignView"
+            v-loading.fullscreen.lock="lookDesign"
+    >
+        <dsp-phone :design-data="information" :width="375" :dsp="DSP" v-cloak ></dsp-phone>
+    </el-dialog>
+
+</div>
+<script src="/js/cms/specialDetails.bundle.js"></script>

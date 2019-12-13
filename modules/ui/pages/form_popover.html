@@ -1,0 +1,139 @@
+<div id="app" v-cloak>
+
+	<!--弹出面板-->
+	<div class="dsp-panel-popover" :class="{'active': popoverPanelVisible}" style="width: 700px">
+		<div class="dsp-panel-popover_header">
+			<span>面板标题</span>
+			<i class="el-icon-close" @click="popoverPanelVisible = false" ></i>
+		</div>
+
+		<div class="dsp-panel-popover_body">
+
+			<div class="dsp-form" container="popover" v-dsp-form-validate>
+				<div class="dsp-form_body">
+					<el-row>
+						<el-col :span="4"  class="form-label required">
+							客户姓名：
+						</el-col>
+						<el-col :span="7"
+								v-dsp-validate="information.name"
+								dsp-err-required="客户姓名必须填写"
+								dsp-err-minlength="客户姓名须至少2个字">
+							<el-input
+									  placeholder="姓名或尊称"
+									  maxlength="10"
+									  v-model="information.name"
+									  v-dsp-input-trim>
+							</el-input>
+						</el-col>
+						<el-col :span="2">&nbsp;</el-col>
+						<el-col :span="4"  class="form-label required">
+							手机号码：
+						</el-col>
+						<el-col :span="7"
+								v-dsp-validate="information.mobile"
+								dsp-err-required="手机号码必须填写"
+								dsp-err-remote="手机号码重复"
+								dsp-err-minlength="手机号码须至少11位">
+							<el-input  v-model="information.mobile" :maxlength=11 placeholder="请输入电话号码"  v-dsp-input-mobile="information.mobile"></el-input>
+						</el-col>
+					</el-row>
+					<el-row >
+						<el-col :span="4"  class="form-label required">
+							貌似年龄段：
+						</el-col>
+						<el-col :span="7"
+								v-dsp-validate="information.ageRange"
+								dsp-err-required="年龄段必须填写">
+							<el-select  v-model="information.ageRange" placeholder="请选择">
+								<el-option
+										v-for="item in meta.AGES"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value">
+								</el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="2">&nbsp;</el-col>
+						<el-col :span="4"  class="form-label required">
+							意向品类：
+						</el-col>
+						<el-col :span="7"
+								v-dsp-validate="information.wechat"
+								dsp-err-required="意向品类必须填写">
+							<el-select  v-model="information.wechat"
+									   multiple
+									   placeholder="请选择意向品类（可多选）">
+								<el-option
+										v-for="item in meta.BRAND"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value">
+								</el-option>
+							</el-select>
+						</el-col>
+					</el-row>
+
+					<!-- 跟上方区域有个间隔 -->
+					<el-row class="form-split">
+						<el-col :span="4"  class="form-label">
+							老人：
+						</el-col>
+						<el-col :span="7" class="input-group">
+							<el-input  v-model="information.old" maxlength="2" v-dsp-input-integer></el-input>
+							<div class="unit">位</div>
+						</el-col>
+						<el-col :span="2">&nbsp;</el-col>
+						<el-col :span="4"  class="form-label">
+							小孩：
+						</el-col>
+						<el-col :span="7" class="input-group">
+							<el-input  v-model="information.child" maxlength="2" v-dsp-input-integer ></el-input>
+							<div class="unit">位</div>
+						</el-col>
+					</el-row>
+
+					<el-row>
+						<el-col :span="4"  class="form-label">
+							小票：
+						</el-col>
+						<el-col :span="20" class="form-value">
+							<dsp-img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527847719047&di=33c764afe2b359058dea03da8b2dc799&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F9345d688d43f8794fb05122ed01b0ef41bd53a33.jpg"></dsp-img>
+						</el-col>
+					</el-row>
+
+					<el-row>
+						<el-col :span="4"  class="form-label">
+							制单人：
+						</el-col>
+						<el-col :span="7" class="form-value">
+							唐志春
+						</el-col>
+						<el-col :span="2">&nbsp;</el-col>
+						<el-col :span="4"  class="form-label">
+							制单门店：
+						</el-col>
+						<el-col :span="7" class="form-value">
+							北京丽泽店
+						</el-col>
+					</el-row>
+				</div>
+
+				<div class="dsp-form_footer">
+					<el-row>
+						<el-col :span="20" :push="4">
+							<el-button type="primary" :loading="saveLoading" @click="save">
+								<i class="icon-save"></i><span>保存</span>
+							</el-button>
+							<el-button @click="popoverPanelVisible = false">
+								取消
+							</el-button>
+						</el-col>
+					</el-row>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="/js/ui/form_popover.bundle.js"></script>

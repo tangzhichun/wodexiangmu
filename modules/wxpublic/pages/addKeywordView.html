@@ -1,0 +1,133 @@
+<link rel="stylesheet" href="/css/wxpublic/FollowReply.min.css">
+<div id="app" v-cloak>
+    <div class="followReply cms-card">
+        <!--title-->
+        <div class="main_title font-weight font-size-xl ">
+            关键词回复
+            <el-button size="mini" type="danger"  icon="el-icon-delete" @click="delKeywor" style="margin-left: auto" :loading="views.save" v-if="DSP.keywordData && DSP.keywordData.id" >删除</el-button>
+        </div>
+        <!--page-->
+        <div class="add-keywordReply-page cms-card-body">
+            <div class="form-item">
+                <div class="form-item-left">是否启用</div>
+                <div class="form-item-center">
+                    <el-switch
+                            v-model="formData.statusSwitch">
+                    </el-switch>
+                </div>
+            </div>
+            <div class="form-item">
+                <div class="form-item-left">是否默认</div>
+                <div class="form-item-center">
+                    <el-switch
+                            v-model="formData.defaultReply">
+                    </el-switch>
+                </div>
+            </div>
+            <div class="form-item" style="align-items: baseline;">
+                <div class="form-item-left">关键词</div>
+                <div style="padding-left:15px;width: 620px">
+                    <div v-for="(item,i) in keyWord" style="display: flex;align-items: center;margin-bottom: 10px;">
+                        <el-input placeholder="请输入内容" v-model="item.keyword" :maxlength="10"  class="input-with-select"  style="min-width: 550px;max-width: 550px" :maxlength="30">
+                            <el-select v-model="item.type" slot="prepend" placeholder="请选择">
+                                <el-option label="全匹配" value="all"></el-option>
+                                <el-option label="半匹配" value="part"></el-option>
+                            </el-select>
+                        </el-input>
+                        <el-link :underline="false" style="margin-left: 10px" @click="addKeyWord" > <i class="el-icon-circle-plus-outline font-size-xxl" ></i></el-link>
+                        <el-link :underline="false" style="margin-left: 10px" @click="delKeyWord(i)" v-show="i > 0"> <i class="el-icon-remove-outline font-size-xxl" ></i></el-link>
+                    </div>
+
+                    <p style="color: #999;font-size: 14px;margin-bottom: 10px">关键词最多输入10个字</p>
+                </div>
+            </div>
+            <!--新增-->
+            <div class="form-item">
+                <div class="form-item-left">回复内容</div>
+                <div class="form-item-center" >
+                    <div class="type-box">
+                        <el-button class="type-item" type="text" @click="showAddReplyModal('miniprogrampage')" >
+                            <span class="el-icon-bank-card"></span>
+                            <span class="type-name">小程序卡片</span>
+                        </el-button>
+                        <el-button class="type-item" type="text" @click="showAddReplyModal('text')">
+                            <span class="el-icon-edit"></span>
+                            <span class="type-name">文字</span>
+                        </el-button>
+                        <el-button class="type-item" type="text" @click="showAddReplyModal('image')">
+                            <span class="el-icon-picture-outline"></span>
+                            <span class="type-name">图片</span>
+                        </el-button>
+                    </div>
+                </div>
+            </div>
+            <!--插入的内容-->
+            <div class="form-item">
+                <div class="form-item-left"></div>
+                <div style="padding-left:15px ">
+                    <div v-for="(item,i) in replyModal">
+                        <!--卡片-->
+                        <div v-if="item.type === 'miniprogrampage'" class="item-box-warp">
+                            <div class="item-body ">
+                                <div class="item-body-cardForm">
+                                    <div class="single-line" style="margin-bottom: 10px;font-size: 14px">
+                                        <i class="el-icon-link"></i>
+                                        {[item.title]}
+                                    </div>
+                                    <img :src="DSP.globalConfig.fileBaseUrl + item.mediaSourseUrl" alt="">
+                                </div>
+                            </div>
+                            <el-link :underline="false"><i class="el-icon-edit edit-action" @click="showEditReplyModal(item,i)"></i></el-link>
+                            <el-link :underline="false"><i class="el-icon-delete edit-action" @click="delReplyPreviewTemplate(i)"></i></el-link>
+                        </div>
+                        <!--文字-->
+                        <div v-if="item.type === 'text'"  class="item-box-warp">
+                            <div class="item-body">
+                                {[item.text]}
+                            </div>
+                            <el-link :underline="false"><i class="el-icon-edit edit-action" @click="showEditReplyModal(item,i)"></i></el-link>
+                            <el-link :underline="false"><i class="el-icon-delete edit-action" @click="delReplyPreviewTemplate(i)"></i></el-link>
+                        </div>
+                        <!--图片-->
+                        <div v-if="item.type === 'image'" class="item-box-warp">
+                            <div class="item-body">
+                                <div class="item-body-cardForm">
+                                    <img :src="DSP.globalConfig.fileBaseUrl + item.mediaSourseUrl" alt="">
+                                </div>
+                            </div>
+                            <el-link :underline="false"><i class="el-icon-edit edit-action" @click="showEditReplyModal(item,i)"></i></el-link>
+                            <el-link :underline="false"><i class="el-icon-delete edit-action" @click="delReplyPreviewTemplate(i)"></i></el-link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-item">
+                <div class="form-item-left">回复方式</div>
+                <div class="form-item-center">
+                    <el-radio v-model="formData.replyType" label="all">回复全部</el-radio>
+                    <el-radio v-model="formData.replyType" label="rand">随机回复一条</el-radio>
+                </div>
+            </div>
+            <div class="form-item">
+                <div class="form-item-left"></div>
+                <div class="form-item-center">
+                    <el-button type="primary" @click="save" :loading="views.save">保存</el-button>
+                    <el-button @click="window.location='/wxpublic/keyWordList'+document.location.hash">取消</el-button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!--对话框-->
+        <!--小程序卡片-->
+        <cms-mincade :cmsflag.sync="views.miniprogrampage" :mindata="miniprogrampage" @mindata="addCardForm"></cms-mincade>
+        <!--文字-->
+        <cms-mintext :cmsflag.sync="views.text" :mindata="text" @mindata="addCardForm" :guanjianci="true"></cms-mintext>
+        <!--图片-->
+        <cms-minimage :cmsflag.sync="views.image" :mindata="image" @mindata="addCardForm"></cms-minimage>
+    </div>
+
+</div>
+<script src="/js/wxpublic/addKeywordView.bundle.js"></script>

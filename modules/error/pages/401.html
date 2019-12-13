@@ -1,0 +1,26 @@
+<div style="padding-top: 5%; ">
+    <div style="display: flex; width: fit-content; margin: auto">
+        <div style="padding: 30px; ">
+            <img src="/images/error.svg" width="160" >
+        </div>
+        <div style="padding: 30px; ">
+            <p style="font-size: 36px; font-weight: bold; line-height: 84px">
+                权限不足！
+            </p>
+            <p style="font-size: 16px; color: #666;">
+                系统已记录本次操作，请勿尝试越权操作！
+                {{#devMode}}
+                缺少权限：{{privilegeRequired}}
+                {{/devMode}}
+            </p>
+            <p style="margin-top: 20px">
+                <button type="button"
+                        style="width: 64px;"
+                        class="el-button el-button--primary el-button--small is-plain"
+                        onclick="window.history.length == 1 ? window.location.href = '/' : window.history.back()">
+                    <span>返回</span>
+                </button>
+            </p>
+        </div>
+    </div>
+</div>

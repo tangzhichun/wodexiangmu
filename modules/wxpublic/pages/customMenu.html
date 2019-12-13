@@ -1,0 +1,222 @@
+<link rel="stylesheet" href="/css/wxpublic/customMenu.min.css">
+<div id="app" class="customMenu cms-card"  v-cloak style="padding:0 20px">
+    <!--todo Tabs 标签页-->
+        <header class="cms-card-header">
+            <div class="cms-card-header-categoriesTab"
+                 :class="{'cms-card-header-categoriesTab-active':item.appid=== (gzh && gzh.appid)}"
+                 v-for="item in DSP.gzh"
+                 @click="change(item)">
+                {[item.name]}
+            </div>
+            <div class="cms-card-header-query">
+                {{#contains user.privileges 'GZH_MENU_DEL_MESH-MENU'}}
+                    <el-button type="danger" size="small" @click="delUp" :loading="views.hufu">删除线上菜单</el-button>
+                {{/contains}}
+                {{#contains user.privileges 'GZH_MENU_PULL_MESH-MENU'}}
+                    <el-button type="primary" size="small" @click="hufu" :loading="views.hufu">拉取线上数据</el-button>
+                {{/contains}}
+            </div>
+        </header>
+        <!--tab1-->
+        <div class="cms-card-body" v-loading="views.getMenu || views.save || views.hufu || views.delUp">
+            <div class="customMenu-left">
+                <div class="mobile">
+                    <header class="mobile-header"></header>
+                    <div class="mobile_foot">
+                        <ul class="customMenu-ul"  >
+                            <!--todo 主菜单-->
+                            <li class="customMenu-li" v-for="(item,i) in customMenuLi"
+                                @click="editMenu(item)">
+                                <div :class="{'active':currMenu && (currMenu.zdyId === item.zdyId && !currSub_button),'targetActive':upAndDownShift && upAndDownShift.targetData && (upAndDownShift.targetData.zdyId === item.zdyId )}"
+                                     draggable="true" @dragstart="dragstart(event,item,i)"  @dragend="dragend(event,item,i)" @dragenter="dragenter(event, item,i)">
+                                    {[item.name]}
+                                </div>
+                                <!--todo 子菜单-->
+                                <div class="sub-button-box"
+                                     v-show="currMenu && currMenu.zdyId === item.zdyId" >
+                                    <div class="sub-button-li" v-if="item.sub_button" v-for="(sub,j) in item.sub_button"
+                                         @click.stop="editSub (sub)"
+                                         draggable="true"
+                                         @dragstart.stop="dragstartSub(sub,j,item.sub_button)"  @dragend.stop="dragendSub(sub,j,i)" @dragenter.stop="dragenterSub(sub,j,item.sub_button)"
+                                         :class="{'active':currSub_button && (currSub_button.zdyId === sub.zdyId),'targetActive':upAndDown && upAndDown.tD && (upAndDown.tD.zdyId === sub.zdyId )}"
+                                    >
+                                        {[sub.name]}
+                                    </div>
+                                    <div class="sub-button-li"
+                                         @dragstart.stop
+                                         @dragend.stop
+                                         @dragenter.stop
+                                         @click.stop="addSub(item)" v-if="item.sub_button.length<5"><i class="el-icon-plus"></i></div>
+                                </div>
+                            </li>
+                            <li class="customMenu-li"  @click="addLi" v-if="customMenuLi.length < 3">
+                                <a class="link-success">
+                                    <i class="el-icon-plus"></i>
+                                    <span v-if="customMenuLi.length === 0">添加菜单</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top: 20px" v-show="information">
+                    <el-button type="success" style="width: 100%"   @click="save" :loading="views.save">保存并发布</el-button>
+                </div>
+            </div>
+
+            <div class="customMenu-right" >
+                <div class=" cms-card customMenu-form" style="padding:0 20px;position: relative;border: 1px solid #e7e7eb;" :style="!information && 'background: #fff;border:none'">
+                    <header class="cms-card-header" v-if="information">
+                        <div class="cms-card-header-categoriesTab" v-if="information" style="cursor: auto">
+                            {[information.name]}
+                        </div>
+                        <div style="margin-left: auto" v-if="information">
+                            <el-link :underline="false" class="link-danger" type="danger" size="small" icon="el-icon-delete"  @click="delMenu(information)"  >删除</el-link>
+                        </div>
+                    </header>
+                    <div  style="color: #8d8d8d;font-size: 12px;height: 24px;line-height: 24px">
+                        <span v-show="information && information.sub_button && information.sub_button.length>0">
+                            已添加子菜单，仅可设置菜单名称。
+                        </span>
+                    </div>
+
+                    <div style="min-height: 520px;box-sizing: border-box" class="dsp-form cms-card-body" v-dsp-form-validate v-cloak v-if="information">
+                        <div class="dsp-form_body" style="width: 600px;overflow: hidden">
+                            <el-row :gutter="10">
+                                <el-col :span="6"  class="form-label required">{[information.sub_button && '菜单名称' || '子菜单名称']}</el-col>
+                                <el-col :span="17" v-dsp-validate="information.name" >
+                                    <el-input  :placeholder="information.sub_button ? '请填写菜单名称，4个字符以内' : '请填写菜单名称，6个字符以内'"
+                                               v-model="information.name" :maxlength="information.sub_button ? 4 : 6"></el-input>
+                                </el-col>
+                            </el-row>
+                            <div v-if="information.sub_button && information.sub_button.length < 1 || !information.sub_button">
+                                <el-row :gutter="10"  style='display: flex;align-items: center   '>
+                                    <el-col :span="6"  class="form-label required">菜单内容</el-col>
+                                    <el-col :span="17" v-dsp-validate="information.type" dsp-err-required="选择菜单内容">
+                                        <el-radio-group  v-model="information.type" @change="changeType">
+                                            <el-radio label="miniprogram">跳转小程序 </el-radio>
+                                            <el-radio label="view">跳转网页</el-radio>
+                                            <el-radio label="click">发送消息</el-radio>
+                                        </el-radio-group>
+                                    </el-col>
+                                </el-row>
+                                <!--todo 发送消息-->
+                                <div v-if="information.type === 'click'" :key="information.type">
+                                    <el-row :gutter="10"  style='display: flex;align-items: center' >
+                                        <el-col :span="6"  class="form-label required">消息类型</el-col>
+                                        <el-col :span="17" v-dsp-validate="information.type" >
+                                            <el-radio-group  v-model="information.newsType" @change="changeNewsType">
+                                                <el-radio label="text">文字</el-radio>
+                                                <el-radio label="image">图片</el-radio>
+                                            </el-radio-group>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row :gutter="10"  style='display: flex;' v-if="information.newsType === 'text'" :key="information.newsType">
+                                        <el-col :span="6"  class="form-label required">文字内容</el-col>
+                                        <el-col :span="17" v-dsp-validate="information.text">
+                                            <el-input
+                                                    type="textarea"
+                                                    :autosize="{ minRows: 6, maxRows: 8}"
+                                                    clearable
+                                                    resize="none"
+                                                    :maxlength="600"
+                                                    placeholder="请输入内容"
+                                                    :show-word-limit="true"
+                                                    v-model="information.text">
+                                            </el-input>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row :gutter="10"  style='display: flex;' v-if="information.newsType === 'image'" :key="information.newsType">
+                                        <el-col :span="6"  class="form-label required">上传图片</el-col>
+                                        <el-col :span="17" >
+                                            <div class="font-label font-size-ms" style="margin: 12px 0">上传图片大小不能超过 200kb!</div>
+                                            <el-upload
+                                                    dsp-err-required="上传图片"
+                                                    v-dsp-validate="information.mediaSourseUrl"
+                                                    class="avatar-uploader"
+                                                    action="/api/file-service/file/wechat/admin/upload/"
+                                                    :show-file-list="false"
+                                                    :on-success="handleAvatarSuccess"
+                                                    :before-upload="beforeAvatarUpload">
+                                                <img style="max-width: 220px" v-if="information.mediaSourseUrl" class="show_img" :src="DSP.globalConfig.fileBaseUrl + information.mediaSourseUrl" alt="">
+                                                <div class="upload"  v-else>
+                                                    <i class="el-icon-upload avatar-uploader-icon"></i>
+                                                </div>
+                                            </el-upload>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                                <!--todo 跳转网页-->
+                                <div v-if="information.type === 'view'" :kfey="information.type">
+
+                                    <el-row :gutter="10"  style='display: flex;' >
+                                        <el-col :span="6"  class="form-label required">网页路径</el-col>
+                                        <el-col :span="17" v-dsp-validate="information.url"
+                                                dsp-err-customize="网页路径需要https://，http://开头"
+                                        >
+                                            <el-input
+                                                    :maxlength="400"
+                                                    clearable
+                                                    placeholder="https://*****或者http://******"
+                                                    v-model="information.url">
+                                            </el-input>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                                <!--todo 跳转小程序-->
+                                <div v-if="information.type === 'miniprogram'" :key="information.type">
+
+                                    <el-row :gutter="10"  style='display: flex;' >
+                                        <el-col :span="6"  class="form-label required">app</el-col>
+                                        <el-col :span="17" v-dsp-validate="information.appid">
+                                            <el-select v-model="information.appid" placeholder="请选择小程序" >
+                                                <el-option
+                                                        v-for="item in DSP.xcx"
+                                                        :key="item.appId"
+                                                        :label="item.name"
+                                                        :value="item.appId">
+                                                </el-option>
+                                            </el-select>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row :gutter="10"  style='display: flex;' >
+                                        <el-col :span="6"  class="form-label required">小程序路径</el-col>
+                                        <el-col :span="17" v-dsp-validate="information.pagepath">
+                                            <el-input
+                                                    type="textarea"
+                                                    :rows="2"
+                                                    resize="none"
+                                                    :maxlength="255"
+                                                    :show-word-limit="true"
+                                                    placeholder="请输入小程序路径"
+                                                    v-model="information.pagepath"
+                                            >
+                                            </el-input>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row :gutter="10"  style='display: flex;' >
+                                        <el-col :span="6"  class="form-label required">备用网页</el-col>
+                                        <el-col :span="17" v-dsp-validate="information.x_url" dsp-err-customize="网页路径需要https://，http://开头"
+                                        >
+                                            <el-input
+                                                    clearable
+                                                    :maxlength="400"
+                                                    placeholder="网页地址https://，http://开头"
+                                                    v-model="information.x_url">
+                                            </el-input>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div  style="height: 562px;line-height: 542px;text-align: center;background: #fff" class="font-label" v-if="!information" >
+                        点击左侧菜单进行编辑操作
+                    </div>
+                    <span class="triangle_border_left" v-show="information"><span></span></span>
+                </div>
+
+            </div>
+        </div>
+</div>
+<script src="/js/wxpublic/customMenu.bundle.js"></script>

@@ -1,0 +1,94 @@
+<div id="app" v-cloak>
+    <div class="dsp-list">
+        <!--头部-->
+        <div class="dsp-list_header">
+            <!--查询条件区域-->
+            <dsp-criteria :criteria="criteria" v-on:remove="removeCriteria"></dsp-criteria>
+
+            <!--按钮区域-->
+            <div class="pull-right">
+                <el-button size="small" type="primary" plain @click="showFilterPanel">
+                    <i class="icon-filter"></i> 筛选
+                </el-button>
+            </div>
+        </div>
+
+        <div class="dsp-list_table">
+            <!--表格-->
+            <el-table
+                    :data="tableData"
+                    v-loading="loading"
+                    stripe
+                    style="width: 100%">
+                <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
+                <el-table-column  prop="name" label="姓名"></el-table-column>
+                <el-table-column  prop="mobile" label="电话"></el-table-column>
+                <el-table-column  prop="email" label="邮箱"></el-table-column>
+                <el-table-column  prop="wechat" label="微信"></el-table-column>
+                <el-table-column  prop="qq" label="QQ"></el-table-column>
+                <el-table-column  prop="address.province" label="所在省份"></el-table-column>
+                <el-table-column label="联系地址">
+                    <template slot-scope="scope">
+                        {[scope.row.address.province]}
+                        {[scope.row.address.city]}
+                        {[scope.row.address.addr]}
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <a class="list-link " href="javascript:void(0)">编辑</a>
+                        <a class="list-link link-danger" href="javascript:void(0)">删除</a>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <!--分页-->
+            <div class="dsp-list_table-pagination">
+                <el-pagination
+                        @size-change="onSizeChange"
+                        @current-change="onCurrentChange"
+                        :current-page="query.currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size="query.pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="query.totalSize">
+                </el-pagination>
+            </div>
+        </div>
+
+        <!--筛选面板-->
+        <div class="dsp-panel-popover" :class="{'active': filterPanelVisible}">
+            <div class="dsp-panel-popover_header">
+                <span>筛选</span>
+                <i class="el-icon-close" @click="hideFilterPanel" ></i>
+            </div>
+            <div class="dsp-panel-popover_body">
+                <div class="filter-row">
+                    <el-input v-model="query.name" placeholder="姓名" size="small" maxlength="10" clearable="true" ></el-input>
+                </div>
+                <div class="filter-row">
+                    <el-input v-model="query.mobile" placeholder="手机号码" size="small" maxlength="11" clearable="true" ></el-input>
+                </div>
+                <div class="filter-row">
+                    <el-input v-model="query.email" placeholder="邮箱" size="small" maxlength="11" clearable="true" ></el-input>
+                </div>
+                <div class="filter-row">
+                    <el-input v-model="query.qq" placeholder="QQ" size="small" maxlength="11" clearable="true" ></el-input>
+                </div>
+                <div class="filter-row">
+                    <el-input v-model="query.wechat" placeholder="微信" size="small" maxlength="11" clearable="true" ></el-input>
+                </div>
+
+                <!--查询重置-->
+                <div class="filter-row button-row">
+                    <!--查询-->
+                    <el-button @click="doQuery" type="primary">查询</el-button>
+                    <el-button @click="doReset">重置</el-button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="/js/ui/list_complex.bundle.js"></script>

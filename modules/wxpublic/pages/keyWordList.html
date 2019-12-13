@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="/css/wxpublic/autoResponse.min.css">
+<link rel="stylesheet" href="/css/wxpublic/FollowReply.min.css">
+<div id="app" class="cms-card" v-cloak style="padding:0 20px">
+    <header class="cms-card-header" :key="query">
+        <div class="cms-card-header-categoriesTab"
+             :class="{'cms-card-header-categoriesTab-active':item.appid === (axiosQuery.gzh && axiosQuery.gzh.appid)}"
+             v-for="item in tab"
+             @click="change(item)">
+            {[item.name]}
+        </div>
+        <div class="dsp-list_header-query " style="display: flex;margin-left: auto" v-for="item in tab" v-if="item.appid === (axiosQuery.gzh && axiosQuery.gzh.appid)">
+            <el-input
+                    @change="fetchData(1)"
+                    v-model.trim="axiosQuery[item.query].keyword"
+                    placeholder="关键词查询"
+                    clearable
+                    size="small"
+            >
+            </el-input>
+            {{#contains user.privileges 'GZH_ANTISTOP_ADD_KEY'}}
+                <el-button  type="primary" size="small" plain style="margin-left: 10px" @click="addKeywordView('add')">添加回复</el-button>
+            {{/contains}}
+        </div>
+    </header>
+    <!--关键词回复-->
+    <div class="cms-card-body" style="padding-left: 20px;margin-left: -20px" v-for="el in tab" :key="el.id" v-if="el.appid === (axiosQuery.gzh && axiosQuery.gzh.appid)">
+        <div class="cms-table" style="padding-left: 20px;margin-left: -20px;padding-bottom: 10px;box-sizing: border-box">
+            <div class="keyWordCade" v-for="item in list[el.query]" :key="item.id" @click="addKeywordView(item.id)">
+                <img src="/images/guanjiancimoren.png" style="position: absolute;top: 0;right: 0;width: 48px" v-show="item.defaultReply">
+                <img src="/images/jinyong.png" style="position: absolute;top: 0;right: 0;width: 48px" v-show="item.status === 'stop'">
+                <div class="font-size-m keyWordCade-top" v-if="item.keywordNum < 5">{[item.keywords]}</div>
+                <div class="font-size-m keyWordCade-top" v-if="item.keywordNum >= 5 && item.keywords">{[item.keywords.split('/')[0] + '等'+item.keywordNum+'个关键字']}</div>
+                <p class="font-label font-size-s keyWordCade-bottom">
+                    <span>{[item.newsNum]}条内容</span>
+                    <span>{[item.replyType === 'rand' ? '随机回复' : '回复全部']}</span>
+                </p>
+            </div>
+        </div>
+        <div class="cms-table-table-pagination">
+            <el-pagination
+                    @size-change="fetchData"
+                    @current-change="fetchData"
+                    :current-page.sync="axiosQuery[el.query].currentPage"
+                    :page-sizes="[30,50,75, 100]"
+                    :page-size.sync="axiosQuery[el.query].pageSize"
+                    layout= "total, sizes, prev, pager,next"
+                    :total.sync="axiosQuery[el.query].totalSize">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<script src="/js/wxpublic/keyWordList.bundle.js"></script>
+

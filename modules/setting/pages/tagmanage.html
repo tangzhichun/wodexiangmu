@@ -1,0 +1,158 @@
+<link rel="stylesheet" href="/css/setting/tagmanage.min.css">
+<div id="app" v-cloak>
+    <div class="tagmanageBox">
+        <div class="dsp-list" v-if="view !== 2">
+            <!--头部-->
+            <div class="dsp-list_header">
+                <div class="dsp-list_header-query">
+                    <el-input v-model="query.alias" placeholder="名称" size="small" maxlength="10" clearable  @change="fetchData"></el-input>
+                </div>
+                <div class="dsp-list_header-query">
+                    <el-select v-model="query.realm" placeholder="作用域"  size="small" clearable  @change="fetchData">
+                        <el-option
+                                v-for="item in meta.TAGSCOPE"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item">
+                        </el-option>
+                    </el-select>
+                </div>
+                <div class="dsp-list_header-query">
+                    <el-select v-model="query.interior" placeholder="是否内置标签"  size="small" clearable @change="fetchData">
+                        <el-option
+                                v-for="item in meta.DELIVERY_PART"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item">
+                        </el-option>
+                    </el-select>
+                </div>
+
+                <div class="dsp-list_header-query" @click="fetchData">
+                    <el-button type="primary" icon="el-icon-search" size="small"></el-button>
+                </div>
+
+                <!--按钮区域-->
+                <div class="pull-right">
+                    <el-button size="small" type="primary" plain @click="addTag">
+                        <i class="el-icon-plus"></i>
+                        新增内置标签
+                    </el-button>
+                </div>
+            </div>
+
+            <div class="dsp-list_table">
+                <!--表格-->
+                <el-table
+                        :data="tableData"
+                        v-loading="loading"
+                        stripe
+                        ref="singleTable"
+                        highlight-current-row
+                        @row-click="look"
+                        style="width: 100%">
+                    <el-table-column label="序号" type="index" width="80" class-name="index" ></el-table-column>
+                    <el-table-column  prop="name" label="唯一值"></el-table-column>
+                    <el-table-column  prop="alias" label="名称">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.id !== editTagParams.id ">{[scope.row.alias]} <el-tag size="mini" class="pull-right" v-if="scope.row.interior">内置</el-tag></div>
+                            <el-input v-if="scope.row.id === editTagParams.id " v-model="editTagParams.alias"  placeholder="名称" size="small" maxlength="10" clearable ></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column  prop="realm" label="作用域">
+                        <template slot-scope="scope">
+                            {[$translate(meta.TAGSCOPE,scope.row.realm)]}
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <a class="list-link link-danger" href="javascript:void(0)" @click="tagDeleta(scope.row)">删除</a>
+                            <a class="list-link link-warn" href="javascript:void(0)" v-if="!scope.row.interior && scope.row.id !== editTagParams.id" @click="tagEdit(scope.row)">编辑</a>
+                            <el-button type="text" class="font-success" style="margin-left: 10px;"  v-if="!scope.row.interior && scope.row.id === editTagParams.id" :loading="saveLoading"   @click="tagEditSave(scope.row)" :disabled="!editTagParams.alias">保存</el-button>
+                            <span class="font-label" style="cursor: pointer;margin-left: 10px;" v-if="!scope.row.interior && scope.row.id === editTagParams.id" @click="tagEdit({id:null,alias:null})" >取消</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+        <!--新增-->
+        <el-card class="box-card addTagBox"  v-if="view === 2">
+            <div slot="header" class="clearfix">
+                <span>新增标签</span>
+            </div>
+            <div class="addTagBody dsp-form-scrollable-container">
+                <div class="dsp-form" v-dsp-form-validate v-cloak>
+                    <div class="dsp-form_body">
+                        <div class="form-group_body">
+                            <el-row :gutter="10">
+                                <el-col :span="3"  class="form-label">
+                                    标签分组
+                                </el-col>
+                                <el-col :span="19">
+                                    <el-select v-model="addTagParams.realm" placeholder="作用域"  clearable
+                                               dsp-err-required="必须选择标签所属分组"
+                                               v-dsp-validate="addTagParams.realm">
+                                        <el-option
+                                                v-for="item in meta.TAGSCOPE"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="10">
+                                <el-col :span="3"  class="form-label">
+                                    标签唯一名
+                                </el-col>
+                                <el-col :span="19"   v-dsp-validate="addTagParams.name" dsp-err-required="必须填写标签唯一名">
+                                    <el-input v-model="addTagParams.name" maxlength="40" placeholder="标签唯一名"></el-input>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="10">
+                                <el-col :span="3"  class="form-label">
+                                    标签别名
+                                </el-col>
+                                <el-col :span="19"   v-dsp-validate="addTagParams.alias" dsp-err-required="必须填写标签标签别名">
+                                    <el-input v-model="addTagParams.alias" maxlength="40" placeholder="标签别名"></el-input>
+                                </el-col>
+                            </el-row>
+                        </div>
+
+                    </div>
+
+                    <div class="dsp-form_footer">
+                        <el-row :gutter="10">
+                            <el-col :span="3" push="2">
+                                <el-button type="primary" :loading="saveLoading" @click="saveAddTag">保存</el-button>
+                            </el-col>
+                            <el-col :span="2"  push="2" >
+                                <el-button   @click="saveAddTag('quxiao') ">取消</el-button>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </div>
+            </div>
+        </el-card>
+
+        <el-card class="box-card lookTagList">
+            <div slot="header" class="clearfix ">
+                <span class="font-label" v-if="currentTag.tag && currentTag.tag.realm">{[$translate(meta.TAGSCOPE,currentTag.tag && currentTag.tag.realm)]}-{[currentTag && currentTag.tag && currentTag.tag.alias ]}</span>
+                <span v-if="!currentTag.tag">未选择标签</span>
+                <div>
+                    <el-input v-model="key2Query" placeholder="检索" size="small" maxlength="10" clearable></el-input>
+                </div>
+            </div>
+            <div v-for="ele in  currentTag.arr.filter(item => {return (item.key1.indexOf(key2Query)> -1 || item.key2.indexOf(key2Query) > -1)})" class="currentTagList" >
+                <a @click="changeHref(ele)" class="bian" v-if="currentTag.tag.realm !== 'ORGANIZATION' && currentTag.tag.realm !== 'PLAN'">{[ele.key1]}</a>
+                <div  v-if="currentTag.tag.realm === 'ORGANIZATION' || currentTag.tag.realm === 'PLAN'">{[ele.key1]}</div>
+                <div> {[$translate(meta.BRAND,ele.key2)]}</div>
+                <div >
+                    <span class="el-icon-delete font-danger font-size-m pull-right" @click="unbind(ele)">解绑标签</span>
+                </div>
+            </div>
+        </el-card>
+    </div>
+</div>
+<script src="/js/setting/tagmanage.bundle.js"></script>

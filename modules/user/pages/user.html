@@ -1,0 +1,158 @@
+<div id="app" v-cloak>
+    <div class="dsp-list">
+        <!--头部-->
+        <div class="dsp-list_header">
+            <div class="dsp-list_header-query">
+                <el-date-picker
+                        size="small"
+                        v-model="query.submitDateArr"
+                        value-format="yyyy/MM/dd"
+                        type="daterange"
+                        start-placeholder="注册"
+                        end-placeholder="期间"
+                        @change="doQuery"
+                >
+                </el-date-picker>
+            </div>
+            <div class="dsp-list_header-query">
+                <el-select v-model="query.levelsArr" placeholder="客户种类" multiple  size="small" v-if="query.levelsArr"  @change="doQuery">
+                    <el-option
+                            v-for="item in meta.levels"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+            <div class="dsp-list_header-query">
+                <el-select v-model="query.categoriesArr" placeholder="用户来源" multiple  size="small" v-if="query.categoriesArr"   collapse-tags  @change="doQuery">
+                    <el-option
+                            v-for="item in meta.categories"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+            <div class="dsp-list_header-query">
+                <el-input v-model="query.sharerNo" placeholder="分享者编号" size="small" maxlength="20" @change="doQuery" ></el-input>
+            </div>
+            <!--<div class="dsp-list_header-query" @click="doQuery">-->
+                <!--<el-button type="primary" icon="el-icon-search" size="small"></el-button>-->
+            <!--</div>-->
+            <!--按钮区域-->
+            <div class="pull-right">
+                <a
+                        style="display: inline-block"
+                        :href=`/api/wechat-admin-service/wechat/admin/user/export/file?${urlSearch(exportQuery)}`
+                        @click="orderExportObj.dialogVisible = false">
+                    <el-button type="primary">
+                        导出
+                    </el-button>
+                </a>
+                <!--<el-button @click="orderExportObj.dialogVisible = true">-->
+                    <!--<i class="el-icon-download"></i>导出用户-->
+                <!--</el-button>-->
+            </div>
+        </div>
+
+        <div class="dsp-list_table">
+            <!--表格-->
+            <el-table
+                    :data="tableData"
+                    v-loading="loading"
+                    stripe
+                    style="width: 100%">
+                <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
+                <el-table-column  prop="nickName" label="微信号昵称"></el-table-column>
+                <el-table-column  prop="userNo" label="用户或访客编号"></el-table-column>
+                <el-table-column  prop="createTime" label="用户注册时间"></el-table-column>
+                <el-table-column  prop="name" label="用户种类">
+                    <template slot-scope="scope">
+                        {[$translate(meta.levels,scope.row.level)]}
+                    </template>
+                </el-table-column>
+                <el-table-column  prop="name" label="用户来源">
+                    <template slot-scope="scope">
+                        {[$translate(meta.categories,scope.row.category)]}
+                    </template>
+                </el-table-column>
+                <el-table-column  prop="name" label="姓名"></el-table-column>
+                <el-table-column  prop="mobile" label="用户手机号"></el-table-column>
+                <el-table-column  prop="createTime" label="用户地址">
+                    <template slot-scope="scope">
+                        {[scope.row.userCity]}
+                        {[scope.row.userArea]}
+                        {[scope.row.userAddr]}
+                    </template>
+                </el-table-column>
+
+                <el-table-column  prop="sharerNo" label="分享人编号"></el-table-column>
+                <el-table-column  prop="sharerName" label="分享人姓名"></el-table-column>
+                <el-table-column  prop="sharerMobile" label="分享人电话"></el-table-column>
+                <el-table-column  prop="sharerNickName" label="分享人昵称"></el-table-column>
+
+            </el-table>
+            <!--分页-->
+            <div class="dsp-list_table-pagination">
+                <el-pagination
+                        @size-change="onSizeChange"
+                        @current-change="onCurrentChange"
+                        :current-page="query.currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size="query.pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="query.totalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+    <el-dialog title="导出注册用户" :visible.sync="orderExportObj.dialogVisible" width="420px" :close-on-click-modal=false v-if="orderExportObj.dialogVisible">
+        <div class="dsp-form" container="dialog">
+            <div class="dsp-form_body">
+                <div class="block" style="margin: 30px 0 ">
+                    <el-date-picker
+                            v-model="orderExportObj.submitDateArr"
+                            format="yyyy/MM/dd"
+                            value-format="yyyy/MM/dd"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="注册"
+                            end-placeholder="日期"
+                            @change="handleOrderSubmitDateRangeSet">
+                    </el-date-picker>
+                    <p class="font-warn font-size-ms" style="margin-top: 10px">导出订单的交单日期范围不能超过31天</p>
+                </div>
+            </div>
+        </div>
+
+        <div slot="footer" class="dialog-footer align-right">
+            <el-button @click="orderExportObj.dialogVisible = false">
+                取消
+            </el-button>
+            <!--:href="'/api/install/' + query.currentTab + '/installOrderReturnExcel' + exportLinkStr"-->
+            <a
+                    v-if="orderExportObj.submitDateRange"
+                    style="display: inline-block"
+                    :href=`/api/wechat-admin-service/wechat/admin/user/export/file?timeCreatedBegin=${orderExportObj.submitDateArr[0]}&timeCreatedEnd=${orderExportObj.submitDateArr[1]}`
+                    @click="orderExportObj.dialogVisible = false">
+                <el-button type="primary">
+                    导出
+                </el-button>
+            </a>
+            <a
+                    v-else
+                    style="display: inline-block"
+                    href="javascript: void(0)">
+                <el-button type="primary" disabled="true">
+                    导出
+                </el-button>
+            </a>
+        </div>
+    </el-dialog>
+
+
+</div>
+<script src="/js/user/user.bundle.js"></script>
+
+<!--<script src="/js/ui/list_query.bundle.js"></script>-->

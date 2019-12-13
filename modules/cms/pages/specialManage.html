@@ -1,0 +1,156 @@
+
+<link rel="stylesheet" href="/css/cms/specialManage.min.css">
+<div id="app" v-cloak>
+    <div class="dsp-list specialManage">
+        <!--头部-->
+        <div class="dsp-list_header">
+          专题列表
+            <div class="list-query">
+                <div class="label">名称</div><el-input placeholder="专题名称"  size="small" v-model="query.name"  @change="fetchData" clearable></el-input>
+                <div class="label">类别</div>
+                <el-cascader
+                        @change="fetchData"
+                        clearable
+                        placeholder="专题类别"
+                        :options= "meta.cmsColumn"
+                        v-model="query.kind"
+                >
+                </el-cascader>
+                {{#contains user.privileges 'NR_TOPIC_ADD'}}
+                <el-button type="primary" plain size="small" style="margin-left: 18px" @click="editSpecial('')">添加专题</el-button>
+                {{/contains}}
+            </div>
+        </div>
+        <div class="dsp-list_table " style="position: relative">
+            <div class="specialManage-card-box">
+                <el-card :body-style="{ padding: '0px' }"
+                         style="cursor: pointer"
+                         class="specialManage-el-card"
+                         v-for="item in topicList"
+                         @click.native="specialDetails(item)">
+                    <img src="/images/weifabu.png" alt="" style="width: 70px;height: 70px;position: absolute;top: 0;right: 0" v-show="item.publishStatus===0">
+                    <img :src="DSP.globalConfig.fileBaseUrl + item.imageUrl" class="image">
+                    <div class="specialManage-card-bottom" >
+                        <img :src="'/images/specialManage-'+item.kind.split('.')[0]+'.png'" class="card-icon-box">
+                        <div>
+                            <p class="font-size-m">{[item.name]}</p>
+                            <p class="font-size-ms font-label">共包含{[item.designCount]}篇文章</p>
+                        </div>
+
+                        <div style="margin-left: auto;"  @click.stop class="gengduo-box">
+                            <div class="gengduo-box-cell">
+                                <el-dropdown @command="handleClick" trigger="click">
+                                    <div class="el-dropdown-link" >
+                                        <el-link :underline="false"><i class="el-icon-more"></i></el-link>
+                                    </div>
+                                    <el-dropdown-menu slot="dropdown">
+                                        {{#contains user.privileges 'NR_TOPIC_EDIT'}}
+                                             <el-dropdown-item :command="{a:item,type :'edit'}">编辑</el-dropdown-item>
+                                        {{/contains}}
+                                        {{#contains user.privileges 'NR_TOPIC_DEL'}}
+                                            <el-dropdown-item :command="{a:item,type :'del'}">删除</el-dropdown-item>
+                                        {{/contains}}
+                                        {{#contains user.privileges 'NR_TOPIC_PUBLISH'}}
+                                            <el-dropdown-item :command="{a:item,type :'issue'}" v-show="item.publishStatus===0">发布</el-dropdown-item>
+                                        {{/contains}}
+                                        {{#contains user.privileges 'NR_TOPIC_DOWN_WIRW'}}
+                                            <el-dropdown-item :command="{a:item,type :'soldOut'}" v-show="item.publishStatus===1">下线</el-dropdown-item>
+                                        {{/contains}}
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                </el-card>
+            </div>
+            <div class="cms-pagination" style="position: absolute;bottom: 0;width: 100%">
+                <el-pagination
+                        @size-change="fetchData"
+                        @current-change="fetchData"
+                        :current-page.sync="query.currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size.sync="query.pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="query.totalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+    <el-dialog
+            title="专题"
+            :visible.sync="views.addSpecial"
+            width="680px"
+            top="30vh"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            :show-close="false"
+            @closed="handleClose"
+            >
+        <div class="dsp-form" style="min-height: 180px" container="dialog" v-dsp-form-validate>
+            <div class="dsp-form_body stylist">
+
+                <div class="stylist-from">
+                    <el-row type="flex" >
+                        <el-col :span="4"  class="form-label required">
+                            专题名称
+                        </el-col>
+                        <el-col :span="20"
+                                v-dsp-validate="specialFrom.name"
+                                dsp-err-required="姓名必须填写"
+                        >
+                            <el-input
+                                    placeholder="姓名"
+                                    maxlength="10"
+                                    v-model="specialFrom.name"
+                                    v-dsp-input-trim>
+                            </el-input>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex" >
+                        <el-col :span="4"  class="form-label required">
+                            专题类别
+                        </el-col>
+                        <el-col :span="20"
+                                maxlength="10"
+                                v-dsp-validate="specialFrom.kind"
+                                dsp-err-required="请选择类别"
+                        >
+                            <el-cascader
+                                    :disabled="specialFrom.id"
+                                    placeholder="请选择类别"
+                                    :options= "meta.cmsColumn"
+                                    v-model="specialFrom.kind"
+                            >
+                            </el-cascader>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex" >
+                        <el-col :span="4"  class="form-label required">
+                            专题图片
+                        </el-col>
+                        <el-col :span="20"
+                                v-dsp-validate="specialFrom.imageUrl"  dsp-err-required="请上传专题图片"
+                        >
+                            <dsp-cropper :value.sync="specialFrom.imageUrl" :ul="specialFrom.imageUrl" height="135px" width="240px"></dsp-cropper>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex" >
+                        <el-col :span="4"  class="form-label required">
+                            详情页配图
+                        </el-col>
+                        <el-col :span="20"
+                                v-dsp-validate="specialFrom.detailUrl"  dsp-err-required="请上传详情页配图"
+                        >
+                            <dsp-cropper type="poster" :value.sync="specialFrom.detailUrl" :ul="specialFrom.detailUrl" height="210px" width="375px"></dsp-cropper>
+                        </el-col>
+                    </el-row>
+                </div>
+            </div>
+        </div>
+      <div slot="footer" class="dialog-footer" style="text-align: right">
+        <el-button @click="views.addSpecial = false">取 消</el-button>
+        <el-button type="primary" @click="saveSpecial" :loading="views.saveSpecial">保存</el-button>
+      </div>
+    </el-dialog>
+</div>
+<script src="/js/cms/specialManage.bundle.js"></script>

@@ -1,0 +1,123 @@
+<div id="app" v-cloak class="list-card-box">
+    <el-card class="ui-box-card-f-l" >
+        <div slot="header" class="clearfix" v-cloak>
+            <span>经销商</span>
+        </div>
+        <div style="height: 100%" v-cloak>
+            <div class="filter">
+                <el-input size="small" v-model="query.jian" :maxlength="11" placeholder="输入关键字检索" ></el-input>
+            </div>
+            <ul class="ul-box">
+                <li v-for="item in meta.filter(el => {return (!query.jian && el)|| (el.value.indexOf(query.jian) > -1 || el.label.indexOf(query.jian) > -1)})"
+                    :key="item.value"
+                    class="list-li"
+                    :class="{'active':item.value === query.card}"
+                    @click="changeAgent(item.value)"
+                >
+                    {[item.label]}
+                </li>
+            </ul>
+        </div>
+
+    </el-card>
+    <div class="dsp-list"  v-cloak>
+        <!--头部-->
+        <div class="dsp-list_header">
+            <div class="dsp-list_header-tabs">
+                <div class="dsp-list_header-tabs-item" v-for="tab in tabList" :class="{active: tab.id == query.currentTab}" @click="showTab(tab.id)">{[tab.title]}</div>
+            </div>
+
+            <!--按钮区域-->
+            <div class="pull-right">
+                <el-button size="small" type="primary" plain>
+                    <i class="el-icon-plus"></i>
+                    这里还可以放按钮
+                </el-button>
+            </div>
+        </div>
+
+        <div class="dsp-list_table" v-if="query.currentTab == 'tab1'">
+            <!--表格-->
+            <el-table
+                    :data="tableData.tab1"
+                    v-loading="loading"
+                    stripe
+                    style="width: 100%">
+                <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
+                <el-table-column  prop="name" label="姓名"></el-table-column>
+                <el-table-column  prop="mobile" label="电话"></el-table-column>
+                <el-table-column  prop="email" label="邮箱"></el-table-column>
+                <el-table-column  prop="address.province" label="所在省份"></el-table-column>
+                <el-table-column label="联系地址">
+                    <template slot-scope="scope">
+                        {[scope.row.address.province]}
+                        {[scope.row.address.city]}
+                        {[scope.row.address.addr]}
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <a class="list-link " href="javascript:void(0)">编辑</a>
+                        <a class="list-link link-danger" href="javascript:void(0)">删除</a>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <!--分页-->
+            <div class="dsp-list_table-pagination">
+                <el-pagination
+                        @size-change="onSizeChange"
+                        @current-change="onCurrentChange"
+                        :current-page="query.tab1.currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size="query.tab1.pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="query.tab1.totalSize">
+                </el-pagination>
+            </div>
+        </div>
+
+        <div class="dsp-list_table" v-if="query.currentTab == 'tab2'">
+            <!--表格-->
+            <el-table
+                    :data="tableData.tab2"
+                    v-loading="loading"
+                    stripe
+                    style="width: 100%">
+                <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
+                <el-table-column  prop="name" label="姓名"></el-table-column>
+                <el-table-column  prop="wechat" label="微信"></el-table-column>
+                <el-table-column  prop="qq" label="QQ"></el-table-column>
+                <el-table-column  prop="address.province" label="所在省份"></el-table-column>
+                <el-table-column label="联系地址">
+                    <template slot-scope="scope">
+                        {[scope.row.address.province]}
+                        {[scope.row.address.city]}
+                        {[scope.row.address.addr]}
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <a class="list-link " href="javascript:void(0)">编辑</a>
+                        <a class="list-link link-danger" href="javascript:void(0)">删除</a>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <!--分页-->
+            <div class="dsp-list_table-pagination">
+                <el-pagination
+                        @size-change="onSizeChange"
+                        @current-change="onCurrentChange"
+                        :current-page="query.tab2.currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size="query.tab2.pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="query.tab2.totalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/ui/list_card.bundle.js"></script>

@@ -1,0 +1,156 @@
+@import "../../global/styles/global";
+.customMenu{
+  min-height: 100%;
+  background: #fff;
+  div{
+    box-sizing: border-box;
+  }
+  .cms-card-body{
+    display: flex;
+    .customMenu-left{
+      width: 400px;
+      min-width: 400px;
+      padding-left:80px;
+    }
+    .customMenu-right{
+      padding-top: 40px;
+      padding-left: 22px;
+      width: 100%;
+    }
+  }
+  //手机
+  .mobile{
+    margin-top: 40px;
+    border: 1px solid #e7e7eb;
+    width: 320px;
+    height: 582px;
+    position: relative;
+    .mobile-header{
+      height: 64px;
+      background: transparent  url("/images/bg_mobile_head.png") no-repeat ;
+      background-size: 100% 100%;
+    }
+    .mobile_foot{
+      border-top: 1px solid #e7e7eb;
+      height: 50px;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding-left: 44px;
+      background: transparent  url("/images/bg_mobile_foot.png") no-repeat ;
+      background-size: 100% 100%;
+      .customMenu-ul{
+        cursor: pointer;
+        height: 100%;
+        display: flex;
+        .customMenu-li{
+          height: 100%;
+          font-size: 12px;
+          line-height: 48px;
+          text-align: center;
+          border-right:1px solid #e7e7eb ;
+          position: relative;
+          width:100%;
+          .sub-button-box{
+            position: absolute;
+            width: 100%;
+            bottom: 54px;
+            border: 1px solid #d0d0d0;
+            color: #000000;
+            .sub-button-li{
+              min-height: 50px;
+              border-bottom: 1px solid #e7e7eb;
+            }
+            .sub-button-li:hover{
+              background: #eee;
+            }
+            .sub-button-li:last-child{
+              border-right: none;
+            }
+          }
+        }
+        .customMenu-li:last-child{
+          border-right: none;
+        }
+        .active{
+          border: 1px solid @color-success !important;
+          color: @color-success;
+        }
+        .targetActive{
+          box-shadow: 1px 1px 5px #888888;
+        }
+      }
+
+    }
+  }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+
+
+  .customMenu-form{
+    max-width: 640px;
+    background: #f4f5f9;
+    .cms-card-header{
+      height: 40px;
+    }
+    .cms-card-header-categoriesTab:hover{
+      color: #000;
+    }
+    .dsp-form{
+      .dsp-form_body{
+        padding: 0;
+        .form-label{
+          max-width: 100px;
+        }
+      }
+      background: #f4f5f9;
+      padding: 0;
+    }
+  }
+
+
+  .triangle_border_left{
+    position: absolute;
+    left: -16px;
+    top: 500px;
+    width:0;
+    height:0;
+    border-width:16px 16px 16px 0;
+    border-style:solid;
+    border-color:transparent #e7e7eb transparent transparent;/*透明 灰 透明 透明 */
+    margin:40px auto;
+  }
+  .triangle_border_left span {
+    display: block;
+    width: 0;
+    height: 0;
+    border-width: 14px 14px 14px 0;
+    border-style: solid;
+    border-color: transparent #f4f5f9 transparent transparent; /*透明 黄 透明 透明 */
+    position: absolute;
+    top: -14px;
+    left: 2px;
+  }
+
+}

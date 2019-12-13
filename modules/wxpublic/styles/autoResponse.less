@@ -1,0 +1,41 @@
+//关键词卡片
+.cms-card-body{
+  box-sizing: border-box;
+}
+.cms-table{
+  min-height: calc(~'100% - 50px');
+  max-height: calc(~'100% - 50px');
+  overflow-y: auto;
+  .keyWordCade{
+    font-family: "STHeitiSC-Light 黑体";
+    max-width: 240px;
+    min-width: 240px;
+    min-height: 100px;
+    max-height: 100px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0.1px 2px 22px 0.1px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin-top: 30px;
+    margin-right: 40px;
+    box-sizing: border-box;
+    float: left;
+    .keyWordCade-top{
+      height: 48px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+    .keyWordCade-bottom{
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .cms-table-table-pagination{
+    .btn-prev,.el-pager,.btn-next{
+      float: right;
+    }
+  }
+}

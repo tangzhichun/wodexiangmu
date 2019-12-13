@@ -1,0 +1,62 @@
+<!--todo Tabs 标签页-->
+<link rel="stylesheet" href="/css/wxpublic/appmsg.min.css">
+<meta name="referrer" content="no-referrer">
+<div id="app" class="cms-card dealerUser" v-cloak style="padding:0 20px" v-loading="views.listView">
+    <meta name="referrer" content="no-referrer">
+    <header class="cms-card-header">
+        <div class="cms-card-header-categoriesTab"
+             :class="{'cms-card-header-categoriesTab-active':item.appid=== (query.gzh && query.gzh.appid)}"
+             v-for="item in DSP.gzh"
+             @click="change(item)">
+            {[item.name]}
+        </div>
+        <div class="cms-card-header-query"  v-for="item in DSP.gzh" v-show="item.appid=== (query.gzh && query.gzh.appid)">
+            {{#contains user.privileges 'GZH_NEWS_PULL_MESH_DATA'}}
+            <el-button type="primary" plain  size="small" @click="getOnLine(item)">拉取线上数据</el-button>
+            {{/contains}}
+            {{#contains user.privileges 'GZH_NEWS_ADD_MSG'}}
+            <el-button type="primary" plain  size="small" @click="appOrEditmsg(item)">新建图文素材</el-button>
+            {{/contains}}
+        </div>
+    </header>
+    <!--tab0-->
+    <div class="cms-card-body dsp-list" >
+        <div class="msg-box">
+            <div  v-for="k in views.listNum">
+                <div class="msg-cell" v-for="(item ,j) in tab0Data" v-if="j % views.listNum === (k - 1) ">
+                    <img src="/images/weifabu.png" alt="" style="width: 70px; height: 70px; position: absolute; top: 0; right: 0;z-index: 5" v-if="item.newsPublish < 2">
+                    <div v-for="(msg,i) in item.newsArticles" >
+                            <!--只有1个的显示样式-->
+                            <div v-if="item.newsArticles.length < 2">
+                                <div class="msg-cell-title" style="margin-bottom: 6px">{[msg.title]}</div>
+                                <img :src="imgurl(msg.mediaSourseUrl)" alt="" width="100%" height="151px">
+                                <p class="font-size-s" style="color: #9A9A9A;padding-top: 12px">{[msg.digest]}</p>
+                            </div>
+                            <!--一个以上的显示样式-->
+                            <div v-if="item.newsArticles.length > 1" :class="{'more-first':i < 1}" class="more">
+                                <div :class="{'msg-cell-title-box':i < 1}">
+                                    <div class="msg-cell-title">{[msg.title]}</div>
+                                </div>
+                                <img :src="imgurl(msg.mediaSourseUrl)">
+                            </div>
+                    </div>
+                    <div class="font-size-s edit-box">
+                        {[item.createTime | datetime]}
+                        <span>
+                            {{#contains user.privileges 'GZH_NEWS_EDIT_MSG'}}
+                            <i class="el-icon-edit" @click="appOrEditmsg(query.gzhAppid ,item.id)"></i>
+                            {{/contains}}
+
+                            {{#contains user.privileges 'GZH_NEWS_DEl_MSG'}}
+                            <i class="el-icon-delete" @click="delMsg(item)"></i>
+                            {{/contains}}
+
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/wxpublic/appmsg.bundle.js"></script>

@@ -1,0 +1,325 @@
+<link rel="stylesheet" href="/css/cms/designList.min.css">
+<div id="app" class="designList" v-cloak>
+
+    <!--左-->
+    <el-card class="box-card left-box" v-cloak>
+        <div slot="header" class="clearfix">
+            栏目
+        </div>
+        <div v-for="ele in meta.cmsColumn" style="padding: 0 20px">
+            <div class="tzc-collapse" @click="columnActive(ele)" :class="{'open':leftData.column && (leftData.column.parent === ele.value)}">
+                <div class="title" :class="{'active':leftData.column && (leftData.column.value === ele.value) && !ele.children}">{[ele.label]}</div>
+                <div class="el-icon-arrow-right " v-if="ele.children"></div>
+                <p class="li" v-if="ele.children"
+                   v-for="item in ele.children "
+                   @click.stop="columnActive(item)"
+                   :class="{'active':leftData.column && (leftData.column.value === item.value)}">
+                     {[item.label]}
+                </p>
+            </div>
+        </div>
+
+        <!--<el-collapse accordion>-->
+            <!--<div v-for="ele in meta.cmsColumn ">-->
+                <!--<el-collapse-item :title="ele.label" name="1" v-if="ele.children">-->
+                    <!--<p v-for="item in ele.children " @click="columnActive(item)" class="inner" :class="{'active':(leftData.column && leftData.column.value === item.value)}">-->
+                        <!--{[item.label]}-->
+                    <!--</p>-->
+                <!--</el-collapse-item>-->
+                <!--<p v-else @click="columnActive(ele)" class="inner" :class="{'active':(leftData.column && leftData.column.value === ele.value)}">-->
+                    <!--{[ele.label]}-->
+                <!--</p>-->
+            <!--</div>-->
+        <!--</el-collapse>-->
+    </el-card>
+    <!--右-->
+    <el-card class="box-card right-box"  v-loading="loading.tableData" v-if="leftData.column" v-cloak>
+        <div slot="header" class="clearfix" style="justify-content: flex-start ">
+            <el-input placeholder="文章标题/编码" suffix-icon="el-icon-search" style="width: 260px" v-model="query.designTitle" @change="fetchData"></el-input>
+            <el-cascader
+                    v-if="!['NEWS','ACTIVITY','RULE'].includes(leftData.column.value)"
+                    style="width: 260px;margin-right: 0;margin-left: 10px;font-size: 14px"
+                    filterable
+                    placeholder="包含标签"
+                    v-model="query['signIds'+leftData.column.father]"
+                    :options="DSP.tags.tagCascader"
+                    clearable
+                    @change="fetchData">
+            </el-cascader>
+            <el-cascader
+                    v-if="!['NEWS','ACTIVITY','RULE'].includes(leftData.column.value)"
+                    style="width: 260px;margin-right: 0;margin-left: 10px;font-size: 14px"
+                    filterable
+                    placeholder="不含标签"
+                    v-model="query['noSignIds'+leftData.column.father]"
+                    :options="DSP.tags.tagCascader"
+                    clearable
+                    @change="fetchData">
+            </el-cascader>
+            <div style="margin-left: auto;min-width: 200px;display: flex;justify-content: flex-end">
+                <!--<el-button size="small" type="primary" plain @click="queryTopic">-->
+                    <!--专题管理-->
+                <!--</el-button>-->
+                {{#contains user.privileges 'CLIENT_WECHAT_EDIT'}}
+                     <el-button size="small" type="primary" plain @click="location('add','wx')">
+                    <i class="el-icon-plus"></i>
+                    <sapn style="margin-left: 7px">发布</sapn>
+                </el-button>
+                {{/contains}}
+            </div>
+        </div>
+        <div class="cms-list_table">
+            <div class="cms-list_table-cell-box">
+                <!--scope.row.valid 是否允许访问-->
+                <el-table
+                        v-if="tableData && tableData.length > 0"
+                        :data="tableData"
+                        stripe
+                        :row-class-name="tableRowClassName"
+                        style="width: 100%">
+                    <el-table-column label="序号" type="index" :index="indexMethod" width="50" class-name="index" ></el-table-column>
+                    <!--封面-->
+                    <el-table-column class-name="fengmian" width="150" v-if="leftData.column.value !== 'RULE'">
+                        <template slot-scope="scope">
+                            <div class="quan">
+                                <a v-if="scope.row.panorama" :href="scope.row.panorama" target="view_window">
+                                    <img :src="scope.row.reduceUrl | url" alt="" width="140px" height="90px">
+                                </a>
+                                <img v-else :src="scope.row.reduceUrl | url" alt="" width="140px" height="90px">
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <!--标题和大纲-->
+                    <el-table-column >
+                        <template slot-scope="scope">
+                            <p class="font-label" style="display: flex;align-items: center;font-size: 12px">    {[scope.row.designNo]}
+                                <span class="btnFabu" v-if="scope.row.showLevel === 'PRIVATE'">未发布</span>
+                            </p>
+                            <a style="cursor: pointer" @click="lookDesign(scope.row.id)" >{[scope.row.title]}</a>
+                            <p class="font-label">{[scope.row.contentSyllabus]}</p>
+                        </template>
+                    </el-table-column>
+                    <!--查看  收藏  点赞-->
+                    <el-table-column v-if="leftData.column.value !== 'RULE'">
+                        <template slot-scope="scope">
+                            <p class="flex-center" @click.stop>
+                                <i class="el-icon-view"></i>
+                                <span class="font-label">查看</span>
+                                <span class="font-value" >{[scope.row.actualViewNumStr]} <sapn style="padding: 0 4px">+</sapn></span>
+                                {{#contains user.privileges 'NR_DESIGN_OTHER'}}
+                                    <a href="javascript:void(0)" @click.stop="changeNumber(scope.row)">{[scope.row.unrealViewNumStr]}</a>
+                                {{/contains}}
+                                {{^contains user.privileges 'NR_DESIGN_OTHER'}}
+                                    <span class="font-value" >{[scope.row.unrealViewNumStr]}</span>
+                                {{/contains}}
+
+                            </p>
+                            <p class="flex-center" @click.stop>
+                                <i class="icon-collection"></i>
+                                <span class="font-label">收藏</span>
+                                <span class="font-value" >{[scope.row.actualCollectNumStr]} <sapn style="padding: 0 4px">+</sapn></span>
+                                {{#contains user.privileges 'NR_DESIGN_OTHER'}}
+                                <a href="javascript:void(0)"  @click.stop="changeNumber(scope.row)">{[scope.row.unrealCollectNumStr]}</a>
+                                {{/contains}}
+                                {{^contains user.privileges 'NR_DESIGN_OTHER'}}
+                                    <span class="font-value" >{[scope.row.unrealCollectNumStr]}</span>
+                                {{/contains}}
+                            </p>
+                            <p class="flex-center"  @click.stop>
+                                <i class="icon-thumbs-up"></i>
+                                <span class="font-label">点赞</span>
+                                <span class="font-value" >{[scope.row.actualPraiseNumStr]} <sapn style="padding: 0 4px">+</sapn></span>
+                                {{#contains user.privileges 'NR_DESIGN_OTHER'}}
+                                    <a href="javascript:void(0)" @click.stop="changeNumber(scope.row)">{[scope.row.unrealPraiseNumStr]}</a>
+                                {{/contains}}
+                                {{^contains user.privileges 'NR_DESIGN_OTHER'}}
+                                    <span class="font-value" >{[scope.row.unrealCollectNumStr]}</span>
+                                {{/contains}}
+                            </p>
+                        </template>
+                    </el-table-column>
+                    <!--户型  发布人 发布日期-->
+                    <el-table-column >
+                        <template slot-scope="scope">
+                            <p class="flex-center" v-if="scope.row.houseType">
+                                <span class="font-label min-widthF4">户型</span>
+                                <span class="font-value">{[$translate(meta.FWHX, scope.row.houseType)]}</span>
+                            </p>
+                            <p class="flex-center" v-if="scope.row.designerName">
+                                <span class="font-label min-widthF4">发布人</span>
+                                <span class="font-value">{[scope.row.designerName]}</span>
+                            </p>
+                            <p class="flex-center">
+                                <span class="font-label min-widthF4">发布日期</span>
+                                <span class="font-value">{[scope.row.publishTime && (scope.row.publishTime.year + '/' + scope.row.publishTime.monthValue + '/' +scope.row.publishTime.dayOfMonth) || '未发布']}</span>
+                            </p>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="120px">
+                        <template slot-scope="scope" >
+                            {{#contains user.privileges 'CLIENT_WECHAT_EDIT'}}
+                                <a class="list-link " href="javascript:void(0)" @click="location('edit',scope.row.id)" >编辑</a><br/>
+                            {{/contains}}
+                            {{#contains user.privileges 'CLIENT_WECHAT_MORE_AND_MORE'}}
+                                <el-dropdown  trigger="click" v-if="leftData.column.value !== 'RULE'">
+                                    <a class="el-dropdown-link " href="javascript:void(0)">更多</a>
+                                    <el-dropdown-menu slot="dropdown">
+                                        {{#contains user.privileges 'NR_DESIGN_ACT_MULTI'}}
+                                            <el-dropdown-item ><sapn @click="del(scope.row.id,scope.row.valid)">{[scope.row.valid ? '禁止访问' : '允许访问']}</sapn></el-dropdown-item>
+                                        {{/contains}}
+
+                                        {{#contains user.privileges 'NR_DESIGN_CANCEL_PUBLISH'}}
+                                        <el-dropdown-item ><sapn @click="publish(scope.row.id)" v-if="scope.row.valid && scope.row.showLevel !=='PRIVATE'">取消发布</sapn></el-dropdown-item>
+                                        {{/contains}}
+
+                                        {{#contains user.privileges 'NR_DESIGN_CREATE_QRCODE'}}
+                                        <el-dropdown-item ><sapn @click="accrueQRcode(scope.row)">生成二维码</sapn></el-dropdown-item>
+                                        {{/contains}}
+
+                                        {{#contains user.privileges 'NR_DESIGN_ADD_TOPIC'}}
+                                        <el-dropdown-item ><sapn @click.stop="addSpecial(scope.row)">添加到专题</sapn></el-dropdown-item>
+                                        {{/contains}}
+                                        {{#contains user.privileges 'NR_DESIGN_OTHER'}}
+                                            <el-dropdown-item ><sapn @click.stop="changeNumber(scope.row)">其他操作</sapn></el-dropdown-item>
+                                        {{/contains}}
+                                        </el-dropdown-menu>
+                                </el-dropdown>
+                            {{/contains}}
+                            <!--<sapn @click="del(scope.row.id)" style="cursor: pointer" class="font-danger" v-if="scope.row.valid == 1">无效</sapn>-->
+                            <!--<sapn @click="publish(scope.row.id)" style="cursor: pointer" class="font-success" v-if="scope.row.valid == 1 && scope.row.showLevel !=='PUBLIC' ">发布</sapn>-->
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <empty v-if="tableData && tableData.length < 1"></empty>
+            </div>
+
+            <div class="cms-pagination">
+                <el-pagination
+                        @size-change="onSizeChange"
+                        @current-change="onCurrentChange"
+                        :current-page="query.currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size="query.pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="query.totalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </el-card>
+
+    <el-dialog
+            v-cloak
+            title="分享二维码"
+            :visible.sync="loading.qRCode"
+            width="670px"
+            :close-on-click-modal="false"
+           >
+        <div>
+            <div style="display: flex">
+                <el-select style="width: 50%;margin-right: 10px" v-model="canvas.query.wx" placeholder="选择进入那个小程序" @change="changeWx">
+                    <el-option
+                            v-for="item in meta.categories"
+                            :key="item.key"
+                            :label="item.key"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+                <el-select v-model="canvas.query.value" placeholder="推广人微信昵称/姓名/手机号精准检索" filterable @change="unripeQRcode" remote :remote-method="fetchDataUser" loading-text="搜索中" :loading="loading.canvasQueryList">
+                    <el-option
+                            v-for="item in canvas.query.list"
+                            :key="item.id"
+                            :label="item.name || item.nickName"
+                            :value="item.userNo">
+                        <div style="display: flex;align-items: center">
+                            <img :src="item.avatarUrl ||'/images/head_portrait.jpg'" alt="" style="width: 28px;height: 28px;border-radius: 50%">
+                            <span style="margin-left: 10px">{[ item.name || item.nickName ]}</span>
+                            <span style="margin-left: auto; color: #8492a6; font-size: 13px" v-if="item.mobile">{[item.mobile]}</span>
+                            <span style="margin-left: auto; color: #8492a6; font-size: 13px" v-if="!item.mobile">{[item.remarks && item.remarks[0] && item.remarks[0].remark]}</span>
+                        </div>
+                    </el-option>
+                </el-select>
+            </div>
+
+            <canvas id="canvas" style="display: block;margin: 0 auto"></canvas>
+            <canvas id="canvas2" style="display: none"></canvas>
+        </div>
+        <div slot="footer" class="dialog-footer">
+            <div style="text-align: center;width: 100%;margin: 10px 0" class="font-label">
+                用于制作线下推广物料，手机微信扫码可直接打开小程序文章页面
+            </div>
+            <div class="dialog-footer-box">
+                <a href="" :download="canvas.model && canvas.model.title" id="download0" @click="saveCanvas('download0',3000)"><span><i class="el-icon-download"></i> 极大尺寸</span><br/><span>3000*3000像素</span></a>
+                <a href="" :download="canvas.model && canvas.model.title" id="download1" @click="saveCanvas('download1',1000)"><span><i class="el-icon-download"></i> 大尺寸</span><br/><span>1000*1000像素</span></a>
+                <a href="" :download="canvas.model && canvas.model.title" id="download2" @click="saveCanvas('download2',500)"><span><i class="el-icon-download"></i> 中尺寸</span><br/><span>500*500像素</span></a>
+                <a href="" :download="canvas.model && canvas.model.title" id="download3" @click="saveCanvas('download3',300)"><span><i class="el-icon-download"></i> 小尺寸</span><br/><span>300*300像素</span></a>
+            </div>
+        </div>
+    </el-dialog>
+    {{#contains user.privileges 'NR_DESIGN_OTHER'}}
+         <el-dialog title="其他设置"
+               v-cloak
+               width="300px"
+               :show-close="false"
+               :close-on-click-modal="false"
+               :visible.sync="setDesign.view">
+        <div>
+            <div class='set-flex-center'>
+                <div style="width: 40px">查看</div>
+                <el-input v-model="setDesign.curr && setDesign.curr.viewNum" :maxlength="6"></el-input>
+            </div>
+            <div class='set-flex-center'>
+                <div style="width: 40px">收藏</div>
+                <el-input v-model="setDesign.curr && setDesign.curr.collectNum" :maxlength="6"></el-input>
+            </div>
+            <div class='set-flex-center'>
+                <div style="width: 40px">点赞</div>
+                <el-input v-model="setDesign.curr && setDesign.curr.praiseNum" :maxlength="6"></el-input>
+            </div>
+            <div class='set-flex-center'>
+                <div style="width: 40px">排序</div>
+                <el-input v-model="setDesign.curr && setDesign.curr.sorted" :maxlength="4"></el-input>
+            </div>
+        </div>
+
+        <div slot="footer" class="dialog-footer right">
+            <el-button @click="setDesign.view = false">取 消</el-button>
+            <el-button type="primary" @click="saveSetDesign" :loading="loading.set">保存</el-button>
+        </div>
+    </el-dialog>
+    {{/contains}}
+
+    <el-dialog title="添加到专题"
+               v-cloak
+               width="430px"
+               :show-close="false"
+               :close-on-click-modal="false"
+               :visible.sync="loading.addSpecialBox">
+            <div class='set-flex-center' style="width: 100%;margin-left: 32px">
+                <div style="width: 80px">专题名称</div>
+                <el-select filterable  placeholder="专题名称" v-model="currSpecial" >
+                    <el-option
+                            v-for="item in specialList"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                    </el-option>
+                </el-select>
+            </div>
+        <div slot="footer" class="dialog-footer" style="text-align: right">
+            <el-button @click="loading.addSpecialBox = false">取 消</el-button>
+            <el-button type="primary" @click="saveAddSpecialDesign" :loading="loading.addSpecialLoading" :disabled="!currSpecial">保存</el-button>
+        </div>
+    </el-dialog>
+
+    <!--设计预览弹出框-->
+    <el-dialog
+            width="375px"
+            :show-close="false"
+            class="dsp-phone-box"
+            :visible.sync="loading.lookDesignView"
+            v-loading.fullscreen.lock="lookDesign"
+    >
+        <dsp-phone :design-data="information" :width="375" :dsp="DSP" v-cloak ></dsp-phone>
+    </el-dialog>
+</div>
+<script src="/js/cms/designList.bundle.js"></script>

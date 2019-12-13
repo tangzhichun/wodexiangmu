@@ -1,0 +1,47 @@
+@import "../../global/styles/global";
+
+section {
+  padding: 15px;
+  counter-increment: c1 1;
+  counter-reset: c2;
+}
+
+h1 {
+  //counter-increment: c1 1;
+  padding: 10px 0;
+
+  &:before {
+    content: counter(c1) "、";
+  }
+}
+
+h2 {
+  padding: 6px 0;
+  counter-increment: c2 1;
+  counter-reset: c3;
+
+  &:before {
+    content: counter(c1) "." counter(c2) "、";
+  }
+}
+
+h3 {
+  padding: 4px 0;
+  counter-increment: c3 1;
+
+  &:before {
+    content: counter(c1) "." counter(c2) "." counter(c3) "、";
+  }
+}
+
+.el-row {
+  //padding: 3px 0;
+}
+
+.el-col {
+  padding: 3px;
+
+  span {
+    font-size: 12px;
+  }
+}

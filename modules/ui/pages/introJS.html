@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="/vendor/introjs.min.css">
+<style>
+    [v-cloak]{
+        display: none;
+    }
+    .a1{
+        margin: 5px 0px;
+        background-color: red;
+    }
+</style>
+<div>
+    <div  data-intro=" 这是第一步 " data-step="1" data-position='center' class="a1">1</div>
+    <div  data-intro=" 这是第二部 " data-step="2" data-position='center' class="a1">2</div>
+    <div  data-intro=" 这是第3部 " data-step="3" data-position='center' class="a1">3</div>
+</div>
+
+<script src="/vendor/intro.min.js"></script>
+<script>
+    introJs().start();
+</script>

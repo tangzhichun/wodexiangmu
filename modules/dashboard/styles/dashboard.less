@@ -1,0 +1,164 @@
+@import "../../global/styles/global";
+.dashboard{
+
+  .mg-bottom30{
+    margin-bottom: 30px;
+  }
+  .el-card .el-card__header > .clearfix:after {
+    border-bottom:none;
+  }
+  .font-weight{
+    font-weight:900
+  }
+  .el-table__header-wrapper{
+    font-size:16px;
+    color:#282751;
+    th{
+      background: #EBEEF5;
+      text-align:center;
+      border-right:none;
+      div{
+        font-weight: 900;
+      }
+    }
+  }
+  .flex{
+    display: flex;
+  }
+  .dsp-row{
+    padding: 0 30px;
+    height: 100%;
+    .dsp-col{
+      height: 100%;
+    }
+  }
+  .header-information{
+    .layout-header-information{
+      height: 100%;
+    }
+    .dsp-panel-popover{
+      width: 100%;
+      height: 100%;
+      position: relative;
+      right:0;
+      top: 0;
+      box-shadow:none;
+    }
+  }
+  //左侧报表
+  .ri-yue{
+    margin-left: 10px;
+    display: inline-block;
+    width: 48px;
+    height:30px ;
+    line-height: 30px;
+    box-sizing: border-box;
+    border:1px solid #eff2f5;
+    text-align: center;
+    font-size: 14px;
+    color: @color-gray-l;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  .ri-yue.active{
+    background: #409eff;
+    color: #fff;
+    border:none;
+  }
+//  数据box
+  .data-ri-yue-box{
+    padding: 0 24px;
+  }
+  //当月业绩 || 门店效益
+  .data-ri-yue-cell{
+      margin-bottom: 30px;
+  }
+  //标题
+  .data-ri-yue-cell-title{
+    font-size: 18px;
+    color:#303133;
+    display: flex;
+    align-items: center;
+    i{
+      margin-right: 10px;
+    }
+  }
+  //  内容
+  .data-list-box{
+    display: flex;
+    flex-wrap:wrap;
+  }
+    //5等分表格
+  .data-list{
+    display: flex;
+    align-items: center;
+    height: 116px;
+    border-top: none;
+    border-right:  1px solid #eff2f5;
+    width: 20%;
+    box-sizing: border-box;
+    text-align: center;
+    flex-wrap:wrap;
+    .el-icon-question{
+      cursor: pointer;
+    }
+    & > div{
+      width: 100%;
+    }
+  }
+  .data-list:nth-child(5n){
+    border-right:none
+  }
+  .data-list:nth-of-type(n+6){
+    border-top: 1px solid #eff2f5;
+  }
+  //3等分
+  .data-list3{
+    width: 33.333%;
+    border-right:  1px solid #eff2f5;
+    border-bottom:  1px solid #eff2f5;
+    padding-left: 30px;
+    box-sizing: border-box;
+  }
+  .data-list3.border-right-none{
+    border-right:none
+  }
+  .border-bottom-none{
+    border-bottom:none !important;
+  }
+  .data-list2{
+    padding-top: 30px;
+    width: 50%;
+    border-right:  1px solid #eff2f5;
+    border-bottom:  1px solid #eff2f5;
+    padding-left: 30px;
+    box-sizing: border-box;
+  }
+  //送货单数
+  .delivery-number{
+    display: flex;
+    margin-top: 20px;
+  }
+  .delivery-name{
+    min-width: 90px;
+    max-width: 100px;
+  }
+  .delivery-progress{
+    width: 100%;
+    .el-progress-bar__innerText{
+      color: transparent;
+    }
+  }
+  .delivery-num{
+    padding-left: 20px;
+    width: 80px;
+  }
+  .dayyun{
+    position: relative;
+    div{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

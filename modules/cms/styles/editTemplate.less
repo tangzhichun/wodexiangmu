@@ -1,0 +1,142 @@
+.cms-card{
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+  //加粗加黑
+  .font-weight{
+    font-weight: bold;
+    color:#303133;
+  }
+  .color-gray-xl{
+    color: #606266;
+  }
+  .editTemplate-body{
+    display: flex;
+    box-sizing: border-box;
+    overflow: visible;
+    height: 100%;
+    //模版
+    .template{
+      padding-top: 30px;
+      min-width: 500px;
+      width: 500px;
+      position: relative;
+      .template-mobile{
+        -moz-user-select:none;/**ff*/
+        -webkit-user-select:none;/**chrome、safari、360极速*/
+        overflow: hidden;
+        min-width: 10px;
+        border-radius:4px;
+        box-shadow:0.1px 2px 22px 0.1px rgba(0,0,0,0.20);
+        background:#fff;
+        position: absolute;
+        .beijingtu{
+          width:1800px;background: #d2d6d9;color: #fff;display: flex;justify-content: center;align-items: center
+        }
+        //白边
+        .baiBianY{
+          z-index: 10;
+          width: 100%;
+          height: 5px;
+          position: absolute;
+          top: 0;
+          background: #fff;
+        }
+        .baiBianY1{
+          top: 600px;
+        }
+        .baiBianY2{
+          top: 1200px;
+        }
+        .baiBian{
+          z-index: 10;
+          width: 5px;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          background: #fff;
+        }
+        .baiBian1{
+          left: 600px;
+        }
+        .baiBian2{
+          left: 1200px;
+        }
+        .move-div{
+          cursor: pointer ;
+          background: transparent;
+          position: absolute;
+        }
+      }
+    }
+    //表单
+    .dsp-form{
+      padding: 0;
+      padding-top: 30px;
+      width: 100%;
+      height: 100%; //模版
+      overflow-y: auto;
+      .dsp-form_body{
+        padding: 0;
+      }
+      .form-group_body{
+        padding: 0;
+        .el-row{
+          padding: 0;
+          flex-wrap: nowrap;
+          display: flex;
+          margin-bottom: 14px ;
+          .form-label{
+            min-width: 96px;
+            padding-right: 10px;
+            justify-content: flex-end;
+          }
+          .el-col{
+            display: flex;
+            align-items: center;
+          }
+          .el-col-8{
+            max-width: 300px;
+          }
+          .el-col-4{
+            max-width: 150px;
+            padding-left: 5px;
+            padding-right: 5px;
+          }
+          .el-col-4:last-child{
+            padding-right: 0;
+          }
+        }
+        //el-row底部外边距离
+        .el-row-margin-b-1{
+            margin-bottom:20px;
+        }
+        .el-row-margin-b-2{
+          margin-bottom:60px;
+        }
+        .el-row-margin-b-3{
+          margin-bottom:29px;
+        }
+        //上传按钮
+        .upload-btn{
+          div{
+            width: 100%;
+          }
+          background:#ffffff;
+          border:1px solid #c7e2ff;
+          border-radius:4px;
+          cursor: pointer;
+          text-align: center;
+          line-height: 38px;
+          width:100% ;
+          color:#409eff;
+          height:38px;
+        }
+      }
+    }
+  }
+}

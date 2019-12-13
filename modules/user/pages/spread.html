@@ -1,0 +1,44 @@
+<link rel="stylesheet" href="/css/user/spread.min.css">
+<div id="app" v-cloak>
+    <div class="dsp-list">
+        <!--头部-->
+        <div class="dsp-list_header">
+            <!--标题-->
+            <div class="dsp-list_header-tabs">
+                <div class="dsp-list_header-tabs-item" v-for="item in categoryList"
+                     :class="{active: item.value == category}" @click="getCurrentCategory(item.value)">{[item.label]}
+                </div>
+            </div>
+        </div>
+        <div class="dsp-list_table">
+            <!--表格-->
+            <el-table
+                    :data="query[category].tableData"
+                    v-loading="loading"
+                    stripe
+                    style="width: 100%">
+                <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
+                <el-table-column label="姓名/电话"></el-table-column>
+                <el-table-column  prop="userNo" label="部门"></el-table-column>
+                <el-table-column  prop="" label="获客数"></el-table-column>
+                <el-table-column  prop="" label="订单数"></el-table-column>
+                <el-table-column  prop="" label="下单数"></el-table-column>
+                <el-table-column  prop="" label="累计佣金"></el-table-column>
+                <el-table-column  prop="" label="可提佣金"></el-table-column>
+            </el-table>
+            <!--分页-->
+            <div class="dsp-list_table-pagination">
+                <el-pagination
+                        @size-change="onSizeChange"
+                        @current-change="onCurrentChange"
+                        :current-page="query[category].currentPage"
+                        :page-sizes="[15, 30, 50, 100]"
+                        :page-size="query[category].pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="query[category].totalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/user/spread.bundle.js"></script>

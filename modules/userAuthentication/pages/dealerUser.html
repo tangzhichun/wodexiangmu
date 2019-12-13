@@ -1,0 +1,384 @@
+<!--todo Tabs 标签页-->
+<link rel="stylesheet" href="/css/userAuthentication/dealerUser.min.css">
+
+<div id="app" class="cms-card dealerUser" v-cloak  >
+        <aside class="dealerUser-aside"  v-cloak  >
+            <el-card class="box-card-f-l">
+                <div slot="header" class="clearfix">
+                    <span>经销商</span>
+                </div>
+                <div style="height: 100%">
+                    <div class="filter" >
+                        <el-input v-if="meta.dealerEnums.length > 6" size="small" v-model="query.jian" :maxlength="11" placeholder="输入关键字检索" ></el-input>
+                    </div>
+                    <ul class="ul-box">
+                        <li @click="changeAgent('')"  class="list-li" :class="{'active':!query.agent}" v-if="meta.dealerEnums.length === DSP.dealerEnums.length">
+                            所有
+                        </li>
+                        <li v-for="item in meta.dealerEnums.filter(el => {return (!query.jian && el)|| (el.value.indexOf(query.jian) > -1 || el.label.indexOf(query.jian) > -1)})"
+                            :key="item.value"
+                            class="list-li"
+                            :class="{'active':item.value === query.agent}"
+                            @click="changeAgent(item.value)"
+                        >
+                            {[item.label]}
+                        </li>
+                    </ul>
+                </div>
+            </el-card>
+        </aside>
+        <div class="dealerUser-list"  v-cloak  >
+            <header class="cms-card-header">
+                {{#contains user.privileges 'RZ_CREATE_TAB_EMPLOYEE'}}
+                    <div class="cms-card-header-categoriesTab" :class="{'cms-card-header-categoriesTab-active':'tab0' === query.currTab}" @click="change('tab0')">员工</div>
+                {{/contains}}
+                {{#contains user.privileges 'RZ_CREATE_TAB_PARTNER'}}
+                    <div class="cms-card-header-categoriesTab" :class="{'cms-card-header-categoriesTab-active':'tab2' === query.currTab}" @click="change('tab2')">合作方</div>
+                {{/contains}}
+                {{#contains user.privileges 'RZ_CREATE_TAB_OTHER'}}
+                    <div class="cms-card-header-categoriesTab" :class="{'cms-card-header-categoriesTab-active':'tab4' === query.currTab}" @click="change('tab4')">其他</div>
+                {{/contains}}
+
+
+                <div v-show="query.currTab === item.value" class="cms-card-header-query" v-for="item in tab" :key="item.value" >
+                    <el-input v-model="query[item.value+'Query'].name" :maxlength="11" placeholder="姓名或手机号" clearable size="small" style="margin: 0 10px" @change="fetchData(1)"></el-input>
+                    {{#contains user.privileges 'RZ_BASICS_APPROVE'}}
+                        <el-button type="primary" plain icon="el-icon-plus" size="small" @click="openAddDialog(item.value)">新增</el-button>
+                        <el-button type="primary" plain icon="el-icon-upload2" size="small" @click="views.dialogVisible = true" >导入</el-button>
+                    {{/contains}}
+                </div>
+            </header>
+            <!--tab0-->
+            <div class="cms-card-body dsp-list " v-if="query.currTab ==='tab0' && query.tab0Query">
+                <div class="dsp-list_table" style="padding: 0">
+                    <!--表格-->
+                    <el-table
+                            :data="tab0Data"
+                            stripe
+                            v-loading="views.loading"
+                            style="width: 100%;height: 100%">
+                        <el-table-column label="序号" type="index" :index="(value)=>{return indexMethod(value,'tab0')}" width="80" class-name="index" ></el-table-column>
+                        <el-table-column label="姓名" width="100">
+                            <template slot-scope="scope" >
+                                {[scope.row.name]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="电话" width="140">
+                            <template slot-scope="scope">
+                                {[scope.row.mobile]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="经销商" v-if="!query.agent">
+                            <template slot-scope="scope" >
+                                {[$translate(DSP.dealerEnums, scope.row.agent)]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="部门/门店">
+                            <template slot-scope="scope">
+                                {[scope.row.company]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="认证用户">
+                            <template slot-scope="scope">
+                                <sapn v-show="scope.row.list && scope.row.list.length < 1" class="font-warn">未认证</sapn>
+                                <div class="renzheng" v-show="scope.row.list && scope.row.list.length > 0">
+                                    <a :href="'/user/userInformation?userId='+ren.id" v-for="(ren,i) in scope.row.list " class="renzheng">
+                                        <img :src="ren.avatarUrl" alt="" class="img1">
+                                        <span>{[ren.nickName]}{[i < (scope.row.list.length -1) ? '/' : '']}</span>
+                                    </a>
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="公众号">
+                            <template slot-scope="scope">
+                                <span v-show="scope.row.follow.length === 0">未关注</span>
+                                <img :src="e"  width="26px" style="margin: 0 4px" v-for="(e,i) in scope.row.follow" >
+                            </template>
+                        </el-table-column>
+                        <el-table-column  width="100px">
+                            <template slot-scope="scope">
+                                <div class="edit-cell" v-if="scope.row.category !==1 ">
+                                    {{#contains user.privileges 'RZ_BASICS_EDIT'}}
+                                    <span class="el-icon-edit" @click.stop="openAddDialog('tab0',scope.row)"></span>
+                                    {{/contains}}
+                                    {{#contains user.privileges 'RZ_BASICS_DEL'}}
+                                    <span class="el-icon-delete" @click.stop="delAgent(scope.row)" style="margin-left: 10px" ></span>
+                                    {{/contains}}
+                                </div>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <!--分页-->
+                    <div class="dsp-list_table-pagination" :key="query.tab0Query.totalSize">
+                        <el-pagination
+                                @size-change="fetchData"
+                                @current-change="fetchData"
+                                :current-page.sync="query.tab0Query.currentPage"
+                                :page-sizes="[15,30,50, 100]"
+                                :page-size.sync="query.tab0Query.pageSize"
+                                layout= "total, sizes, prev, pager,next"
+                                :total="query.tab0Query.totalSize">
+                        </el-pagination>
+                    </div>
+                </div>
+            </div>
+            <!--tab2-->
+            <div class="cms-card-body dsp-list" v-if="query.currTab ==='tab2' && query.tab2Query">
+                <div class="dsp-list_table" style="padding: 0">
+                    <!--表格-->
+                    <el-table
+                            :data="tab2Data"
+                            stripe
+                            v-loading="views.loading"
+                            style="width: 100%;height: 100%">
+                        <el-table-column label="序号" type="index" :index="(value)=>{return indexMethod(value,'tab0')}" width="80" class-name="index" ></el-table-column>
+                        <el-table-column label="姓名" width="240">
+                            <template slot-scope="scope">
+                                {[scope.row.name]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="电话" width="140">
+                            <template slot-scope="scope">
+                                {[scope.row.mobile]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="经销商" v-if="!query.agent" >
+                            <template slot-scope="scope" >
+                                {[$translate(DSP.dealerEnums, scope.row.agent)]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="公司">
+                            <template slot-scope="scope">
+                                {[scope.row.company]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="认证用户">
+                            <template slot-scope="scope">
+                                <sapn v-show="scope.row.list && scope.row.list.length < 1" class="font-warn">未认证</sapn>
+                                <div class="renzheng" v-show="scope.row.list && scope.row.list.length > 0">
+                                    <a :href="'/user/userInformation?userId='+ren.id" v-for="(ren,i) in scope.row.list " class="renzheng">
+                                        <img :src="ren.avatarUrl" alt="" class="img1">
+                                        <span>{[ren.nickName]}{[i < (scope.row.list.length -1) ? '/' : '']}</span>
+                                    </a>
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="公众号">
+                            <template slot-scope="scope">
+                                <span v-show="scope.row.follow.length === 0">未关注</span>
+                                <img :src="e"  width="26px" style="margin: 0 4px" v-for="(e,i) in scope.row.follow" >
+                            </template>
+                        </el-table-column>
+                        <el-table-column  width="100px">
+                            <template slot-scope="scope">
+                                <div class="edit-cell"  v-if="scope.row.category !==3 ">
+                                    {{#contains user.privileges 'RZ_BASICS_EDIT'}}
+                                    <span class="el-icon-edit" @click.stop="openAddDialog('tab2',scope.row)"></span>
+                                    {{/contains}}
+                                    {{#contains user.privileges 'RZ_BASICS_DEL'}}
+                                    <span class="el-icon-delete" @click.stop="delAgent(scope.row)" style="margin-left: 10px" ></span>
+                                    {{/contains}}
+                                </div>
+                            </template>
+                        </el-table-column>
+
+                    </el-table>
+                    <!--分页-->
+                    <div class="dsp-list_table-pagination" :key="query.tab2Query.totalSize">
+                        <el-pagination
+                                @size-change="fetchData"
+                                @current-change="fetchData"
+                                :current-page.sync="query.tab2Query.currentPage"
+                                :page-sizes="[15,30,50, 100]"
+                                :page-size.sync="query.tab2Query.pageSize"
+                                layout= "total, sizes, prev, pager,next"
+                                :total="query.tab2Query.totalSize">
+                        </el-pagination>
+                    </div>
+                </div>
+            </div>
+            <!--tab4-->
+            <div class="cms-card-body dsp-list" v-if="query.currTab ==='tab4' && query.tab4Query">
+                <div class="dsp-list_table" style="padding: 0">
+                    <!--表格-->
+                    <el-table
+                            :data="tab4Data"
+                            stripe
+                            v-loading="views.loading"
+                            style="width: 100%;height: 100%">
+                        <el-table-column label="序号" type="index" :index="(value)=>{return indexMethod(value,'tab0')}" width="80" class-name="index" ></el-table-column>
+                        <el-table-column label="姓名" width="100">
+                            <template slot-scope="scope">
+                                {[scope.row.name]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="电话" width="140">
+                            <template slot-scope="scope">
+                                {[scope.row.mobile]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="经销商" v-if="!query.agent">
+                            <template slot-scope="scope" >
+                                {[$translate(DSP.dealerEnums, scope.row.agent)]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="部门/门店">
+                            <template slot-scope="scope">
+                                {[$translate(meta.position,scope.row.company)]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="认证用户">
+                            <template slot-scope="scope">
+                                <sapn v-show="scope.row.list && scope.row.list.length < 1" class="font-warn">未认证</sapn>
+                                <div class="renzheng" v-show="scope.row.list && scope.row.list.length > 0">
+                                    <a :href="'/user/userInformation?userId='+ren.id" v-for="(ren,i) in scope.row.list " class="renzheng">
+                                        <img :src="ren.avatarUrl" alt="" class="img1">
+                                        <span>{[ren.nickName]}{[i < (scope.row.list.length -1) ? '/' : '']}</span>
+                                    </a>
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="公众号">
+                            <template slot-scope="scope">
+                                <span v-show="scope.row.follow.length === 0">未关注</span>
+                                <img :src="e"  width="26px" style="margin: 0 4px" v-for="(e,i) in scope.row.follow" >
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="备注" >
+                            <template slot-scope="scope">
+                                {[scope.row.remarks]}
+                            </template>
+                        </el-table-column>
+                        <el-table-column  width="100px">
+                            <template slot-scope="scope">
+                                <div class="edit-cell">
+                                    {{#contains user.privileges 'RZ_BASICS_EDIT'}}
+                                    <span class="el-icon-edit" @click.stop="openAddDialog('tab4',scope.row)"></span>
+                                    {{/contains}}
+                                    {{#contains user.privileges 'RZ_BASICS_DEL'}}
+                                    <span class="el-icon-delete" @click.stop="delAgent(scope.row)" style="margin-left: 10px" ></span>
+                                    {{/contains}}
+                                </div>
+                            </template>
+                        </el-table-column>
+
+                    </el-table>
+                    <!--分页-->
+                    <div class="dsp-list_table-pagination" :key="query.tab4Query.totalSize">
+                        <el-pagination
+                                @size-change="fetchData"
+                                @current-change="fetchData"
+                                :current-page.sync="query.tab4Query.currentPage"
+                                :page-sizes="[15,30,50, 100]"
+                                :page-size.sync="query.tab4Query.pageSize"
+                                layout= "total, sizes, prev, pager,next"
+                                :total="query.tab4Query.totalSize">
+                        </el-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!--新增经销商-->
+    <el-dialog
+            v-cloak
+            :title="information && information.id && '修改' || '新增'"
+            :visible.sync="views.addDialog"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            :show-close="false"
+            width="400px"
+            >
+        <div class="dsp-form" container="dialog" v-dsp-form-validate>
+            <div class="dsp-form_body add-dialog-form" v-if="information">
+                <div class="add-dialog-form-cell" v-dsp-validate="information.name" dsp-err-required="姓名必须填写" dsp-err-minlength="姓名须至少2个字">
+                    <el-input placeholder="姓名" maxlength="10" v-model="information.name" ></el-input>
+                </div>
+                <div class="add-dialog-form-cell" v-dsp-validate="information.mobile" dsp-err-required="手机号码必须填写" dsp-err-minlength="手机号码须为11位">
+                    <el-input  v-model="information.mobile"  v-dsp-input-mobile="information.mobile" :maxlength=11 placeholder="请输入电话号码" ></el-input>
+                </div>
+                <div class="add-dialog-form-cell" v-dsp-validate="information.company" :key="information.category" :dsp-err-required="information.category < 1 ? '部门/门店必须填写' : '公司必须填写'" v-if="information.category < 3">
+                    <el-input :placeholder="information.category < 1 ? '请填写所在部门/门店' : '请填写所在公司'" type="text"  show-word-limit maxlength="30" v-model="information.company" ></el-input>
+                </div>
+                <div class="add-dialog-form-cell" v-dsp-validate="information.agent" dsp-err-required="请选择经销商">
+                    <el-select v-model="information.agent" filterable placeholder="经销商">
+                        <el-option
+                                v-for="item in meta.dealerEnums"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </div>
+
+                <div class="add-dialog-form-cell" v-dsp-validate="information.company" :key="information.category" dsp-err-required="请选择部门/门店" v-if="information.category > 2">
+                    <el-cascader
+                            placeholder='请选择部门/门店'
+                            v-model="information.company"
+                            :options="meta.positionS"
+                            clearable
+                          ></el-cascader>
+                </div>
+                <div class="add-dialog-form-cell" v-if="information.category > 3">
+                    <el-input  v-model="information.remarks" :maxlength=50 placeholder="请输入备注" ></el-input>
+                </div>
+            </div>
+        </div>
+
+        <div slot="footer" class="dialog-footer align-right">
+            <el-button @click="cancelSave(false)">
+                取消
+            </el-button>
+            <el-button type="primary" :loading="views.saveLoading" @click="save">
+                <i class="icon-save"></i><span>保存</span>
+            </el-button>
+        </div>
+    </el-dialog>
+    <!--导入-->
+    <el-dialog title="导入"  v-cloak  :visible.sync="views.dialogVisible" width="300px" :close-on-click-modal=false>
+        <el-select v-model="importObj.currentFile.agent"
+                   @change="importObj.currentFile2.agent = importObj.currentFile.agent"
+                   placeholder="经销商" >
+            <el-option
+                    v-for="item in meta.dealerEnums"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+        </el-select>
+        <el-cascader
+                style="margin-top:10px"
+                v-if="query.currTab === 'tab4'"
+                placeholder='请选择部门/门店'
+                v-model="importObj.currentFile2.company"
+                :options="meta.positionS"
+                clearable
+        ></el-cascader>
+
+
+        <div slot="footer" class="dialog-footer" style="text-align: right; " >
+            <a href="/api/mpuser/service/agent/download/template" style="float:left;line-height: 32px" >
+                下载模版
+            </a>
+            <el-button v-if="(query.currTab === 'tab4' && (importObj.currentFile2.company.length < 1 || !importObj.currentFile2.agent)) || (query.currTab !== 'tab4' && !importObj.currentFile.agent)"
+                       slot="trigger"
+                       disabled
+                       type="primary"
+                       size="small">导入</el-button>
+
+            <el-upload
+                    v-else
+                    ref="upload"
+                    :action="importObj.uploadPath"
+                    :data="query.currTab === 'tab4' ? importObj.currentFile2 : importObj.currentFile "
+                    :before-upload="importBeforeUpload"
+                    :on-success="importUploadSucceed"
+                    :on-error="importUploadFailed"
+                    :show-file-list="false"
+                    :auto-upload="true">
+                <el-button slot="trigger"  type="primary" size="small">导入</el-button>
+            </el-upload>
+        </div>
+    </el-dialog>
+</div>
+<script src="/js/userAuthentication/dealerUser.bundle.js"></script>

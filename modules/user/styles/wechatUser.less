@@ -1,0 +1,87 @@
+@import "../../global/styles/global";
+  .user_list{
+    width: 100%;
+    height: calc(~"100% - 75px");
+    padding-top: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    .user_list_item{
+      cursor: pointer;
+      width: 380px;
+      margin-right: 30px;
+      height: 120px;
+      background:#f9fafc;
+      float: left;
+      margin-bottom: 30px;
+      border-radius:4px;
+      position: relative;
+      &.emissary{
+        background:#fff9e7;
+      }
+      &.passed{
+        background:#f2f3ff;
+      }
+      .img_wrap{
+        width: 120px;
+        height: 120px;
+        padding: 20px;
+        box-sizing: border-box;
+        float: left;
+        img{
+          display: block;
+          border-radius:4px;
+          width: 80px;
+          height: 80px;
+        }
+      }
+      .user_detail{
+        float: left;
+        width: calc(~"100% - 120px");
+        height: 100%;
+        box-sizing: border-box;
+        padding-top: 26px;
+        div{
+          font-size:14px;
+          height: 22px;
+          line-height: 22px;
+          margin-bottom: 4px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .user_name{
+          .name{
+            float: left;
+            padding-right: 10px;
+          }
+          img{
+            width: 70px;
+          }
+        }
+      }
+      .operate{
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
+        .el-icon-setting{
+          font-size: 18px;
+          &:hover{
+            color: @color-blue-l;
+          }
+        }
+
+      }
+      &:hover{
+        background: @color-blue-s;
+      }
+
+    }
+    @media (max-width: 1550px) {
+      .user_list_item{
+        max-width: 350px;
+        &:nth-child(3n){
+          margin-right: 0;
+        }
+      }
+    }
+  }

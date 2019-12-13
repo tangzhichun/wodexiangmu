@@ -1,0 +1,406 @@
+@import "../../global/styles/global";
+.desigin-box{
+  min-height: 100%;
+  display: flex;
+  //&>div{
+  //  float: left;
+  //}
+  .dsp-form{
+    padding: 0;
+    height: 100%;
+    background: transparent;
+    .dsp-form_body{
+      padding: 0;
+      height: 100%;
+      background: #fff;
+      display: flex;
+      .el-row{
+        padding: 10px 0;
+      }
+      & > div{
+        box-sizing: border-box;
+        height: 100%;
+        overflow-y: auto;
+      }
+      .dsp-form_body-left{
+        border-right: 1px solid #EBEEF5;
+        width: 30.45507%;
+        min-width: 522px;
+        padding-top: 20px;
+        padding-right: 25px;
+        .form-label{
+          font-weight: bold;
+          color: #303133;
+        }
+      }
+      .dsp-form_body-center{
+        .form-label{
+          font-weight: bold;
+          color: #303133;
+        }
+        padding: 0 30px;
+        position: relative;
+        border-right: 1px solid #EBEEF5;
+        width: 41.6569%;
+        min-width: 714px;
+        .center-box{
+          overflow: hidden;
+          min-height: 680px;
+          height: calc(~"100% - 130px");
+        }
+        .editor{
+          z-index: 100;
+          padding-top: 15px;
+          overflow: hidden;
+          min-height: 680px;
+          height:  100%;
+
+        }
+      }
+      .dsp-form_body-right{
+        .form-label{
+          font-weight: bold;
+          color: #303133;
+        }
+        width: 27.8879%;
+        min-width: 478px;
+      }
+      //设计师框
+      .designer-box{
+        display: flex;
+        .designer-name-type{
+          margin-right: -1px;
+          max-width: 120px;
+          input{
+            border-right: none;
+            border-color:#DCDFE6 !important;
+            border-radius: 3px 0 0 3px;
+          }
+        }
+        .designer-name{
+          input{
+            border-radius: 0 3px 3px 0;
+          }
+        }
+      }
+    }
+  }
+
+  .el-tag{
+    border-radius: 50px;
+    display: flex;
+    border: none;
+    color:#303133;
+    align-items: center;
+    .el-icon-close{
+      color:#303133;
+    }
+    //.el-icon-close:hover{
+    //  background: transparent;
+    //}
+  }
+  .tag-box{
+    .el-tag__close.el-icon-close{
+      display: none!important;
+    }
+    .el-cascader__search-input{
+
+      margin: 0 0 0 10px;
+      font-size: 14px;
+    }
+  }
+
+  .w-e-toolbar {
+    border: 1px solid #dcdfe6 !important;
+    border-bottom: none !important;
+    background-color: #f6f6f6 !important;
+    border-top-left-radius: 3px !important;
+    border-top-right-radius: 3px !important;
+    height: 40px !important;
+    line-height: 30px !important;
+  }
+
+  .w-e-text-container {
+    height: calc(~"100% - 60px")!important;
+    border-bottom-left-radius: 3px !important;
+    border-bottom-right-radius: 3px !important;
+    border: 1px solid #dcdfe6 !important;
+
+  }
+  .w-e-droplist{
+    .w-e-item:nth-child(1) {
+      display: none;
+    }
+    .w-e-item{
+      color: #fff;
+      font-size: 0;
+    }
+    .w-e-item:nth-child(2):after
+    {
+      content: "一级标题";
+      color: #303133;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .w-e-item:nth-child(3):after
+    {
+      content: "二级标题";
+      color:#303133;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .w-e-item:nth-child(4):after
+    {
+      content: "三级标题";
+      color: #303133;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .w-e-item:nth-child(4) {
+      display: block;
+    }
+    .w-e-item:nth-child(5) {
+      display: none;
+    }
+    .w-e-item:nth-child(6) {
+      display: block;
+    }
+    .w-e-item:nth-child(6):after
+    {
+      content: "正文";
+      color: #606266;
+      font-size: 12px;
+    }
+  }
+
+  //手机预览
+  .mobile{
+    //封面
+    .mobile-img-box{
+      background: #fff;
+      position: relative;
+      .sanD{
+        position: absolute;
+        top: 0;
+        display: flex;
+        align-items: center;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        font-size: 20px;
+        color: #fff;
+        line-height: 51px;
+        justify-content: center;
+        text-align: center;
+        opacity:0.7;
+        background:#303133;
+        border-radius:87.35px;
+        width:132px;
+        height:51px;
+        .sanJiao{
+          margin-left: 10px ;
+          width: 0;
+          height: 0;
+          border: 10px solid transparent;
+          border-left:10px solid #fff ;
+        }
+      }
+    }
+    .mobile-img-box.meiyou{
+      position: relative;
+      font-size: 0;
+      text-align: center;
+      min-height: 308px;
+      line-height: 308px;
+      background: #ccc;
+    }
+
+    .inner{
+      padding: 20px;
+      padding-bottom: 100px;
+    }
+    position: relative;
+  }
+
+  .dsp-cropper-box{
+    .show{
+      max-width: 375px!important;
+      max-height: 300px!important;
+    }
+    .picture{
+      max-width: 375px!important;
+      max-height: 300px!important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+
+  //新增dom操作模式
+  .node-box {
+    margin-top: 15px;
+    height: 100%;
+    overflow-y: auto;
+    background: @color-gray-s;
+  //
+  .add-node-box {
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    border-bottom: 1px solid #EBEEF5;
+    & > div{
+      color: @color-gray-xl;
+      min-width: 60px;
+      padding: 10px 6px 0;
+      box-sizing: border-box;
+      height: 60px;
+      background: #fff;
+      font-weight: bold;
+      font-size: 12px;
+      text-align: center;
+      margin-right: 10px;
+      cursor: pointer;
+      i{
+        font-size: 24px;
+      }
+    }
+    & > div:hover{
+      background: #ECF5FF;
+      color: #409EFF;
+    }
+  }
+  .item-node-box-body{
+    height: calc(~'100% - 121px');
+    overflow-y: auto;
+    max-height: calc(~'100% - 121px');
+  }
+    .item-node-box  {
+      padding: 22px 20px 0;
+      position: relative;
+      /*功能部分  删除，移动位置*/
+      .symbol {
+        display: flex;
+        justify-content: space-between;
+        i {
+          width: 20px;
+          height: 20px;
+          font-size: 16px;
+          cursor: pointer;
+          margin-left: 10px;
+          color: #606266;
+        }
+        i.disabled{
+          color: #c0c4cc;
+          cursor: no-drop;
+        }
+        i.disabled:hover{
+          color: #c0c4cc
+        }
+        i:hover{
+          color: #008bff;
+        }
+      }
+      .inner-box{
+        padding: 10px 0;
+        .el-textarea{
+          margin: 0;
+        }
+
+      }
+      /*大标题小标题*/
+      .el-textarea, .el-select {
+        margin: 10px 0;
+      }
+    }
+    .item-node-box:last-child{
+      .inner-box{
+        border-bottom: none;
+      }
+    }
+    .label-input{
+      position: relative;
+      .label-append{
+        left: 16px;
+        font-weight: bold;
+        top: 20px;
+        z-index: 1;
+        position: absolute;
+      }
+      .el-input__inner{
+        padding-left: 90px;
+      }
+    }
+  }
+
+  .mobile{
+    box-shadow: 0 0 8px 2px #ccc;
+    margin: 30px;
+  }
+}
+//上传图片
+.empty_img{
+  .avatar-uploader{
+    background:#DDE1EA ;
+    height: 100%;
+  }
+  .show_img{
+    display: block;
+    max-width: 40%;
+
+  }
+  .el-upload{
+    //height: 140px;
+    height: 100%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .upload{
+    display: inline-block;
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 50%;
+    margin: 40px 0;
+    .avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+    }
+  }
+}
+
+.imgLi{
+  li{
+    display: flex;
+    height: 100px;
+    align-items: center;
+  }
+}
+
+.designerList{
+  min-height: 24px;
+  height: auto;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  & > img{
+    min-width: 50px;
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+}
+
+.key_item{
+  &>div{
+    padding: 0 5px;
+  }
+  .key_name{
+    color: #303133 !important;
+  }
+}

@@ -1,0 +1,182 @@
+.template{
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+  .dataList-box{
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 4px;
+    .dataList{
+      width: 240px;
+      height: 440px;
+      margin-right: 40px;
+      margin-top: 30px;
+      //海报模型单图
+      .poster{
+        width: 100%;
+        height: 427px;
+        box-shadow:0.1px 2px 12px 0.1px rgba(0,0,0,0.10);
+        border-radius:4px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        .template-mobile{
+          overflow: hidden;
+          min-width: 10px;
+          border-radius:4px;
+          box-shadow:0.1px 2px 22px 0.1px rgba(0,0,0,0.20);
+          background:#fff;
+          position: absolute;
+          .beijingtu{
+            width:1800px;background: #d2d6d9;color: #fff;display: flex;justify-content: center;align-items: center
+          }
+          //白边
+          .baiBianY{
+            z-index: 10;
+            width: 100%;
+            height: 1px;
+            position: absolute;
+            top: 0;
+            background: #fff;
+          }
+          .baiBianY1{
+            top: 70px;
+          }
+          .baiBianY2{
+            top: 140px;
+          }
+          .baiBian{
+            z-index: 10;
+            width: 1px;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            background: #fff;
+          }
+          .baiBian1{
+            left: 70px;
+          }
+          .baiBian2{
+            left: 140px;
+          }
+          .move-div{
+            cursor: pointer ;
+            background: transparent;
+            position: absolute;
+          }
+        }
+
+
+        .editAndAdd{
+          position: absolute;
+          width: 0;
+          height: 0;
+          z-index: 100;
+          background: #000;
+          opacity: 0.4;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          margin: auto;
+          transition: all 0.3s;
+          font-size: 0;
+          .addOrEdit{
+            height: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border-bottom: 1px solid #fff;
+          }
+          .addOrEdit:last-child{
+            border-bottom: none
+          }
+          .addOrEdit:hover{
+            color: #008bff;
+          }
+        }
+      }
+      .poster:hover{
+        .editAndAdd{
+          font-size: 18px;
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .footer{
+        display: flex;
+        color:#303133;
+        font-size: 12px;
+        line-height: 30px;
+        justify-content: space-between;
+      }
+    }
+    .dataListMore{
+      width: 210px;
+      height: 210px;
+      .template-mobile{
+          overflow: hidden;
+          min-width: 10px;
+          border-radius:4px;
+          box-shadow:0.1px 2px 22px 0.1px rgba(0,0,0,0.20);
+          background:#fff;
+          position: absolute;
+          .beijingtu{
+            width:1800px;background: #d2d6d9;color: #fff;display: flex;justify-content: center;align-items: center
+          }
+          //白边
+          .baiBianY{
+            z-index: 10;
+            width: 100%;
+            height: 5px;
+            position: absolute;
+            top: 0;
+            background: #fff;
+          }
+          .baiBianY1{
+            top: 600px;
+          }
+          .baiBianY2{
+            top: 1200px;
+          }
+          .baiBian{
+            z-index: 10;
+            width: 5px;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            background: #fff;
+          }
+          .baiBian1{
+            left: 600px;
+          }
+          .baiBian2{
+            left: 1200px;
+          }
+          .move-div{
+            cursor: pointer ;
+            background: transparent;
+            position: absolute;
+          }
+        }
+    }
+    .posterMore{
+      width: 210px!important;
+      height: 210px!important;
+    }
+  }
+}
+.designList-box{
+  min-height: 700px;
+  max-height: 700px;
+  .designList-box-body{
+    .el-table::before{
+      height: 0;
+    }
+  }
+}

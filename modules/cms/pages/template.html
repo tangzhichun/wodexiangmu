@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="/css/cms/cms.min.css">
+<link rel="stylesheet" href="/css/cms/template.min.css">
+<div id="app" class="template cms-card" v-cloak >
+    <header class="header">
+        <div class="categoriesTab"
+             :class="{'categoriesTab-active':item.value===query.templateType}"
+             v-for="item in tab"
+             @click="change(item.value)">{[item.label]}</div>
+
+        <el-button type="primary" size="small" plain style="margin-left: auto" @click="addTemplate(null,'add')">添加模版</el-button>
+    </header>
+    <!--单图-->
+    <div class="body dataList-box" v-if="query.templateType==='one'">
+        <div class="dataList" v-for="information in dataList">
+            <div class="poster" >
+                <div class="editAndAdd">
+                    <div class="addOrEdit" @click="addTemplate(information.id,'edit')"><i class="el-icon-edit-outline" style="margin-right: 10px"></i>编辑</div>
+                    <div class="addOrEdit" @click="addTemplate(information.id,'add')"><i class="el-icon-tickets" style="margin-right: 10px"></i>复制</div>
+                </div>
+                <div class="template-mobile" style="font-size: 0">
+                    <img v-if="information.articleImage" style="width: 100%" :src="DSP.globalConfig.fileBaseUrl + information.articleImage" alt="">
+                </div>
+            </div>
+            <div class="footer">
+                <span>{[information.templateNo]}</span>
+                <a class="font-size-ms" href="javascript:void(0)" v-if="information.quoteNum" @click="openDesignList(information)">{[information.quoteNum]}篇文章使用</a>
+                <a v-else class="link-danger font-size-ms" href="javascript:void(0)" @click="deleteInformation(information)">
+                    <i class="el-icon-delete"></i>
+                    删除
+                </a>
+            </div>
+        </div>
+    </div>
+    <!--多图-->
+    <div class="body dataList-box" v-if="query.templateType==='more'">
+        <div class="dataList dataListMore" v-for="information in dataList">
+            <div class="poster posterMore" >
+                <div class="editAndAdd">
+                    <div class="addOrEdit" @click="addTemplate(information.id,'edit')"><i class="el-icon-edit-outline" style="margin-right: 10px"></i>编辑</div>
+                    <div class="addOrEdit" @click="addTemplate(information.id,'add')"><i class="el-icon-tickets" style="margin-right: 10px"></i>复制</div>
+                </div>
+                <div class="template-mobile" :key="information" style="width: 210px;height: 210px">
+                    <img v-else :src="DSP.globalConfig.fileBaseUrl + information.backgroundImage " style="vertical-align:middle;display: block ">
+                    <div :class="'baiBian'+i" class="baiBian" v-for="i in 2" v-show="information.posterNum !== 4"></div>
+                    <div :class="'baiBianY'+i" class="baiBianY" v-for="i in 2" v-show="information.posterNum !== 4"></div>
+                    <div class="baiBianY" style="top: 105px" v-show="information.posterNum === 4"></div>
+                    <div class="baiBian" style="left: 105px" v-show="information.posterNum === 4"></div>
+                    <img v-if="information.articleImage" style="width: 100%" :src="DSP.globalConfig.fileBaseUrl + information.articleImage" alt="">
+                </div>
+            </div>
+            <div class="footer">
+                <span>{[information.templateNo]}</span>
+                <a class="font-size-ms" href="javascript:void(0)"  v-if="information.quoteNum" @click="openDesignList(information)">{[information.quoteNum]}篇文章使用</a>
+                <a v-else class="link-danger font-size-ms" href="javascript:void(0)" @click="deleteInformation(information)">
+                    <i class="el-icon-delete"></i>
+                    删除
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!--实际方案列表-->
+    <el-dialog title="文章列表" :visible.sync="views.designList">
+        <div class="designList-box">
+            <el-input placeholder="文章标题" suffix-icon="el-icon-search" v-model="designQuery.designTitle" @change="queryDesignTitle"></el-input>
+            <div class="designList-box-body">
+                <el-table :data="designListFilter" v-loading="views.designListLoading" height="600">
+                    <el-table-column label="序号" type="index" width="50" :index="indexMethod" ></el-table-column>
+                    <el-table-column label="标题">
+                        <template slot-scope="scope">
+                            <a class="list-link " href="javascript:void(0)" @click="location('edit',scope.row)">{[scope.row.title]}</a>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="栏目">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.kind.split('.')[1]">{[$translate(cmsColumn,scope.row.kind.split('.')[0])]}/</span>{[ $translate(cmsColumn,scope.row.kind) ]}
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <el-pagination
+                    :key="designQuery.zongData"
+                    @current-change="handleCurrentChange"
+                    layout="prev, pager, next"
+                    :page-size="10"
+                    :current-page="designQuery.current"
+                    :total="designQuery.zongData">
+            </el-pagination>
+        </div>
+    </el-dialog>
+</div>
+<script src="/js/cms/template.bundle.js"></script>

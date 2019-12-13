@@ -1,0 +1,59 @@
+
+.height100{
+  height: 100%;
+  min-height: 100%;
+}
+.list-box{
+  background: #fff;
+  height: 100%;
+  min-height: 100%;
+  padding:0 20px;
+
+  //头
+  .header{
+    font-size: 24px;
+    color: #303133;
+    height: 66px;
+    box-sizing: border-box;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    line-height: 64px;
+    border-bottom: 2px solid #EBEEF5;
+    .el-icon-el-icon-question{
+      margin-left: auto;
+      color: #e5e5e5;
+      cursor: pointer;
+    }
+    .el-icon-el-icon-question:hover{
+      color: #008bff;
+    }
+  }
+  //查询条件
+  .query{
+    height: 95px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    padding-top: 26px;
+  }
+  //列表
+  .user-list{
+    min-height:calc(~"100% - 166px");
+    max-height: calc(~"100% - 166px");
+    overflow-y: auto;
+    .has-gutter{
+      display: none;
+    }
+    .el-table--enable-row-hover::before{
+      display: none;
+    }
+  }
+  .user-list::before{
+    display: none;
+  }
+  .el-table-cell-details{
+    display: flex;
+    align-items: center;
+  }
+}

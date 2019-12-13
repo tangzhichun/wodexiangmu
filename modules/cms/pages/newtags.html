@@ -1,0 +1,272 @@
+<link rel="stylesheet" href="/css/cms/tags.min.css">
+<div id="app" class="tag-app" v-cloak>
+    <header class="header">
+        <!--<div v-for="item in meta.categories" class="categoriesTab" :class="{'active':item.value === category}" @click="changeCategories(item)">-->
+            <!--{[item.label]}-->
+            <!--<div v-if="item.value === category" class="activeLine"></div>-->
+        <!--</div>-->
+        标签管理
+    </header>
+    <div class="tag-box">
+        <!--标签组-->
+        <div class="tag-group" v-loading="!loadingS.leftBox || !loadingS.saveTagGroup">
+            <div class="tag-inner-header">
+                <span>标签组</span>
+                {{#contains user.privileges 'CLIENT_TAG_EDIT_INNER'}}
+                    <sapn class="icon-plus" @click="addTagGroup('tagGroup')"></sapn>
+                {{/contains}}
+            </div>
+            <div class="tag-inner-body" >
+                <!--新增-->
+                {{#contains user.privileges 'CLIENT_TAG_EDIT_INNER'}}
+                <div class="tag-inner-body-liEdit tag-inner-body-liEdit-tagGroup" v-if="tagGroup.status === 2">
+                    <el-input placeholder="标签组类型" v-model="tagGroup.add.type" :maxlength="50"></el-input>
+                    <el-input placeholder="标签组名称" v-model="tagGroup.add.value" :maxlength="10"></el-input>
+                    <dsp-cropper  :value.sync="tagGroup.add.stCoverUrlobj" height="80px" width="235px" type="poster"></dsp-cropper>
+
+                    <el-button type="text" @click="saveTagGroup" :disabled="!tagGroup.add.value || !tagGroup.add.type || !tagGroup.add.stCoverUrlobj" :loading="!loadingS.saveTagGroup">保存</el-button>
+                    <el-button type="text" style="color:#606266;" @click="cancelSaveTagGroup('tagGroup')">取消</el-button>
+                </div>
+                {{/contains}}
+                <div v-for="item in requestTagGroup"
+                    :key="item.id"
+                >
+                    <!--查看状态-->
+                    <div class="tag-inner-body-li"
+                         :draggable="tagGroup.status === 0 && true || false"
+                         @dragstart="dragstart(item,'group')"
+                         @dragenter="dragenter(item,'group')"
+                         @dragend="dragend"
+                         v-if="tagGroup.status === 0 || !tagGroup.edit || (tagGroup.edit && tagGroup.edit.id !== item.id)"
+                         :class="{'active':tagGroup.current && item.type === tagGroup.current.type,'dragenter':drag && drag.td && drag.td.id && drag.td.id === item.id}"
+                         @click="getTagList(item)">
+                        <span>{[item.value]}</span>
+                        {{#contains user.privileges 'CLIENT_TAG_EDIT_INNER'}}
+                            <div class="tag-inner-body-li-editBtn" @click.stop>
+                                <a class="el-icon-edit" @click.stop="editTag('tagGroup',item)"></a>
+                                <a class="el-icon-delete link-danger" @click.stop="delTag('tagGroup',item)" style="margin:0 10px" ></a>
+                                <el-switch
+                                        v-model="item.showValid"
+                                        active-color="#13ce66"
+                                        @change="switchTagGroup(item)"
+                                       >
+                                </el-switch>
+                            </div>
+                        {{/contains}}
+                    </div>
+                    <!--编辑状态-->
+                    {{#contains user.privileges 'CLIENT_TAG_EDIT_INNER'}}
+                        <div class="tag-inner-body-liEdit tag-inner-body-liEdit-tagGroup" draggable="false" v-if="tagGroup.status === 1 && tagGroup.edit && tagGroup.edit.id === item.id">
+                            <el-input placeholder="标签组类型" v-model="tagGroup.edit.type" :maxlength="50"></el-input>
+                            <el-input placeholder="标签组名称" v-model="tagGroup.edit.value" :maxlength="10"></el-input>
+                            <dsp-cropper  :value.sync="tagGroup.edit.stCoverUrlobj" height="80px" width="235px"></dsp-cropper>
+                            <el-button type="text" @click="saveEditTagGroup" :disabled="!tagGroup.edit.value || !tagGroup.edit.type"  :loading="!loadingS.editTagGroup ">保存</el-button>
+                            <el-button type="text" style="color:#606266;"  @click="tagGroup.status = 0">取消</el-button>
+                        </div>
+                    {{/contains}}
+                </div>
+            </div>
+        </div>
+
+        <!--标签-->
+        <div class="tag-list" v-if="tagGroup.current "  v-loading="!loadingS.centerBox">
+            <div class="tag-inner-header">
+                <span>标签</span>
+                {{#contains user.privileges 'CLIENT_TAG_EDIT_INNER'}}
+                    <sapn class="icon-plus" @click="addTagGroup('tagList')"></sapn>
+                {{/contains}}
+            </div>
+            <div class="tag-inner-body" >
+                <!--新增-->
+                {{#contains user.privileges 'CLIENT_TAG_EDIT_INNER'}}
+                    <div class="tag-inner-body-liEdit dsp-form" v-if="tagList.status === 2" v-dsp-form-validate>
+                    <div class="dsp-form_body">
+                        <el-row >
+                            <el-col :span="24"  v-dsp-validate="addTag.value" dsp-err-required="">
+                                <el-input  placeholder="请填写标签显示值" v-model="addTag.value" ></el-input>
+                            </el-col>
+
+                        </el-row>
+                        <el-row :gutter="10" >
+                            <el-col class="font-size-ms" style="margin-bottom: 12px"><span class="font-label">封面</span>&nbsp;尺寸&nbsp;750px*340px<span class="font-label">（图片大小建议不超过200KB）</span></el-col>
+                            <dsp-cropper v-dsp-validate="addTag.coverImage" dsp-err-required="请上传封面" :value.sync="addTag.coverImage" height="136px" width="300px" type="poster"></dsp-cropper>
+
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col class="font-size-ms" style="margin-bottom: 12px">
+                                <span class="font-label">收藏图标</span>&nbsp;尺寸&nbsp;120*120px<span class="font-label">（图片大小建议不超过100KB）</span>
+                            </el-col>
+                            <el-upload
+                                    v-dsp-validate="addTag.iconImage"
+                                    dsp-err-required="请上传收藏图标"
+                                    class="avatar-uploader"
+                                    :class="{'have': addTag.iconImage && addTag.iconImage.imageUrl}"
+                                    action="/api/file-service/file/wechat/admin/upload/"
+                                    :show-file-list="false"
+                                    :on-success="handleAvatarSuccess"
+                                    :before-upload="beforeAvatarUpload">
+                                <img v-if="addTag.iconImage && addTag.iconImage.imageUrl" class="show_img" style="max-width:calc(100% - 44px)" :src="fileUrl + addTag.iconImage.imageUrl" alt="">
+                                <div class="upload"  v-else>
+                                    <i class="el-icon-upload avatar-uploader-icon"></i>
+                                </div>
+                            </el-upload>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col class="font-size-ms" style="margin-bottom: 12px">
+                                <span class="font-label">自定义图标</span>&nbsp;尺寸随意<span class="font-label">（图片大小建议不超过200KB）</span>
+                            </el-col>
+                            <el-upload
+                                    class="avatar-uploader"
+                                    :class="{'have': addTag.zdyiconImage && addTag.zdyiconImage.imageUrl}"
+                                    action="/api/file-service/file/wechat/admin/upload/"
+                                    :show-file-list="false"
+                                    :on-success="((item)=>{zdyhandleAvatarSuccess(item, 'addTag')})"
+                                    :before-upload="beforeAvatarUpload">
+                                <img v-if="addTag.customIcon && addTag.customIcon" style="max-width:calc(100% - 44px)" :src="fileUrl + addTag.customIcon" alt="">
+                                <div class="upload"  v-else>
+                                    <i class="el-icon-upload avatar-uploader-icon"></i>
+                                </div>
+                            </el-upload>
+
+                        </el-row>
+                        <el-row :gutter="10">
+                          <el-button @click="addSaveTag" type="primary" size="small">保存</el-button><el-button size="small" @click="tagList.status = 0">取消</el-button>
+                        </el-row>
+                    </div>
+                </div>
+                {{/contains}}
+                <div v-for="item in requesttagList" v-if="requesttagList && requesttagList.length>0" :key="item.id"
+                >
+                    <!--查看状态-->
+                    <div class="tag-inner-body-li"
+                         :draggable="tagList.status === 0 && true || false"
+                         :class="{'active':tagList.current && item.id === tagList.current.id,'dragenter':drag && drag.td && drag.td.id && drag.td.id === item.id}"
+                         @click="getArticle(item)"
+                         @dragstart="dragstart(item,'tag')"
+                         @dragenter="dragenter(item,'tag')"
+                         @dragend="dragend"
+                         v-if="tagList.status === 0 || !tagList.edit || (tagList.edit && tagList.edit.id !== item.id)"
+                        >
+                        <div style="display: flex;align-items: center">
+                            <img :src="DSP.globalConfig.fileBaseUrl + item.iconUrl" alt="" width="36px" height="36px" style="border-radius: 4px;margin-right: 10px">
+                            <span>{[item.value]}</span>&nbsp;
+                            <!--<span>{[item.desc]}</span>-->
+                        </div>
+                        {{#contains user.privileges 'CLIENT_TAG_EDIT_INNER'}}
+                            <div class="tag-inner-body-li-editBtn" @click.stop>
+                                <a class="el-icon-edit" style="margin-right: 20px" @click="editTag('tagList',item)" ></a>
+                                <a class="el-icon-delete link-danger" @click="delTag('tag',item)"></a>
+                            </div>
+                        {{/contains}}
+                    </div>
+                    <!--编辑状态-->
+                    {{#contains user.privileges 'CLIENT_TAG_EDIT_INNER'}}
+                        <div class="tag-inner-body-liEdit" draggable="false" v-if="tagList.status === 1 && tagList.edit && tagList.edit.id === item.id" >
+                        <!--标签名-->
+                        <div style="display: flex">
+                            <el-input placeholder="显示值" v-model="tagList.edit.value" style="min-width: 206px"></el-input>
+                        </div>
+                         <!--封面-->
+                        <div class="height-el-upload144"  @click="imageClick('coverImage')">
+                                <div class="font-size-ms" style="margin-bottom: 12px"><span class="font-label">封面</span>&nbsp;尺寸&nbsp;750px*340px<span class="font-label">（图片大小建议不超过200KB）</span></div>
+                                <dsp-cropper :value.sync="tagList.edit.coverImage" :default-img.sync="tagList.edit.coverUrl" height="136px" width="300px" type="poster"></dsp-cropper>
+                            </div>
+                        <!--收藏图标-->
+                        <div @click="imageClick('iconImage')">
+                            <div class="font-size-ms" style="margin-bottom: 12px">
+                                <span class="font-label">收藏图标</span>&nbsp;尺寸&nbsp;120*120px<span class="font-label">（图片大小建议不超过100KB）</span>
+                            </div>
+                            <el-upload
+                                    class="avatar-uploader"
+                                    :class="{'have': tagList.edit && tagList.edit.iconUrl}"
+                                    action="/api/file-service/file/wechat/admin/upload/"
+                                    :show-file-list="false"
+                                    :on-success="handleAvatarSuccess"
+                                    :before-upload="beforeAvatarUpload">
+                                <img v-if="tagList.edit && tagList.edit.iconUrl" class="show_img"  style="max-width: calc(100% - 44px);" :src="fileUrl + tagList.edit.iconUrl" alt="">
+                                <div class="upload"  v-else>
+                                    <i class="el-icon-upload avatar-uploader-icon"></i>
+                                </div>
+                            </el-upload>
+                        </div>
+                        <!--自定义图标-->
+                        <div>
+                            <div class="font-size-ms" style="margin-bottom: 12px">
+                                <span class="font-label">自定义图标</span>&nbsp;尺寸随意<span class="font-label">（图片大小建议不超过200KB）</span>
+                            </div>
+                            <el-upload
+                                    class="avatar-uploader"
+                                    :class="{'have': tagList.edit && tagList.edit.customIcon}"
+                                    action="/api/file-service/file/wechat/admin/upload/"
+                                    :show-file-list="false"
+                                    :on-success="((item)=>{zdyhandleAvatarSuccess(item, 'tagList.edit')})"
+                                    :before-upload="beforeAvatarUpload">
+                                <img v-if="tagList.edit && tagList.edit.customIcon" class="show_img"  style="max-width: calc(100% - 44px);" :src="fileUrl + tagList.edit.customIcon" >
+                                <div class="upload"  v-else>
+                                    <i class="el-icon-upload avatar-uploader-icon"></i>
+                                </div>
+                            </el-upload>
+                        </div>
+                        <el-button  @click="saveTag" type="primary" :loading="!loadingS.editTag" size="small" >保存</el-button>
+                        <el-button  style="color:#606266;" @click="tagList.status = 0" size="small">取消</el-button>
+                    </div>
+                    {{/contains}}
+                </div>
+                <empty v-if="requesttagList.length < 1 && tagList.status !== 2"></empty>
+
+            </div>
+        </div>
+
+        <!--文章-->
+        <div class="article" v-if="tagList.current"  v-loading="!loadingS.rightBox">
+            <div class="tag-inner-header">
+                <span>文章</span>
+                <el-input style="width: 300px"  v-model="article.description" placeholder="文章标题 " suffix-icon="el-icon-search" clearable @change="fetchData"></el-input>
+            </div>
+            <!--主体-->
+            <div class="tag-inner-article-center" >
+                <div v-for="(item, index) in requestarticle" class="tag-inner-article-center-cell">
+                    <div>{[(article.currentPage - 1) * article.pageSize + index + 1]}</div>
+                    <img :src = " DSP.globalConfig.fileBaseUrl +item.coverUrl" class="requestarticle-left">
+                    <div class="requestarticle-center">
+                        <p class="font-label font-size-s"> {[item.remark4]}</p>
+                        <p class="font-value font-size-s"> {[item.remark1]}</p>
+                        <p class="font-label font-size-s">{[item.remark2]}</p>
+                    </div>
+                    <div  class="requestarticle-right" style="min-width: 100px;display: flex;align-items: center">
+                        <a @click="lookDesign(item)" class="requestarticle-right">预览</a>
+                        {{#contains user.privileges 'CLIENT_TAG_EDIT_INNER'}}
+                        <a class="requestarticle-right el-icon-delete link-danger" @click="unbindTag(item)"></a>
+                        {{/contains}}
+                    </div>
+
+                </div>
+                <empty v-if="requestarticle.length < 1 "></empty>
+            </div>
+            <!--分页-->
+            <div class="tag-inner-article-bottom">
+                <el-pagination
+                        @size-change="onSizeChange"
+                        @current-change="onCurrentChange"
+                        :current-page="article.currentPage"
+                        :page-sizes="[15,30,50, 100]"
+                        :page-size="article.pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="article.totalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+    <!--v-loading.fullscreen.lock="lookDesign"-->
+    <el-dialog
+            :visible.sync="loadingS.lookDesignView"
+            width="375px"
+            :show-close="false"
+            class="dsp-phone-box"
+            v-loading.fullscreen.lock="lookDesign"
+           >
+            <dsp-phone :design-data="information" :width="375" :dsp="DSP" v-cloak ></dsp-phone>
+
+    </el-dialog>
+</div>
+<script src="/js/cms/newtags.bundle.js"></script>

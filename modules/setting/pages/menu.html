@@ -1,0 +1,644 @@
+<link rel="stylesheet" href="/css/setting/menu.min.css">
+<div id="app" v-cloak v-show="menus && menus.length">
+    <div class="menu">
+        <!--菜单展示-->
+        <div class="menu-side" style="min-width: 240px">
+            <el-card shadow="never">
+                <div slot="header" class="clearfix">
+                    <span>菜单</span>
+                    <div class="buttons">
+                        <el-button type="primary" @click="createMenu" icon="el-icon-plus" size="mini" plain></el-button>
+                    </div>
+                </div>
+                <div class="menu-scope" v-for="beta in MENU_SCOPE">
+                    <div class="scope-name" @click="checkScope(beta.value)" :class="{active: currenScope === beta.value}">
+                        <span class="label">{[beta.label]}</span>
+                        <span class="el-icon-arrow-right icon"></span>
+                    </div>
+                    <ul class="menu-list" v-if="currenScope === beta.value ">
+                        <li class="menu-node" v-for="(data,index) in menus" v-if="beta.value == data.scope" :ref="data.name" :key="index" @click="clickMenu(data)" :class="{active: activeMenuId == data.id}">
+                            <div class="menu-name">{[ data.name ]}</div>
+                            <div class="menu-operations" v-if="choiceOperation">
+                                <i class="el-icon-edit" @click.stop="editMenu(data)"></i>
+                                <i class="el-icon-delete" @click.stop="choiceDelete"></i>
+
+                            </div>
+                            <div class="menu-operations" v-if="!choiceOperation">
+                                <i class="el-icon-success" style="color: #31ce75" @click="insureOperation(data)"></i>
+                                <i class="el-icon-error" style="color: #ff7c3f" @click="cancelOperation(data)"></i>
+                            </div>
+                        </li>
+                        <div v-if="menus.findIndex(ele => ele.scope === beta.value) == -1" class="no-result">暂无此作用域数据</div>
+                    </ul>
+                </div>
+            </el-card>
+        </div>
+
+        <div class="menu-main" v-show="mode != 'createMenu' && mode != 'editMenu'">
+            <el-card shadow="never" class="body100">
+                <el-row style="height: 100%" :gutter="10">
+                    <el-col :span="24"  style="max-height: 100%;height: 100%;overflow: auto">
+                        <el-tabs v-model="activeTab"  @tab-click=" mode ='view' ">
+                            <el-tab-pane :label="'下级菜单(' + subMenus.length + ')'" name="menu">
+                                <!--显示菜单列表-->
+                                <el-table :data="subMenus" @row-click="privilege"  ref="multipleTable" stripe>
+
+                                    <el-table-column type="index" label="序号" width="60" align="center"></el-table-column>
+                                    <el-table-column label="菜单名" prop="name"></el-table-column>
+                                    <el-table-column label="排序" width="60" prop="sortOrder"></el-table-column>
+
+                                    <el-table-column prop="url" label="链接地址"></el-table-column>
+                                    <el-table-column prop="privilege" label="菜单权限"></el-table-column>
+                                    <el-table-column label="操作" width="148">
+                                        <template slot-scope="scope">
+                                            <el-button plain type="primary" size="mini" @click.stop="editSubMenu(scope.row)">编辑</el-button>
+                                            <el-button plain size="mini" type="danger" @click.stop="deleteMenuOrPrivilege(scope.row, false)">删除</el-button>
+                                            <!--<el-button plain size="mini" type="mini" @click.stop="privilege(scope.row)">查看角色</el-button>-->
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+
+                                <!--添加子菜单按钮-->
+                                <el-button plain type="primary"  icon="el-icon-plus" size="small" @click="createSubMenu" class="btn-add" v-show="mode == 'view'">添加子菜单</el-button>
+
+                                <!--添加子菜单表单-->
+                                <el-form :model="newMenu" :rules="rules" ref="newMenu" class="dsp-validation-form" v-show="mode == 'createSubMenu'">
+                                    <el-row :gutter="10">
+                                        <el-col :span="3"  class="text">
+                                            <div class="text">
+                                                <i>*</i>菜单名称
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="name">
+                                                <el-input v-model="newMenu.name"  maxlength="6" size="small" placeholder="最多6个字"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="3"  class="text">
+                                            <div>
+                                                <i>*</i>排序
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="4" >
+                                            <el-form-item prop="sortOrder">
+                                                <el-input-number size="small" v-model="newMenu.sortOrder"
+                                                                 controls-position="right" :min="1" :max="200">
+                                                </el-input-number>
+                                            </el-form-item>
+
+                                        </el-col>
+                                        <el-col :span="3"  class="text">
+                                            <div class="text">
+                                                <i>*</i>菜单权限</div>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="privilege">
+                                                <el-input v-model="newMenu.privilege"   size="small" placeholder="控制菜单或按钮的显示与隐藏" ></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row  :gutter="10">
+                                        <el-col :span="3"  class="text">
+                                            <div class="text">
+                                                <i>*</i>链接地址</div>
+                                        </el-col>
+                                        <el-col :span="20">
+                                            <el-form-item prop="url">
+                                                <el-input v-model="newMenu.url"   size="small" placeholder="以/开头"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row :gutter="10">
+                                        <el-col :span="21" :push="3" style="height: 50px">
+                                            <el-button type="primary" size="small" @click="saveSubMenu('newMenu')"><i class="icon-save"></i><span>保存</span></el-button>
+                                            <el-button type="default" size="small" @click="cancel">取消</el-button>
+                                        </el-col>
+                                    </el-row>
+                                </el-form>
+
+                                <!--修改子菜单表单-->
+                                <el-form :model="newMenu" :rules="rules" ref="editChilMenu" class="dsp-validation-form  edite" v-show="mode == 'editSubMenu'">
+                                    <el-row :gutter="10">
+                                        <el-col :span="3"  class="text">
+                                            <div class="text">
+                                                <i>*</i>菜单名称
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="name">
+                                                <el-input v-model="newMenu.name" maxlength="6"   size="small" placeholder="最多6个字"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="3"  class="text">
+                                            <div>
+                                                <i>*</i>排序
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="4" >
+                                            <el-form-item prop="sortOrder">
+                                                <el-input-number size="small" v-model="newMenu.sortOrder"
+                                                                 controls-position="right" :min="1" :max="200">
+                                                </el-input-number>
+                                            </el-form-item>
+
+                                        </el-col>
+                                        <el-col :span="3"  class="text">
+                                            <div class="text">
+                                                <i>*</i>菜单权限</div>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="privilege">
+                                                <el-input v-model="newMenu.privilege"   size="small" placeholder="控制菜单或按钮的显示与隐藏" ></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row  :gutter="10">
+                                        <el-col :span="3"  class="text">
+                                            <div class="text">
+                                                <i>*</i>链接地址</div>
+                                        </el-col>
+                                        <el-col :span="20">
+                                            <el-form-item prop="url">
+                                                <el-input v-model="newMenu.url"   size="small" placeholder="以/开头"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row :gutter="10">
+                                        <el-col :span="21" :push="3" style="height: 50px">
+                                            <el-button type="primary" size="small" @click="saveEditSubMenu('editChilMenu')"><i class="icon-save"></i><span>保存</span></el-button>
+                                            <el-button type="default" size="small" @click="cancel">取消</el-button>
+                                        </el-col>
+                                    </el-row>
+                                </el-form>
+
+                            </el-tab-pane>
+
+                            <el-tab-pane :label="'功能权限(' + privileges.length + ')'" name="privilege">
+
+                                <!--显示权限列表-->
+                                <el-table
+                                        :data="privileges"
+                                        @row-click="privilege"
+                                        ref="multipleTable2"
+                                        stripe>
+
+                                    <el-table-column
+                                            type="index"
+                                            label="序号"
+                                            width="80"
+                                            align="center">
+                                    </el-table-column>
+
+                                    <el-table-column
+                                            label="权限名"
+                                            prop="name"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                            width="80"
+                                            label="排序"
+                                            prop="sortOrder"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="privilege"
+                                            label="权限">
+                                    </el-table-column>
+
+                                    <el-table-column
+                                            width="148"
+                                            label="操作">
+                                        <template slot-scope="scope">
+                                            <el-button
+                                                    plain
+                                                    type="primary"
+                                                    size="mini"
+                                                    @click.stop="editPrivilege(scope.row)">编辑</el-button>
+                                            <el-button
+                                                    plain
+                                                    size="mini"
+                                                    type="danger"
+                                                    @click.stop="deleteMenuOrPrivilege(scope.row, true)">删除</el-button>
+                                            <!--<el-button plain size="mini" type="mini" @click="privilege(scope.row)">查看角色</el-button>-->
+
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+
+                                <!--添加权限按钮-->
+                                <el-button plain type="primary"  icon="el-icon-plus" size="small" @click="createPrivilege" class="btn-add" v-show="mode == 'view'">添加权限</el-button>
+
+                                <!--添加权限表单-->
+                                <el-form :model="button" :rules="buttonRules" ref="button" class="dsp-validation-form" v-show="mode == 'createPrivilege'">
+                                    <el-row :gutter="10">
+                                        <el-col :span="3"  class="text">
+                                            <div class="text">
+                                                <i>*</i>权限名称
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="name">
+                                                <el-input v-model="button.name"  maxlength="50"  size="small" placeholder="最多50个字"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="3"  class="text">
+                                            <div>
+                                                <i>*</i>排序
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="4" >
+                                            <el-form-item prop="sortOrder">
+                                                <el-input-number size="small" v-model="button.sortOrder" controls-position="right" :min="1" :max="200">
+                                                </el-input-number>
+                                            </el-form-item>
+
+                                        </el-col>
+                                        <el-col :span="3"  class="text">
+                                            <div class="text">
+                                                <i>*</i>权限</div>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="privilege">
+                                                <el-input v-model="button.privilege"   size="small" placeholder="控制菜单或按钮的显示与隐藏" ></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row :gutter="10">
+                                        <el-col :span="21" :push="3" style="height: 50px">
+                                            <el-button type="primary" size="small" @click="savePrivilege"><span>保存</span></el-button>
+                                            <el-button type="default" size="small" @click="cancel">取消</el-button>
+                                        </el-col>
+                                    </el-row>
+                                </el-form>
+
+                                <!--修改权限表单-->
+                                <el-form :model="button" :rules="rules" ref="editButton" class="dsp-validation-form"  v-show="mode == 'editPrivilege'">
+                                    <el-row :gutter="10">
+                                        <el-col :span="3"  class="text">
+                                            <div class="text">
+                                                <i>*</i>权限名称
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="name">
+                                                <el-input v-model="button.name"   maxlength="50"   size="small" placeholder="最多50个字"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="3"  class="text">
+                                            <div>
+                                                <i>*</i>排序
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="4" >
+                                            <el-form-item prop="sortOrder">
+                                                <el-input-number size="small" v-model="button.sortOrder"
+                                                                 controls-position="right" :min="1" :max="200">
+                                                </el-input-number>
+                                            </el-form-item>
+
+                                        </el-col>
+                                        <el-col :span="3"  class="text">
+                                            <div class="text">
+                                                <i>*</i>权限</div>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="privilege">
+                                                <el-input v-model="button.privilege"   size="small" placeholder="控制菜单或按钮的显示与隐藏" ></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <el-row :gutter="10">
+                                        <el-col :span="21" :push="3" style="height: 50px">
+                                            <el-button type="primary" size="small" @click="saveEditPrivilege"><i class="icon-save"></i><span>保存</span></el-button>
+                                            <el-button type="default" size="small" @click="cancel">取消</el-button>
+                                        </el-col>
+                                    </el-row>
+                                </el-form>
+
+                            </el-tab-pane>
+                        </el-tabs>
+                    </el-col>
+                </el-row>
+            </el-card>
+        </div>
+
+
+
+        <!--修改菜单-->
+        <div class="menu-main" v-show="mode == 'editMenu'" >
+            <el-card>
+                <div slot="header" class="clearfix">
+                    <span>修改菜单</span>
+                </div>
+                <div>
+                    <el-form :model="editMenuForm" :rules="rules" ref="editNewMenu" class="dsp-validation-form">
+                        <el-row :gutter="10">
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>菜单名称
+                                </div>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-form-item prop="name">
+                                    <el-input v-model="editMenuForm.name" maxlength="6"  size="small" placeholder="最多6个字"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="3"  class="text">
+                                <div>
+                                    <i>*</i>排序
+                                </div>
+                            </el-col>
+                            <el-col :span="4" >
+                                <el-form-item prop="sortOrder">
+                                    <el-input-number size="small" v-model="editMenuForm.sortOrder"
+                                                     controls-position="right" :min="1" :max="200">
+                                    </el-input-number>
+                                </el-form-item>
+
+                            </el-col>
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>菜单权限</div>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-form-item prop="privilege">
+                                    <el-input v-model="editMenuForm.privilege"   size="small" placeholder="控制菜单或按钮的显示与隐藏" ></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row  :gutter="10" v-show="editMenuForm.url">
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>链接地址</div>
+                            </el-col>
+                            <el-col :span="20">
+                                <el-form-item prop="url" v-if="editMenuForm.url">
+                                    <el-input v-model="editMenuForm.url"   size="small" placeholder="以/开头"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row  :gutter="10" v-show="editMenuForm.parentId && editMenuForm.type=='MENU'">
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>所属父级</div>
+                            </el-col>
+                            <el-col :span="20">
+                                <el-form-item >
+                                    <el-select v-model="editMenuForm.parentId" placeholder="请选择所属父级菜单" size="small">
+                                        <el-option v-for="item in menus" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                    </el-select>
+
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10" v-show="editMenuForm.style">
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>菜单图标</div>
+                            </el-col>
+                            <el-col :span="5" :class="[ validate.styleMessage ? 'is-error':'']">
+                                <el-select v-model="editMenuForm.style"
+                                           @change="validate.styleValidate(editMenuForm.style)"
+                                           placeholder="请选择菜单图标" size="small">
+                                    <el-option
+                                            v-for="item in icons"
+                                            :key="item.label"
+                                            :label="item.label"
+                                            :value="item.value">
+	                                    <span style="float: left; color: #8492a6; font-size: 16px">
+                                            <i :class="item.label"></i>
+                                        </span>
+                                        <span style="float: right">{[ item.value ]}</span>
+
+                                    </el-option>
+                                </el-select>
+                                <div class="error-message" v-show="validate.styleMessage">
+                                    {[validate.styleMessage]}
+                                </div>
+                            </el-col>
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>作用域</div>
+                            </el-col>
+                            <el-col :span="12" style="display: flex; align-items: center">
+                                <el-radio-group v-model="editMenuForm.scope">
+                                    <el-radio :label="item.value" v-for="item in MENU_SCOPE">{[item.label]}</el-radio>
+                                </el-radio-group>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col :span="21" :push="3" style="height: 50px">
+                                <el-button type="primary" size="small" @click="saveEditMenu('editNewMenu')"><i class="icon-save"></i><span>保存</span></el-button>
+                                <el-button type="default" size="small" @click="cancel">取消</el-button>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </div>
+            </el-card>
+        </div>
+
+        <!--添加菜单-->
+        <div class="menu-main" v-show="mode == 'createMenu'">
+            <el-card >
+                <div slot="header" class="clearfix">
+                    <span>添加菜单</span>
+                </div>
+                <div>
+                    <div class="column">
+                        <el-row :gutter="10">
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>菜单名称</div>
+                            </el-col>
+                            <el-col :span="5" :class="[ validate.nameMessage ? 'is-error':'']">
+                                <el-input  v-model="newMenu.name"
+                                           maxlength="6"
+                                           @change="validate.nameValidate(newMenu.name)" size="small" placeholder="最多6个"></el-input>
+                                <div class="error-message" v-show="validate.nameMessage">
+                                    {[validate.nameMessage]}
+                                </div>
+                            </el-col>
+                            <el-col :span="3"  class="text">
+                                <div>
+                                    <i>*</i>排序
+                                </div>
+                            </el-col>
+                            <el-col :span="4" >
+                                <el-input-number size="small" v-model="newMenu.sortOrder"
+                                                 controls-position="right" :min="1" :max="200">
+                                </el-input-number>
+                            </el-col>
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>菜单权限</div>
+                            </el-col>
+                            <el-col :span="5" :class="[ validate.privilegeMessage ? 'is-error':'']">
+                                <el-input  v-model="newMenu.privilege" maxlength="50"
+                                           @change="validate.privilegeValidate(newMenu.privilege)" size="small" placeholder="控制菜单或按钮的显示与隐藏"></el-input>
+                                <div class="error-message" v-show="validate.privilegeMessage">
+                                    {[validate.privilegeMessage]}
+                                </div>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>菜单图标</div>
+                            </el-col>
+                            <el-col :span="5" :class="[ validate.styleMessage ? 'is-error':'']">
+                                <el-select v-model="newMenu.style"
+                                           @change="validate.styleValidate(newMenu.style)"
+                                           placeholder="请选择菜单图标" size="small">
+                                    <el-option
+                                            v-for="item in icons"
+                                            :key="item.label"
+                                            :label="item.label"
+                                            :value="item.value">
+	                                    <span style="float: left; color: #8492a6; font-size: 16px">
+                                            <i :class="item.label"></i>
+                                        </span>
+                                        <span style="float: right">{[ item.value ]}</span>
+
+                                    </el-option>
+                                </el-select>
+                                <div class="error-message" v-show="validate.styleMessage">
+                                    {[validate.styleMessage]}
+                                </div>
+                            </el-col>
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>作用域</div>
+                            </el-col>
+                            <el-col :span="10" style="display: flex; align-items: center">
+                                <el-radio-group v-model="newMenu.scope">
+                                    <el-radio :label="item.value" v-for="item in MENU_SCOPE">{[item.label]}</el-radio>
+                                </el-radio-group>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col :span="3"  class="text" >
+                                <div class="text">
+                                    <i>*</i>
+                                    <span>子菜单</span>
+                                </div>
+                            </el-col>
+                            <el-col :span="4" style="display: flex; align-items: center">
+                                <el-radio-group v-model="radio" @change="showSecond">
+                                    <el-radio :label="1">包含</el-radio>
+                                    <el-radio :label="2">不包含</el-radio>
+                                </el-radio-group>
+                            </el-col>
+                            <el-col :span="16" style="text-align: right">
+                                <el-button type="primary" icon="el-icon-plus" plain size="small" @click="addChild" v-if="secondShow">添加子菜单</el-button>
+                            </el-col>
+                        </el-row>
+                        <el-row v-show="!secondShow" :gutter="10">
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>链接地址</div>
+                            </el-col>
+                            <el-col :span="20" :class="[ validate.urlMessage ? 'is-error':'']">
+                                <el-input  v-model="newMenu.url"  maxlength="50"
+                                           @change="validate.urlValidate(newMenu.url)" size="small" placeholder="以/开头"></el-input>
+                                <div class="error-message" v-show="validate.urlMessage">
+                                    {[validate.urlMessage]}
+                                </div>
+                            </el-col>
+
+                        </el-row>
+                    </div>
+                    <div class="column" v-show="secondShow">
+                        <!--遍历循环生成多个子菜单-->
+                        <el-row :gutter="10" v-for="(item,index) in newMenu.children" :key="item.id">
+
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>子菜单名称
+                                </div>
+                            </el-col>
+                            <!--<el-col :span="4">-->
+                            <!--<el-input v-model="item.name"   size="small" placeholder="最多6个字"></el-input>-->
+                            <!--</el-col>-->
+                            <el-col :span="4" :class="[validate.childNameMessage[index].message ? 'is-error':'']">
+                                <el-input  v-model="item.name"  maxlength="6"
+                                           @change="validate.childNameValidate(item.name,index)"
+                                           size="small" placeholder="最多6个字"></el-input>
+                                <div class="error-message" v-show="validate.childNameMessage[index].message">
+                                    {[validate.childNameMessage[index].message]}
+                                </div>
+                            </el-col>
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>链接地址</div>
+                            </el-col>
+                            <!--<el-col :span="5">-->
+                            <!--<el-input v-model="item.url"   size="small" placeholder="以/开头"></el-input>-->
+                            <!--</el-col>-->
+                            <el-col :span="5" :class="[validate.childUrlMessage[index].message ? 'is-error':'']">
+                                <el-input  v-model="item.url"
+                                           @change="validate.childUrlValidate(item.url,index)"
+                                           size="small" placeholder="以/开头"></el-input>
+                                <div class="error-message" v-show="validate.childUrlMessage[index].message">
+                                    {[validate.childUrlMessage[index].message]}
+                                </div>
+                            </el-col>
+                            <el-col :span="3"  class="text">
+                                <div class="text">
+                                    <i>*</i>权限</div>
+                            </el-col>
+                            <el-col :span="5" :class="[validate.childPrivilegeMessage[index].message ? 'is-error':'']">
+                                <el-input  v-model="item.privilege"
+                                           @change="validate.childPrivilegeValidate(item.privilege,index)"
+                                           size="small" placeholder="控制菜单或按钮的显示与隐藏"></el-input>
+                                <div class="error-message" v-show="validate.childPrivilegeMessage[index].message">
+                                    {[validate.childPrivilegeMessage[index].message]}
+                                </div>
+                            </el-col>
+                            <el-col :span="3" v-show="menuNumber>1">
+                                <el-button type="danger" size="small"  plain @click="deleteChild(index)"><i class="el-icon-delete"></i></el-button>
+                            </el-col>
+                        </el-row>
+                    </div>
+                    <div class="column">
+                        <el-row :gutter="10">
+                            <el-col :span="21" :push="3" style="height: 50px">
+                                <el-button type="primary" size="small" @click="saveMenu"><i class="icon-save"></i><span>保存</span></el-button>
+                                <el-button type="default" size="small" @click="cancel">取消</el-button>
+                            </el-col>
+                        </el-row>
+                    </div>
+
+                </div>
+            </el-card>
+        </div>
+
+        <div class="menu-side" style="min-width: 400px ;margin-left: 10px">
+            <el-card shadow="never">
+                <div slot="header" class="clearfix">
+                    <div>
+                        拥有此
+                        <sapn class="font-primary">{[privilegeData && privilegeData.name]}</sapn>
+                        权限或菜单的角色如下共
+                        <sapn class="font-primary">{[roleList && roleList.length]} </sapn>
+                        个
+                    </div>
+
+                </div>
+                <div class="filter" style="height: 52px;position: relative">
+                    <div class="input">
+                        <el-input size="small"
+                                  placeholder='角色搜索'
+                                  v-model.trim="queryRole"
+                                  prefix-icon="el-icon-search"
+                                  clearable="true">
+                        </el-input>
+                    </div>
+                </div>
+                <ul class="filter-ul" >
+                    <li class="li-employees" v-for='role in roleList.filter(el =>{return (el.name && el.name.indexOf(queryRole) > -1)})'><span>{[role && role.name]}</span></li>
+                </ul>
+            </el-card>
+        </div>
+    </div>
+</div>
+<script src="/js/setting/menu.bundle.js"></script>

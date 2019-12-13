@@ -1,0 +1,322 @@
+<link rel="stylesheet" href="/css/cms/desigin.min.css">
+<div id="app" class="desigin-box" v-cloak>
+    <el-card class="box-card left-box" v-cloak >
+        <div slot="header" class="clearfix">
+            发布
+            <el-button @click="addSave" :loading="saveLoading" type="primary">发布</el-button>
+        </div>
+        <div class="dsp-form" v-dsp-form-validate v-cloak>
+            <div class="dsp-form_body"  >
+                <div class="dsp-form_body-left">
+                    <div v-if="decoded && decoded.column && informationView.uniqueNo.includes(decoded.column.parent)" :key="decoded && decoded.column">
+                        <el-row :gutter="10">
+                            <el-col :span="4"  class="form-label required">编号</el-col>
+                            <el-col :span="20" v-dsp-validate="information.uniqueNo"
+                                    dsp-err-customize="编号只允许5位数字和字母组合"
+                                    dsp-err-remote="编号重复"
+                                    dsp-err-required="请输入编号">
+                                <el-input  placeholder="请填写唯一编号，最多5个字符" v-model="information.uniqueNo" :maxlength="5"></el-input>
+                            </el-col>
+                        </el-row>
+                    </div>
+                    <div v-if="decoded && decoded.column " :key="decoded && decoded.column">
+                        <el-row :gutter="10" style="display: flex;align-items: center">
+                            <el-col :span="4"  class="form-label required">栏目</el-col>
+                            <el-col :span="20">
+                                <el-cascader
+                                        :options= "mata.category"
+                                        v-model="information.categoryArr"
+                                        @change="onCategoryChanged"
+                                >
+                                </el-cascader>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10" style="max-height: 40px;box-sizing: content-box">
+                            <el-col :span="4"  class="form-label required">标题</el-col>
+                            <el-col :span="17" v-dsp-validate="information.title" dsp-err-required="请输入标题">
+                                <el-input  placeholder="请填写标题，12个字以内" v-model="information.title" :maxlength="12"></el-input>
+                            </el-col>
+                            <el-col :span="3"  class="form-label">
+                                <el-color-picker v-model="information.navigationBarBackgroundColor"></el-color-picker>
+                            </el-col>
+                        </el-row>
+
+                    </div>
+                    <div v-if="decoded && decoded.column " :key="decoded && decoded.column ">
+                        <!--摘要-->
+                        <el-row :gutter="10" v-if="informationView['wechatArticle-contentSyllabus'].indexOf(decoded.column.parent ) > -1">
+                            <el-col :span="4"  class="form-label required">摘要</el-col>
+                            <el-col :span="20" v-dsp-validate="information.contentSyllabus" dsp-err-required="请输入摘要">
+                                <el-input  v-model="information.contentSyllabus" type="text" show-word-limit placeholder="请输入摘要，50个字以内" :maxlength="50"></el-input>
+                            </el-col>
+                        </el-row>
+                        <!--3D全景-->
+                        <el-row :gutter="10" v-if="informationView.panorama.indexOf(decoded.column.parent ) > -1">
+                            <el-col :span="4"  class="form-label" >全屋漫游</el-col>
+                            <el-col :span="20" v-dsp-validate="information.panorama" v-dsp-validate="information.panorama" dsp-err-required="请填写3D全景地址">
+                                <el-input  placeholder="酷家乐3D全景渲染图URL" v-model="information.panorama" ></el-input>
+                            </el-col>
+                        </el-row>
+                        <!--户型 面积-->
+                        <el-row :gutter="10" v-if="informationView.houseType.indexOf(decoded.column.parent ) > -1 && informationView.designerName.indexOf(decoded.column.parent ) > -1"   >
+                            <el-col :span="4"  class="form-label">户型</el-col>
+                            <el-col :span="8" >
+                                <el-select v-model="information.houseType" placeholder="请选择户型">
+                                    <el-option
+                                            v-for="item in mata.FWHX"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-col>
+                            <el-col :span="4"  class="form-label">面积</el-col>
+                            <el-col :span="8" >
+                                <el-input  placeholder="户型面积" v-model="information.area"  v-dsp-input-integer="information.area"></el-input>
+                            </el-col>
+                        </el-row>
+                        <!--价格-->
+                        <el-row :gutter="10"  v-if="informationView.lprice.indexOf(decoded.column.parent ) > -1 && informationView.hprice.indexOf(decoded.column.parent ) > -1">
+                            <el-col :span="4"  class="form-label">价格</el-col>
+                            <el-col :span="8">
+                                <el-input  placeholder="最低价格" v-model="information.lprice"  v-dsp-input-integer="information.lprice" :maxlength="10"></el-input>
+                            </el-col>
+                            <el-col :span="4"  class="form-label" style="text-align: center">-</el-col>
+                            <el-col :span="8" >
+                                <el-input  placeholder="最高价格" v-model="information.hprice" v-dsp-input-integer="information.hprice" :maxlength="10"></el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col :span="4"  class="form-label required">发布人</el-col>
+                            <el-col :span="20" v-dsp-validate="information.designerName" dsp-err-required="请输入发布人">
+                                <el-input v-if="!informationView.stylist.includes(decoded.column.parent)"  placeholder="请输入发布人" v-model="information.designerName" :maxlength="8"></el-input>
+                                <div v-else  class="designer-box">
+                                    <el-select v-model="information.designerType" class="designer-name-type" @change="changeDesignerType">
+                                        <el-option label="设计师" value="stylist"></el-option>
+                                        <el-option label="其他" value="rest"></el-option>
+                                    </el-select>
+                                    <el-input class="designer-name" v-if="information.designerType==='rest'" placeholder="请输入发布人" v-model="information.designerName" :maxlength="8"></el-input>
+                                    <el-select :key="designerList"
+                                               v-model="information.designer"
+                                               class="designer-name"
+                                               filterable
+                                               @change="changeDesigner"
+                                               v-if="information.designerType==='stylist'">
+                                        <el-option
+                                                class="designerList"
+                                                v-for="item in designerList"
+                                                :key="item.id"
+                                                :label="item.name"
+                                                :value="item.id">
+                                            <img v-if="item.avatarUrl" :src="DSP.globalConfig.fileBaseUrl + item.avatarUrl">
+                                            <img v-if="!item.avatarUrl" src="/images/head_portrait.jpg" >
+                                            <div>
+                                                <p>{[item.name]}</p>
+                                                <p style="color: #8492a6; font-size: 13px"></p>{[item.addr]}/{[item.company]}</span>
+                                            </div>
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                            </el-col>
+                        </el-row>
+
+                        <!--封面-->
+                        <el-row :gutter="10" style="display: flex;align-items: center;padding: 0;margin: 10px 0 14px;" v-if="informationView.wechatImage.includes(decoded.column.parent)">
+                            <el-col :span="4"  class="form-label required" style="line-height: 20px;">封面</el-col>
+                            <el-col :span="20" >尺寸 750px*420px <sapn class="font-label">（图片大小建议不超过200KB）</sapn></el-col>
+                        </el-row>
+                        <el-row style="padding: 0" v-if="informationView.wechatImage.includes(decoded.column.parent)">
+                            <el-col :span="4"  class="form-label">&nbsp;</el-col>
+                            <el-col :span="20" v-dsp-validate="information.wechatImage.imageUrl"  dsp-err-required="请选择封面" class="dsp-cropper-col">
+                                <dsp-cropper :value.sync="information.wechatImage" :ul="information.wechatImage && information.wechatImage.imageUrl" :maxsize="0.5" height="210px" width="375px"></dsp-cropper>
+                            </el-col>
+                        </el-row>
+                        <!--海报-->
+                        <el-row :gutter="10" style="display: flex;align-items: center;padding-top: 0" v-if="informationView.wechatImage.includes(decoded.column.parent)">
+                            <el-col :span="4"  class="form-label required" >选择海报</el-col>
+                            <el-col :span="20" v-dsp-validate="information.templateId" dsp-err-required="请选择海报样式">
+                                <el-select v-model="information.templateId" placeholder="请选择海报样式" filterable  @change="changeTemplateId" popper-class="imgLi">
+                                    <el-option
+                                            v-for="item in DSP.template && DSP.template.results"
+                                            :key="item.id"
+                                            :label="item.templateNo"
+                                            :value="item.id">
+                                        <img :src="DSP.globalConfig.fileBaseUrl + item.articleImage" width="40px">
+                                        <span style="margin-left: 10px">{[ item.templateNo ]}</span>
+                                        <span style="margin-left: auto; color: #8492a6;">{[ item.articleImageWidth +'*'+ item.articleImageHigh ]}</span>
+                                    </el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
+
+                        <el-row :gutter="10" style="display: flex;align-items: center" v-if="informationView.wechatImage.includes(decoded.column.parent) && posterImage && posterImage.template && posterImage.template.articleImageValid">
+                            <el-col :span="4"  class="form-label required" style="line-height: 20px">海报</el-col>
+                            <el-col :span="20" >尺寸 {[posterImage.w || 750]}px*{[posterImage.h || 600]}px <sapn class="font-label">（图片大小建议不超过200KB）</sapn></el-col>
+                        </el-row>
+
+                        <el-row style="padding-top: 0" v-if="informationView.wechatImage.includes(decoded.column.parent) && posterImage && posterImage.template && posterImage.template.articleImageValid">
+                            <el-col :span="4"  class="form-label">&nbsp;</el-col>
+                            <el-col :span="20" v-dsp-validate="information.posterImage.imageUrl" dsp-err-required="请选择海报">
+                                <div class="dsp-cropper-box">
+                                    <dsp-cropper :value.sync="information.posterImage" :ul="information.posterImage && information.posterImage.imageUrl" :height="(posterImage.h || 375) +'px'" :maxsize="1" :width="(posterImage.w || 300) +'px'" type="poster"></dsp-cropper>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </div>
+
+
+                <div class="dsp-form_body-center">
+
+                    <div style="margin-top: 28px">
+                        <el-radio v-model="information.contentType" label="dom">DOM模式</el-radio>
+                        <el-radio v-model="information.contentType" label="rtf">富文本模式</el-radio>
+                    </div>
+
+                    <div  v-show="information.contentType !=='dom'" class="center-box">
+
+                        <div id="editor" class="editor"  v-show="view.editType">
+                            <p v-html="information.wechatArticle && information.wechatArticle.content"></p>
+                        </div>
+                        <el-button size="mini"
+                                   type="primary"
+                                   icon="el-icon-mobile-phone"
+                                   @click="preview"
+                                   style="position: absolute; right: 20px; top: 20px;">预览手机显示效果 &gt;&gt;</el-button>
+                    </div>
+                    <div  v-if="information.contentType === 'dom'" class="center-box">
+                        <div class="node-box" v-loading.fullscreen="view.viewLoading">
+                            <div class="add-node-box">
+                                <div @click="addNode(item.value)" v-for="item in mata.elementType" :key="item.value"><i :class="item.icon"></i><br/>{[item.label]}</div>
+                            </div>
+                            <div class="item-node-box-body">
+                                <div v-for="(item,index) in information.paragraphs"  class="item-node-box">
+                                    <!--功能部分-->
+                                    <div class="symbol">
+                                        <div style="font-weight: bold">
+                                            {[$translate(mata.elementType,item.elementType)]}
+                                            <i class="el-icon-delete " style="color: #F56C6C "  @click="delNode(index)"></i>
+                                        </div>
+                                        <div>
+                                            <i class="icon-move-upward" :class="{'disabled' : index < 1}" @click="move(index,'top',index < 1)" v-if=""></i>
+                                            <i class="icon-move-down"  :class="{'disabled' :index > information.paragraphs.length-2}"  @click="move(index,'bottom',index > information.paragraphs.length-2)"  ></i>
+                                        </div>
+                                    </div>
+                                    <!--文字-->
+                                    <div v-if="['HEAD','SUB_HEAD','TEXT'].includes(item.elementType)"  class="inner-box">
+                                        <el-input
+                                                v-if="['HEAD','SUB_HEAD'].includes(item.elementType)"
+                                                placeholder="请输入标题"
+                                                type="text" maxlength="100" show-word-limit
+                                                v-model="item.content">
+                                        </el-input>
+                                        <el-input
+                                                v-if="item.elementType === 'TEXT'"
+                                                type="textarea"
+                                                :rows="2"
+                                                placeholder="请输入段落内容"
+                                                v-model="item.content">
+                                        </el-input>
+                                    </div>
+
+                                    <div  v-if="['GENERAL_PIC','NET_PIC','DDD_PIC'].includes(item.elementType)" class="inner-box">
+                                        <div class="empty_img">
+                                            <el-upload
+                                                    v-if="['GENERAL_PIC','DDD_PIC'].includes(item.elementType)"
+                                                    class="avatar-uploader"
+                                                    action="/api/file/wechat/admin/upload/"
+                                                    :show-file-list="false"
+                                                    :on-success="function(res,file) {return handleAvatarSuccess(res,file,item)}"
+                                                    :before-upload="beforeAvatarUpload">
+                                                <img v-if="item.content" class="show_img" :src="DSP.globalConfig.fileBaseUrl + item.content" alt="">
+                                                <div class="upload"  v-else>
+                                                    <i class="el-icon-upload avatar-uploader-icon"></i>
+                                                </div>
+                                            </el-upload>
+                                        </div>
+                                        <div  v-if="item.elementType === 'NET_PIC'" class="label-input">
+                                            <span class="label-append" style="top: 10px;">网络图片</span>
+                                            <el-input v-model="item.content" type="text" maxlength="300" show-word-limit placeholder="图片链接需要https://，http://开头" ></el-input>
+                                        </div>
+                                        <div  v-if="item.elementType === 'DDD_PIC'" class="label-input" style="margin-top: 10px">
+                                            <span class="label-append" style="top: 10px;">3D全景</span>
+                                            <el-input  v-model="item.qjtUrl" type="text" maxlength="300" show-word-limit placeholder="酷家乐3D全景渲染图URL"></el-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <el-row :gutter="16" style="margin-top: 20px" v-if="decoded && decoded.column && informationView && informationView.signs && informationView.signs.indexOf(decoded.column.parent ) > -1 ">
+                        <el-col :span="1.1"  class="form-label">标签</el-col >
+                        <el-col :span="20" style="width: calc(100% - 46px)" class="tag-box">
+                            <el-cascader
+                                    checkStrictly
+                                    v-model="information.signs"
+                                    :collapse-tags="information.signs.length > 7"
+                                    placeholder="请选择该文章拥有的标签"
+                                    :props="props"
+                                    filterable
+                                    clearable
+                                    @change="blurSigns(false)"
+                                    :options="DSP.tags.tagCascader"
+                                   >
+                            </el-cascader>
+                            <!---->
+                            <!---->
+                        </el-col>
+                    </el-row>
+                </div>
+
+
+
+                <div class="dsp-form_body-right" v-if="decoded && decoded.column">
+                    <dsp-phone :design-data="information" :width="420" :dsp="DSP" v-cloak ></dsp-phone>
+                    <div style="padding: 0 30px">
+                        <div v-if="!view.zdyBtn && informationView.zdybtn.includes(decoded.column.parent)" style="align-items: center;display: flex">
+                            <a href="javascript:void(0)" @click="view.zdyBtn = true"><i class="el-icon-edit"></i> 修改按钮样式</a>
+                        </div>
+                        <div style = 'width: 420px;' v-if="view.zdyBtn && informationView.zdybtn.includes(decoded.column.parent)">
+                            <el-row :gutter="10" v-if="informationView['zdybtn'].indexOf(decoded.column.parent ) > -1" style="padding: 0">
+                                <el-col :span="4"  class="form-label ">按钮文字</el-col>
+                                <el-col :span="8" >
+                                    <el-input  v-model="information.btnText"  placeholder="5个字以内" :maxlength="5" clearable></el-input>
+                                </el-col>
+                                <el-col :span="4"  class="form-label ">按钮图标</el-col>
+                                <el-col :span="8">
+                                    <el-select v-model="information.btnIcon" placeholder="请选择" clearable>
+                                        <el-option
+                                                v-for="item in mata.WX_ICON"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value">
+                                            <i :class="item.value"></i>
+                                            {[item.value]}
+                                        </el-option>
+                                    </el-select>
+                                </el-col>
+                            </el-row>
+
+                            <xcx-page-skip
+                                    v-if="informationView['zdybtn'].indexOf(decoded.column.parent ) > -1"
+                                    :dsp="DSP"
+                                    :uniquecode.sync="information.category"
+                                    :onclickurl.sync="information.btnOnclickUrl"
+                                    :onclickparams.sync="information.btnOnclickParams"
+                                    :tagpram.sync="information.btnTag"
+                            >
+                            </xcx-page-skip>
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </el-card>
+
+</div>
+<script src="/js/cms/design.bundle.js"></script>

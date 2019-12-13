@@ -1,0 +1,89 @@
+.msg-box{
+  overflow: hidden;
+  padding: 10px;
+  display: flex;
+  margin: 0 auto;
+  .msg-cell{
+    position: relative;
+    width: 300px;
+    padding: 15px 15px 24px 15px;
+    box-sizing: border-box;
+    background: #fff;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0.1px 0.1px 2px 2px rgba(001,001,001,0.1);
+    //标题两行...
+    .msg-cell-title{
+      font-size:16px;
+      width: 100%;
+      text-overflow: -o-ellipsis-lastline;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    //多个msg第一个
+    .more-first.more{
+      position: relative;
+      border-top: none;
+      .msg-cell-title-box{
+        position: absolute;
+        left: 0;
+        width: 100%;
+        bottom: 12px;
+        background: rgba(000,000,000,0.5);
+        padding: 6px 4px;
+        box-sizing: border-box;
+        .msg-cell-title{
+          font-size: 14px;
+          color: #fff;
+        }
+      }
+      img{
+        margin-left: 0;
+        width:100%;
+        height:151px
+      }
+    }
+    .more{
+      border-top: 1px solid #E4E8EB;
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      .msg-cell-title{
+        font-size: 14px;
+        color: #353535;
+      }
+
+      img{
+        margin-left: 10px;
+        min-width: 60px;
+        height: 60px;
+      }
+    }
+  //  编辑列
+    .edit-box{
+      color: #9A9A9A;
+      display: flex;
+      align-items: center;
+      span{
+        margin-left: auto;
+        i{
+          cursor: pointer;
+          font-size: 18px;
+          margin-left: 10px ;
+          color: transparent;
+        }
+      }
+    }
+  }
+
+  .msg-cell:hover{
+    .edit-box span i{
+      color: #9A9A9A;
+    }
+  }
+}
+

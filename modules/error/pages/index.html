@@ -1,0 +1,33 @@
+<div style="padding-top: 5%; ">
+    <div style="display: flex; width: fit-content; margin: auto">
+        <div style="padding: 30px; ">
+            <img src="/images/error.svg" width="160" >
+        </div>
+        <div style="padding: 30px; ">
+            <p style="font-size: 72px; font-weight: bold; line-height: 84px">
+                {{statusCode}}
+            </p>
+            <p style="font-size: 16px; color: #666;">
+                {{errorMsg}}
+            </p>
+            <p style="margin-top: 20px">
+                <button type="button"
+                        style="width: 64px;"
+                        class="el-button el-button--primary el-button--small is-plain"
+                        onclick="window.history.length == 1 ? window.location.href = '/' : window.history.back()">
+                    <span>返回</span>
+                </button>
+            </p>
+        </div>
+    </div>
+    {{#ne statusCode '404'}}
+    {{#devMode}}
+    <div style="padding: 20px;">
+        <h3>开发环境错误提示：</h3>
+        <p style="font-size: 14px; color: #666;">
+            {{error.stack}}
+        </p>
+    </div>
+    {{/devMode}}
+    {{/ne}}
+</div>

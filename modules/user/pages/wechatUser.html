@@ -1,0 +1,90 @@
+<link rel="stylesheet" href="/css/user/userManage.min.css">
+<style type="text/css">
+    .bg-a{
+        background: #FFF5EB!important;
+    }
+</style>
+<div id="app" v-cloak>
+    <div class="dsp-list">
+        <!--头部-->
+        <div class="dsp-list_header" style="display: flex;justify-content: space-between;">
+            <div class="dsp-list_header-tabs">
+                <div class="dsp-list_header-tabs-item" v-for="item in DSP.gzh"
+                     :class="{active: item.appid=== (query.gzh && query.gzh.appid)}"
+                     @click="getCurrentCategory(item)">
+                    {[item.name]}
+                </div>
+            </div>
+
+            <div class="pull-right">
+                <div class="dsp-list_header-query">
+                    <el-input placeholder="请输入昵称"  size="small"  suffix-icon="el-icon-search" clearable="true" v-model="query.nickName" style="width: 280px;" @clear="fetchData(1)" @keyup.enter.native="fetchData(1)"></el-input>
+                    {{#contains user.privileges 'GZH_USER_PULL_MESH_DATA'}}
+                    <el-button type="primary" size="small" @click="synchronization" v-loading.fullscreen.lock="views.synchronization">拉取线上数据</el-button>
+                    {{/contains}}
+                </div>
+            </div>
+        </div>
+        <div class="dsp-list_table">
+            <div class="user_list" v-loading="views.loading"  >
+                <div class="user_list_item" v-for=" (item, index) in tableData"  :key="item.id" :class="{'bg-a':item.subscribe === 0}" @click='openUser(item)'>
+                    <!--:class="{'emissary':item.isEmissary,'passed':item.designerStatus === 'PASSED'}"-->
+                    <!--@click="userInformation(item)"-->
+                    <div class="img_wrap">
+                        <img :src="item.headImgUrl ||'/images/head_portrait.jpg'" alt="">
+                    </div>
+                    <div class="user_detail">
+                        <div class="user_name font-value">
+                            <div class="name" style="margin: 0">{[item.remarks || item.nickname]}</div>
+                            <span class="no-Guanzhu" v-if="item.subscribe === 0">未关注</span>
+                        </div>
+                        <div class="user_alias font-label">
+                            <span v-show="item.remarks">{[item.remarks]}</span>
+                            <span v-show="!item.remarks">{[item.province + item.city]}</span>
+                        </div>
+                        <div class="user_time font-label">{[item.subscribeTime && item.subscribeTime.substr(0, item.subscribeTime.length - 2)]}</div>
+                    </div>
+                    <div class="operate" @click.stop>
+                        <el-popover
+                                placement="bottom"
+                                trigger="click">
+                            <div class="operate_content">
+                                <div class="ever" @click="setRemark(item, index)">设置备注</div>
+                            </div>
+                            <i type="text" class="el-icon-setting" slot="reference" style="cursor: pointer"></i>
+                        </el-popover>
+
+                    </div>
+
+                </div>
+            </div>
+            <!--分页-->
+            <div class="dsp-list_table-pagination">
+                <el-pagination
+                        @size-change="fetchData"
+                        @current-change="fetchData"
+                        :current-page.sync="query.currentPage"
+                        :page-sizes="[15, 30, 50, 100]"
+                        :page-size.sync="query.pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total.sync="query.totalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+    <!--设置备注-->
+    <el-dialog
+            title="设置备注"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            :visible.sync="views.dialogVisible"
+            width="420px"
+            height="260px">
+        <el-input v-model="currenItem.remarks" placeholder="备注最多15个字符" maxlength="15"></el-input>
+        <div slot="footer" class="dialog-footer right">
+            <el-button @click="views.dialogVisible = false" >取 消</el-button>
+            <el-button type="primary" @click="saveRemark" >保 存</el-button>
+        </div>
+    </el-dialog>
+</div>
+<script src="/js/user/wechatUser.bundle.js"></script>

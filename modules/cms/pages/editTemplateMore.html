@@ -1,0 +1,260 @@
+<link rel="stylesheet" href="/css/cms/cms.min.css">
+<link rel="stylesheet" href="/css/cms/editTemplate.min.css">
+<div id="app" class="cms-card" v-cloak>
+    <header class="header">
+        <div >{[DSP.type === 'edit' ? '修改' : '增加']}模版</div>
+    </header>
+    <div class="body editTemplate-body" v-dsp-form-validate v-cloak >
+        <div class="template" v-cloak  ondragstart="return false">
+            <div class="template-mobile" :key="information" :style="qt.templateMobile">
+                <div class="beijingtu" :style="'height:'+information.posterHigh+'px'" v-if="!information.backgroundImage"></div>
+                <img v-else :src="DSP.globalConfig.fileBaseUrl + information.backgroundImage " style="vertical-align:middle;display: block ">
+                <div :class="'baiBian'+i" class="baiBian" v-for="i in 2" v-show="information.posterNum !== 4"></div>
+                <div :class="'baiBianY'+i" class="baiBianY" v-for="i in 2" v-show="information.posterNum !== 4"></div>
+                <div class="baiBianY" style="top: 900px" v-show="information.posterNum === 4"></div>
+                <div class="baiBian" style="left: 900px" v-show="information.posterNum === 4"></div>
+
+                <div v-for="item in informationOne" v-if="item.f && information[item.f] || !item.f" >
+                    <dev  :data-w="item.w"
+                          :data-h="item.h"
+                          :data-x="item.x"
+                          :data-s="item.s"
+                          :data-y="item.y"
+                          class="move-div"
+                          :style="item.sty+';width:'+information[item.w]+'px;height:'+information[item.h]+'px;top:'+information[item.y]+'px;left:'+information[item.x]+'px'"
+                          v-if="item.type==='div'" @mousedown="move">{[item.l]}</dev>
+                    <img class="move-div"
+                         :data-w="item.w"
+                         :data-h="item.h"
+                         :data-x="item.x"
+                         :data-y="item.y"
+                         :data-s="item.s"
+                         :src="information[item.src] && DSP.globalConfig.fileBaseUrl + information[item.src] || item.d"
+                         :alt="item.l"
+                         v-if="item.type==='img' && (information[item.src] || item.d)"
+                         :style="item.sty+';width:'+information[item.w]+'px;height:'+information[item.h]+'px;top:'+information[item.y]+'px;left:'+information[item.x]+'px'"
+                         @mousedown="move">
+                </div>
+
+            </div>
+        </div>
+        <div class="dsp-form">
+            <div class="dsp-form_body">
+                <div class="form-group_body" v-cloak>
+                        <el-row class="el-row-margin-b-1">
+                            <el-col :span="2"  class="form-label required font-weight ">
+                                海报编号
+                            </el-col>
+                            <el-col :span="8" dsp-err-required="请填写海报编号" v-dsp-validate="information.templateNo" dsp-err-remote="海报编号重复">
+                                <el-input maxlength="15" v-model="information.templateNo" placeholder="请填写海报编号"></el-input>
+                            </el-col>
+                            <el-col :span="2"  class="form-label required font-weight">
+                                切图数量
+                            </el-col>
+                            <el-col :span="8">
+                                <el-select v-model="information.posterNum"
+                                           @change="changePosterNum"
+                                           placeholder="请选择">
+                                    <el-option
+                                            v-for="item in [4,6,9]"
+                                            :key="item"
+                                            :label="item"
+                                            :value="item">
+                                    </el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                        <el-row class="el-row-margin-b-2">
+                            <el-col :span="2"  class="form-label required font-weight">
+                                背景图
+                            </el-col>
+                            <el-col :span="8" v-dsp-validate="information.backgroundImage" dsp-err-required="请上传背景图">
+                                <el-upload
+                                        class="upload-btn"
+                                        action="/api/file-service/file/wechat/admin/upload"
+                                        :before-upload="beforeUpload"
+                                        :show-file-list="false"
+                                        :on-error="uploadFailed"
+                                        :on-success="uploadSucceed"
+                                >
+                                    <div style="width: 100%" @click="imgUrl='backgroundImage'">{[information.backgroundImage && '更换' || '上传']}背景图</div>
+                                </el-upload>
+                            </el-col>
+                            <el-col :span="2"  class="form-label font-weight">
+                                海报尺寸
+                            </el-col>
+                            <el-col :span="8" class="color-gray-xl">
+                                宽{[information.posterWidth || 1800]}px 高{[information.posterHigh || 1800]}px
+                            </el-col>
+                        </el-row>
+                    <!--todo 前景图1 前景图2-->
+                    <el-row class="el-row-margin-b-3">
+                        <el-col :span="2"  class="form-label font-weight">
+                            前景图1
+                        </el-col>
+                        <el-col :span="8">
+                            <el-switch
+                                    v-model="information.foreground1Valid"
+                                    active-color="#13ce66"
+                                    inactive-color="#d2d6d9">
+                            </el-switch>
+                        </el-col>
+                        <el-col :span="2"  class="form-label font-weight">
+                            前景图2
+                        </el-col>
+                        <el-col :span="12">
+                            <el-switch
+                                    v-model="information.foreground2Valid"
+                                    active-color="#13ce66"
+                                    inactive-color="#d2d6d9">
+                            </el-switch>
+                        </el-col>
+                    </el-row>
+                    <el-row v-if="information.foreground1Valid || information.foreground2Valid" >
+                        <el-col :span="2"  class="form-label ">&nbsp;</el-col>
+                        <el-col :span="8"  >
+                            <el-upload
+                                    v-if="information.foreground1Valid "
+                                    class="upload-btn"
+                                    action="/api/file-service/file/wechat/admin/upload"
+                                    :before-upload="beforeUpload"
+                                    :show-file-list="false"
+                                    :on-error="uploadFailed"
+                                    :on-success="uploadSucceed"
+                            >
+                                <div style="width: 100%" @click="imgUrl='foreground1'">{[information.foreground1 && '更换' || '上传']}前景图1</div>
+                            </el-upload>
+                        </el-col>
+                        <el-col :span="2"  class="form-label ">&nbsp;</el-col>
+                        <el-col :span="8"  >
+                            <el-upload
+                                    v-if="information.foreground2Valid "
+                                    class="upload-btn"
+                                    action="/api/file-service/file/wechat/admin/upload"
+                                    :before-upload="beforeUpload"
+                                    :show-file-list="false"
+                                    :on-error="uploadFailed"
+                                    :on-success="uploadSucceed"
+                            >
+                                <div style="width: 100%" @click="imgUrl='foreground2'">{[information.foreground2 && '更换' || '上传']}前景图2</div>
+                            </el-upload>
+                        </el-col>
+                    </el-row>
+                    <!--位置-->
+                    <el-row v-if="information.foreground1Valid || information.foreground2Valid"  >
+                        <el-col :span="2"  class="form-label ">
+                            {[information.foreground1Valid && '位置' || '']}
+                        </el-col>
+                        <el-col :span="4">
+                            <el-input v-if="information.foreground1Valid" type="number" v-model="information.foreground1X" maxlength="20" placeholder="X"></el-input>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-input v-if="information.foreground1Valid" type="number" v-model="information.foreground1Y" maxlength="20" placeholder="Y"></el-input>
+                        </el-col>
+                        <el-col :span="2"  class="form-label ">
+                            {[information.foreground2Valid && '位置' || '']}
+                        </el-col>
+                        <el-col :span="4">
+                            <el-input v-if="information.foreground2Valid" type="number" v-model="information.foreground2X" maxlength="20" placeholder="X"></el-input>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-input v-if="information.foreground2Valid" type="number" v-model="information.foreground2Y" maxlength="20" placeholder="Y"></el-input>
+                        </el-col>
+                    </el-row>
+                    <!--尺寸-->
+                    <el-row v-if="information.foreground1Valid || information.foreground2Valid" class="el-row-margin-b-2"  >
+                        <el-col :span="2"  class="form-label ">
+                            {[information.foreground1Valid && '尺寸' || '']}
+                        </el-col>
+                        <el-col :span="4">
+                            <el-input v-if="information.foreground1Valid"  @change="wh('foreground1Width','foreground1')"  type="number" v-model="information.foreground1Width" maxlength="20" placeholder="宽px"></el-input>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-input v-if="information.foreground1Valid"  @change="wh('foreground1High','foreground1')"  type="number" v-model="information.foreground1High" maxlength="20" placeholder="宽px"></el-input>
+                        </el-col>
+                        <el-col :span="2"  class="form-label ">
+                            {[information.foreground2Valid && '尺寸' || '']}
+                        </el-col>
+                        <el-col :span="4">
+                            <el-input v-if="information.foreground2Valid" @change="wh('foreground2Width','foreground2')" type="number" v-model="information.foreground2Width" maxlength="20" placeholder="宽px"></el-input>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-input v-if="information.foreground2Valid" @change="wh('foreground2High','foreground2')" type="number" v-model="information.foreground2High" maxlength="20" placeholder="高px"></el-input>
+                        </el-col>
+                    </el-row>
+
+                        <!--todo 小程序码   -->
+                        <el-row class="el-row-margin-b-3"  >
+                            <el-col :span="2"  class="form-label font-weight">
+                                二维码类型
+                            </el-col>
+                            <el-col :span="4">
+                                <el-radio-group v-model="information.appletCodeType" @change="changeAppletCodeType" style="min-width: 400px">
+                                    <el-radio  label="APPLET">小程序码</el-radio>
+                                    <el-radio label="WECHAT_SERVICE_ACCOUNT">公众号二维码</el-radio>
+                                    <el-radio  label="POSTER_QRCODE">海报二维码</el-radio>
+                                </el-radio-group>
+                            </el-col >
+                        </el-row>
+                        <el-row class="el-row-margin-b-3"  >
+                            <el-col :span="2"  class="form-label">
+                                <span v-if="information.appletCodeType === 'APPLET'">小程序码</span>
+                                    <span v-if="information.appletCodeType === 'WECHAT_SERVICE_ACCOUNT'">公众号二维码</span>
+                                <span v-if="information.appletCodeType === 'POSTER_QRCODE'">海报二维码</span>
+                            </el-col>
+                            <el-col :span="4">
+                                <el-input type="number" v-model="information.appletCodeWidth" maxlength="20" placeholder="宽px"></el-input>
+                            </el-col>
+                            <el-col :span="4">
+                                <el-select v-model="information.appId"  v-if="information.appletCodeType === 'WECHAT_SERVICE_ACCOUNT'">
+                                    <el-option
+                                            v-for="item in DSP.gzh"
+                                            :key="item.appid"
+                                            :label="item.name"
+                                            :value="item.appid">
+                                    </el-option>
+                                </el-select>
+                                <span v-else></span>
+                            </el-col>
+                            <el-col :span="2"  class="form-label font-weight">
+                                层级说明
+                            </el-col>
+                            <el-col :span="8" style="max-width: 100%; white-space:nowrap;" class="color-gray-xl">小程序码 > 前景图2 > 前景图1 > 分享文章配图 > 背景图</el-col>
+                        </el-row>
+                        <!--位置-->
+                        <el-row >
+                            <el-col :span="2"  class="form-label ">
+                                位置
+                            </el-col>
+                            <el-col :span="4">
+                                <el-input type="number" v-model="information.appletCodeX" maxlength="20" placeholder="X"></el-input>
+                            </el-col>
+                            <el-col :span="4">
+                                <el-input type="number" v-model="information.appletCodeY" maxlength="20" placeholder="Y"></el-input>
+                            </el-col>
+                        </el-row>
+                        <!--保存-->
+                        <el-row  class="el-row-margin-b-3" style="margin-top: 40px">
+                            <el-col :span="2"  class="form-label ">&nbsp;</el-col>
+                            <el-col :span="8" >
+                                <el-button type="primary" @click="addSave" :loading="loading.save">保存</el-button>
+                                <!--<el-button type="primary" @click="clickpreview" :loading="loading.clickpreview" v-if="information.id">生成预览图</el-button>-->
+                            </el-col>
+                        </el-row>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <el-dialog
+            title="预览效果图"
+            :visible.sync="loading.viewPreview"
+            width="30%"
+    >
+        <div style="display: flex;justify-content: center;background: rgba(000,000,000,0.2);padding: 10px">
+            <img v-if="previewImg" width="420" :src="DSP.globalConfig.fileBaseUrl + previewImg" alt="">
+        </div>
+    </el-dialog>
+</div>
+<script src="/js/cms/editTemplateMore.bundle.js"></script>
+

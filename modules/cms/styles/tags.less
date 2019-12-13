@@ -1,0 +1,224 @@
+.tag-app{
+  .avatar-uploader{
+    max-height: 100%;
+  }
+  .el-upload {
+    max-height: 100%;
+    height: 120px;
+    line-height: 120px;
+    background:#e0eaf4;
+    img{
+      height: 120px;
+    }
+  }
+  .have .el-upload{
+    background: transparent;
+  }
+  .height-el-upload144 .el-upload{
+    max-height: 100%;
+    height: 144px;
+  }
+  .avatar-uploader .el-upload {
+    width: 100%;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 100%;
+    text-align: center;
+  }
+  background: #fff;
+  height: 100%;
+  padding: 0 20px;
+  //头部
+  .header{
+    height: 60px;
+    box-sizing: border-box;
+    font-size: 16px;
+    border-bottom: 1px solid #ebeef5;
+    align-items: center;
+    display: flex;
+    .categoriesTab{
+      position: relative;
+      color: #909399;
+      margin-right: 15px;
+      cursor: pointer;
+    }
+    .active{
+      color: #008bff;
+    }
+    .activeLine{
+      position: absolute;
+      bottom: -18px;
+      border-radius: 1px;
+      height: 2px;
+      background: #008bff;
+      width: 100%;
+    }
+    .categoriesTab:hover{
+      color: #008bff;
+    }
+  }
+  // 标签最外层
+  .tag-box{
+    display: flex;
+    height: calc(~"100% - 67px");
+    // 标签组 || 标签 || 文章
+    & > div{
+      padding: 0 20px;
+      height: 100%;
+      border-right: 1px solid #ebeef5;
+      box-sizing: border-box;
+      //width:25%;
+    }
+    // 标签组
+    .tag-group{
+      width: 306px;
+      padding-left: 0;
+    }
+    .tag-list{
+      width: 400px;
+    }
+    // 文章
+    .article{
+      padding-right: 0;
+      width: calc(~"100% - 665px");
+      border-right: none;
+    }
+    // 标签组 || 标签 || 文章    里面的头部
+    .tag-inner-header{
+      height: 60px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .icon-plus{
+        box-sizing: border-box;
+        border:1px solid #c7e2ff;
+        border-radius:2px;
+        line-height: 30px;
+        text-align: center;
+        width:48px;
+        height:30px;
+        cursor: pointer;
+        font-size: 10px;
+        color: #409eff  ;
+      }
+    }
+    // 标签组 || 标签  里面内容list的包裹器
+    .tag-inner-body{
+      box-sizing: border-box;
+      height: calc(~"100% - 60px");
+      width: calc(~"100% + 20px");
+      padding-right: 20px;
+      overflow-y: auto;
+      //里面的每个list查看状态
+      .tag-inner-body-li{
+        border-radius:4px;
+        padding: 0 16px;
+        display: flex;
+        height: 48px;
+        font-size:14px;
+        color:#303133;
+        align-items: center;
+        justify-content: space-between;
+        background:#f9fafc;
+        margin-bottom: 16px;
+        cursor: pointer;
+      }
+      .tag-inner-body-li.active{
+        background: #e0eaf4;
+      }
+      .tag-inner-body-li:hover{
+        background:#e0eaf4;
+      }
+    }
+    // 标签组 || 标签  里面内容list的包裹器里面的修改按钮
+    .tag-inner-body-li-editBtn{
+      padding: 16px ;
+      margin-right: -16px;
+      display: flex;
+      align-items: center;
+      span:hover{
+        color: #3a8ee6;
+      }
+    }
+    //标签修改框
+    .tag-inner-body-liEdit{
+      padding:20px 22px ;
+      background:#f9fafc;
+      border-radius: 4px;
+      margin: 0;
+      margin-bottom: 20px;
+      & > .dsp-form_body{
+        padding: 0;
+        margin: 0;
+        .el-row{
+          padding-top: 0;
+          padding-bottom: 20px;
+        }
+        .el-row:last-child{
+          padding: 0;
+        }
+      }
+      & > div{
+        margin: 20px 0;
+      }
+      &.tag-inner-body-liEdit-tagGroup> div{
+        margin: 10px 0;
+      }
+    }
+    //第三栏中间部分
+    .tag-inner-article-center{
+      min-height: calc(~"100% - 120px");
+      max-height: calc(~"100% - 120px");
+      overflow-y: auto;
+      .tag-inner-article-center-cell{
+        display: flex;
+        box-sizing: border-box;
+        height: 130px;
+        padding: 20px 30px 20px 16px;
+        align-items: center;
+        .requestarticle-left{
+          width:140px;
+          height:90px;
+          margin: 0 20px;
+        }
+        .requestarticle-right{
+          margin-left: auto;
+          cursor: pointer;
+        }
+      }
+      .tag-inner-article-center-cell:nth-child(2n){
+        background:#f9fafc;
+        border-radius:2px;
+      }
+    }
+    //第三栏最下面部分
+    .tag-inner-article-bottom{
+      line-height: 60px;
+      height: 60px;
+      box-sizing: border-box;
+      .el-pagination{
+        padding: 0;
+        display: flex;
+        align-items: center;
+        height: 60px;
+        .el-pager{
+          height: 28px;
+        }
+      }
+    }
+  }
+  //拖动时
+  .dragenter{
+    border: 1px dotted #ccc;
+  }
+}

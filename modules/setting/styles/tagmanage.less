@@ -1,0 +1,55 @@
+@import "../../global/styles/global";
+#app{
+  .tagmanageBox{
+    display: flex;
+    height: 100%;
+  }
+  .dsp-list{
+    width: 70%;
+    .dsp-list_table .el-table{
+      height: calc(~"100% - 10px");
+    }
+  }
+  .addTagBox{
+    width: 70%;
+    background: #fff;
+    height: 100%;
+    box-shadow: none;
+    box-sizing: border-box;
+  }
+  .lookTagList{
+    box-shadow: none;
+    width: calc(~"30% - 10px");
+    box-sizing: border-box;
+    background: #fff;
+    margin-left: 10px;
+    height: 100%;
+  }
+  .currentTagList{
+    display: flex;
+    margin:0 20px ;
+    padding: 10px ;
+    cursor: pointer;
+    border-bottom: 1px solid #ebeef5;
+    align-items: center;
+    justify-content: space-between;
+    & > div{
+      width: 33%;
+    }
+  }
+  .currentTagList:hover{
+    background: #f9fafc;
+  }
+  .bian:hover{
+      color: #008bff;
+  }
+  .font-success:hover{
+    color: @color-success;
+  }
+  .is-disabled:hover {
+    color: #c0c4cc;
+  }
+  .el-table__row{
+    cursor: pointer;
+  }
+}

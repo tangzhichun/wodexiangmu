@@ -1,0 +1,288 @@
+<link rel="stylesheet" href="/css/wxpublic/management.min.css">
+<div id="app" v-cloak>
+    <div class="dsp-list">
+        <!--头部-->
+        <div class="dsp-list_header">
+            小程序管理
+            <!--按钮区域-->
+            <div class="pull-right">
+                {{#contains user.privileges 'XCX_MANAGE_ADD'}}
+                    <el-button size="small" type="primary" plain @click="openAddDialog(false)">
+                        <i class="el-icon-plus"></i>
+                        小程序
+                    </el-button>
+                {{/contains}}
+            </div>
+        </div>
+
+        <div class="dsp-list_table">
+            <!--表格-->
+            <el-table
+                    :data="tableData"
+                    v-loading="views.loading"
+                    stripe
+                    style="width: 100%">
+                <el-table-column  prop="num" label="排序" width="80px"></el-table-column>
+                <el-table-column  prop="name" label="小程序名称">
+                    <template slot-scope="scope">
+                        <div style="display: flex;align-items: center">
+                            <img :src="DSP.globalConfig.fileBaseUrl + scope.row.imgUrl" width="30px" height="30px" v-if="scope.row.imgUrl " style="margin-right: 4px">
+                            <span>{[scope.row.name]}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column  prop="appId" label="开发者ID" ></el-table-column>
+                <el-table-column  prop="authority" label="小程序权限" ></el-table-column>
+                <el-table-column  prop="uniqueCode" label="唯一码" ></el-table-column>
+                <el-table-column  prop="name" label="宿主公众号">
+                    <template slot-scope="scope">
+                        <div style="display:flex;line-height: 30px">
+                            <img :src="DSP.globalConfig.fileBaseUrl + DSP.gzh.find((e) => {return e.appid === scope.row.gzhAppid}).imgUrl"  height="30px" width="30px" v-if="scope.row.gzhAppid " style="margin-right: 4px">
+                            <span>{[DSP.gzh.find((e) => {return e.appid === scope.row.gzhAppid}).name]}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        {{#contains user.privileges 'XCX_MANAGE_EDIT'}}
+                        <a class="list-link " href="javascript:void(0)" @click="openAddDialog(scope.row)">编辑</a>
+                        {{/contains}}
+                        {{#contains user.privileges 'XCX_MANAGE_DEL'}}
+                        <a class="link-danger" @click="delXCX(scope.row.id)" style="cursor: pointer;margin: 0 6px">删除</a>
+                        {{/contains}}
+                        {{#contains user.privileges 'XCX_MANAGE_PAGE'}}
+                        <a class="list-link" @click="getPage(scope.row)"  v-loading.fullscreen.lock="views.getPage" style="cursor: pointer">配置页面</a>
+                        {{/contains}}
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+    </div>
+    <!--新增修改小程序-->
+    <el-dialog
+            :title="information && information.id && '修改' || '新增'"
+            :visible.sync="views.addDialog"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            :show-close="false"
+            width="680px"
+    >
+        <div class="dsp-form" container="dialog" v-dsp-form-validate>
+            <div class="dsp-form_body  stylist" v-if="information">
+                <div class="stylist-img">
+                    <div v-dsp-validate="information.imgUrl"
+                         style="width: 140px"
+                         dsp-err-required="请上传小程序LOGO">
+                        <dsp-cropper :value.sync="information.imgUrl"
+                                     :ul="information.imgUrl && information.imgUrl.imageUrl"
+                                     :maxsize="0.5" height="140px" width="140px"></dsp-cropper>
+
+                    </div>
+                    <div class=" label" style="text-align: center;width: 140px" >LOGO</div>
+                </div>
+                <div class="stylist-from">
+                    <el-row type="flex" >
+                        <el-col :span="4"  class="form-label ">
+                            排序
+                        </el-col>
+                        <el-col :span="20" v-dsp-validate="information.num" dsp-err-required="排序">
+                            <el-input placeholder="排序字段只允许数字" maxlength="3" v-model="information.num" v-dsp-input-number="information.num"></el-input>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex" >
+                        <el-col :span="4"  class="form-label ">
+                            名称
+                        </el-col>
+                        <el-col :span="20" v-dsp-validate="information.name" dsp-err-required="小程序名称">
+                            <el-input placeholder="小程序名称" maxlength="20" v-model="information.name" ></el-input>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex" >
+                        <el-col :span="4"  class="form-label ">
+                            开发者ID
+                        </el-col>
+                        <el-col :span="20" v-dsp-validate="information.appId" dsp-err-required="开发者ID必须填写">
+                            <el-input placeholder="开发者ID（appId）" maxlength="20" v-model="information.appId" ></el-input>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex" >
+                        <el-col :span="4"  class="form-label ">
+                            开发者密码
+                        </el-col>
+                        <el-col :span="20" v-dsp-validate="information.appSecret" dsp-err-required="开发者密码必须填写">
+                            <el-input placeholder="开发者密码（appSecret)"  type="password"  maxlength="64" v-model="information.appSecret" ></el-input>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex" >
+                        <el-col :span="4"  class="form-label ">
+                            唯一码
+                        </el-col>
+                        <el-col :span="20" v-dsp-validate="information.uniqueCode" dsp-err-required="小程序唯一码必须填写">
+                            <el-input v-model="information.uniqueCode" maxlength="64"  placeholder="小程序唯一码" ></el-input>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex" >
+                        <el-col :span="4"  class="form-label ">
+                            <el-tooltip placement="top">
+                                <div slot="content">
+                                    权限说明：<br/>
+                                    需进入系统设置==》菜单管理==》管理==》小程序==》功能权限添加一个和右侧权限一样的配置；<br/>
+                                    之后再将此功能权限配置给对应的角色，此小程序方可使用。
+                                </div>
+                                <span >权限 <i class="el-icon-question"></i></span>
+                            </el-tooltip>
+                        </el-col>
+                        <el-col :span="20" v-dsp-validate="information.authority" dsp-err-required="小程序权限必须填写">
+                            <el-input v-model="information.authority" maxlength="64"  placeholder="权限" ></el-input>
+                        </el-col>
+                    </el-row>
+                    <el-row type="flex" >
+                        <el-col :span="4"  class="form-label ">
+                            宿主公众号
+                        </el-col>
+                        <el-col :span="20" v-dsp-validate="information.gzhAppid" dsp-err-required="请选择宿主公众号">
+                            <el-select v-model="information.gzhAppid" placeholder="请选择宿主公众号">
+                                <el-option
+                                        v-for="item in DSP.gzh"
+                                        :key="item.appid"
+                                        :label="item.name"
+                                        :value="item.appid">
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                    </el-row>
+                </div>
+            </div>
+        </div>
+        <div slot="footer" class="dialog-footer align-right">
+            <el-button @click="cancelSave(false)">
+                取消
+            </el-button>
+            <el-button type="primary" :loading="views.saveLoading" @click="save">
+                <i class="icon-save"></i><span>保存</span>
+            </el-button>
+        </div>
+    </el-dialog>
+    <el-dialog
+            title="填写服务器配置"
+            :visible.sync="views.allocation"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            :show-close="false"
+            width="600px"
+    >
+        <div class="dsp-form" container="dialog" v-if="allocationDate">
+            <p class="font-size-l font-value">url</p>
+            <div style="margin:  4px 0 10px" >
+                {[location.origin]}/api/wechat-service/wechat/getToken?appid={[allocationDate.appid]}&token={[allocationDate.token]}
+            </div>
+            <p class="font-size-l font-value">token</p>
+            <div  style="margin: 4px 0 10px">
+                {[allocationDate.token]}
+            </div>
+            <p class="font-size-l font-value">IP白名单</p>
+            <div  style="margin: 4px 0 10px">
+                121.52.223.224
+            </div>
+        </div>
+        <div slot="footer" class="dialog-footer align-right">
+            <el-button @click="views.allocation = false">
+                取消
+            </el-button>
+        </div>
+    </el-dialog>
+
+    <!--小程序页面配置-->
+    <el-dialog :title="xcxPage.xcx.name + '页面'"
+               :close-on-click-modal="false"
+               width="500px"
+               :close-on-press-escape="false"
+               :visible.sync="views.pageD">
+        <div style="padding: 20px 0;min-height: 300px">
+            <div class="addPage"  style="text-align: center" @click="addPage" v-if="views.addPage === 0" >添加页面</div>
+            <div class="dsp-form" v-if="views.addPage === 2" container="dialog" v-dsp-form-validate>
+                <div class="dsp-form_body">
+                    <el-row>
+                        <el-col :span="5"  class="form-label required">
+                            页面名称：
+                        </el-col>
+                        <el-col :span="19"
+                                v-dsp-validate="formPage.linkName"
+                                dsp-err-required="页面名称必须填写"
+                                >
+                            <el-input
+                                    placeholder="页面名称"
+                                    maxlength="10"
+                                    v-model="formPage.linkName"
+                                    v-dsp-input-trim>
+                            </el-input>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="5"  class="form-label required ">
+                            页面路径：
+                        </el-col>
+                        <el-col :span="19"
+                                v-dsp-validate="formPage.linkPath"
+                                dsp-err-required="请填写页面路径">
+                            <el-input  v-model="formPage.linkPath" :maxlength=300 placeholder="请填写页面路径"></el-input>
+                        </el-col>
+                    </el-row>
+
+
+                    <el-row style="text-align: right">
+                        <el-button @click="views.addPage = 0">取消</el-button>
+                        <el-button type="primary" @click="saveXCXPage">保存</el-button>
+                    </el-row>
+                </div>
+            </div>
+
+            <div class="page-list" v-for="item in xcxPage.pages">
+                <div class="page-list-li" v-if=" item.id !== formPage.id " >
+                    {[item.linkName]}
+                    <div>
+                        <a style="cursor: pointer ;margin-right: 6px" class="el-icon-edit" @click="editPages(item)" ></a>
+                        <a style="cursor: pointer" class="el-icon-delete font-danger" @click="delPages(item.id)"></a>
+                    </div>
+                </div>
+                <div class="dsp-form" v-if="views.addPage === 1 && item.id === formPage.id" container="dialog" v-dsp-form-validate>
+                    <div class="dsp-form_body">
+                        <el-row>
+                            <el-col :span="5"  class="form-label required">
+                                页面名称：
+                            </el-col>
+                            <el-col :span="19"
+                                    v-dsp-validate="formPage.linkName"
+                                    dsp-err-required="页面名称必须填写"
+                                   >
+                                <el-input
+                                        placeholder="姓名或尊称"
+                                        maxlength="10"
+                                        v-model="formPage.linkName"
+                                        v-dsp-input-trim>
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="5"  class="form-label required">
+                                页面路径：
+                            </el-col>
+                            <el-col :span="19"
+                                    v-dsp-validate="formPage.linkPath"
+                                    dsp-err-required="请填写页面路径">
+                                <el-input  v-model="formPage.linkPath" :maxlength=300 placeholder="请填写转跳页面路径"  ></el-input>
+                            </el-col>
+                        </el-row>
+
+                        <el-row style="text-align: right">
+                            <el-button @click="views.addPage = 0">取消</el-button>
+                            <el-button type="primary" @click="saveXCXPage">保存</el-button>
+                        </el-row>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </el-dialog>
+</div>
+<script src="/js/user/xcxManage.bundle.js"></script>

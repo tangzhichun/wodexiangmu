@@ -1,0 +1,262 @@
+<link rel="stylesheet" href="/css/cms/bannerManage.min.css">
+<div id="app" v-cloak>
+    <div class="dsp-list">
+        <!--头部-->
+        <div class="dsp-list_header">
+            <!--标题-->
+            <div class="dsp-list_header-tabs">
+                <div class="dsp-list_header-tabs-item" v-for="item in DSP.xcx"
+                     :class="{active: item.uniqueCode === category}" @click="getCurrentCategory(item.uniqueCode)">{[item.name]}
+                </div>
+            </div>
+        </div>
+
+        <div class="dsp-list_table">
+            <div class="edit_pages column">
+                <div class="title">页面</div>
+                <div class="content auto_scroll">
+                    <div class="page_type" v-for="item in pageTypes[category]" v-if="!item.hidden" :class="{active:  currenPage && currenPage.pagePath === item.pagePath}" :key="item.value" @click="getBanner(item)">
+                        {[item.pageTitle]}
+                    </div>
+                </div>
+            </div>
+            <div class="edit_banners column">
+                <div class="title">自定义广告位</div>
+
+                <!--模拟广告位-->
+                <div class="edit_position" v-if="currenPage">
+                    <div class="preview">
+                        <div class="preview_title" >
+                            <div class="preview_title_nav">
+                                <div class="sign">
+                                    <span>·····</span>
+                                    <span>Sketch</span>
+                                </div>
+                                <div class="time">9.41 AM</div>
+                                <div class="electric_quantity">100%</div>
+                            </div>
+                            <div class="preview_title_name">{[currenPage.pageTitle]}</div>
+                        </div>
+                        <!--全屋定制的主页面-->
+                        <div class="preview_content auto_scroll" v-if="currenPage && currenPage.pagePath === 'customer'">
+                            <!--顶图/轮播图-->
+                            <div class="edit_img" @click="editBanner(currenPage.banners[0], 0)" v-if="currenPage && currenPage.banners && currenPage.banners[0].groupDetails" :class="{active: currentBanner && currentBanner.group === currenPage.banners[0].group}" >
+                                <img v-if="currenPage.banners[0].previewBanner || (currenPage.banners[0].groupDetails[0] && currenPage.banners[0].groupDetails[0].imageUrl)" class="banner_img" :src="fileUrl + currenPage.banners[0].previewBanner" alt="">
+                                <div v-else class="some_img" :style="{'height': currenPage.banners[0].sizeHeight/2 + 'px'}" src="#" alt="">点击此处，编辑广告位</div>
+                            </div>
+                            <div class="column_banners">
+                                <div class="column_banner column_banner_1 edit_img" :class="{active: currentBanner && currentBanner.group === currenPage.banners[3].group}" @click="editBanner(currenPage.banners[3], 3)" :style="{'width': currenPage.banners[3].sizeWidth/2 + 'px'}">
+                                    <img v-if="currenPage.banners[3].previewBanner || (currenPage.banners[3].groupDetails && currenPage.banners[3].groupDetails[0] && currenPage.banners[3].groupDetails[0].imageUrl)" class="ban_img" :src="fileUrl + currenPage.banners[3].previewBanner" alt="">
+                                    <div v-else class="desc">点击此处，编辑广告位</div>
+                                </div>
+                                <div class="column_banner column_banner_2 edit_img" :class="{active: currentBanner && currentBanner.group === currenPage.banners[4].group}" @click="editBanner(currenPage.banners[4], 4)" :style="{'width': currenPage.banners[4].sizeWidth/2 + 'px'}">
+                                    <img v-if="currenPage.banners[4].previewBanner || (currenPage.banners[4].groupDetails && currenPage.banners[4].groupDetails[0] && currenPage.banners[4].groupDetails[0].imageUrl)" class="ban_img" :src="fileUrl + currenPage.banners[4].previewBanner" alt="">
+                                    <div v-else class="desc">点击此处，编辑广告位</div>
+                                </div>
+                                <div class="column_banner column_banner_3 edit_img" :class="{active: currentBanner && currentBanner.group === currenPage.banners[5].group}" @click="editBanner(currenPage.banners[5], 5)" :style="{'width': currenPage.banners[5].sizeWidth/2 + 'px'}">
+                                    <img v-if="currenPage.banners[5].previewBanner || (currenPage.banners[5].groupDetails && currenPage.banners[5].groupDetails[0] && currenPage.banners[5].groupDetails[0].imageUrl)" class="ban_img" :src="fileUrl + currenPage.banners[5].previewBanner" alt="">
+                                    <div v-else class="desc">点击此处，编辑广告位</div>
+                                </div>
+                                <div class="column_banner column_banner_4 edit_img" :class="{active: currentBanner && currentBanner.group === currenPage.banners[6].group}" @click="editBanner(currenPage.banners[6], 6)" :style="{'width': currenPage.banners[6].sizeWidth/2 + 'px'}">
+                                    <img v-if="currenPage.banners[6].previewBanner || (currenPage.banners[6].groupDetails && currenPage.banners[6].groupDetails[0] && currenPage.banners[6].groupDetails[0].imageUrl)" class="ban_img" :src="fileUrl + currenPage.banners[6].previewBanner" alt="">
+                                    <div v-else class="desc">点击此处，编辑广告位</div>
+                                </div>
+                                <div class="column_banner column_banner_5 edit_img" :class="{active: currentBanner && currentBanner.group === currenPage.banners[7].group}" @click="editBanner(currenPage.banners[7], 7)" :style="{'width': currenPage.banners[7].sizeWidth/2 + 'px'}">
+                                    <img v-if="currenPage.banners[7].previewBanner || (currenPage.banners[7].groupDetails && currenPage.banners[7].groupDetails[0] && currenPage.banners[7].groupDetails[0].imageUrl)" class="ban_img" :src="fileUrl + currenPage.banners[7].previewBanner" alt="">
+                                    <div v-else class="desc">点击此处，编辑广告位</div>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <img class="banner_img" src="/images/app_shouye.jpg">
+                            </div>
+                        </div>
+                        <!--全屋定制/悟空快装的预约测量页面-->
+                        <div class="preview_content auto_scroll" v-if="currenPage && (currenPage.pagePath === 'appointment/measure' || currenPage.pagePath === 'appointment/measureWK')">
+                            <!--顶部-->
+                            <div class="edit_img" @click="editBanner(currenPage.banners[2], 2)" v-if="currenPage && currenPage.banners && currenPage.banners[2].groupDetails" :class="{active: currentBanner && currentBanner.group === currenPage.banners[2].group}">
+                                <img v-if="currenPage.banners[2].previewBanner || (currenPage.banners[2].groupDetails[0] && currenPage.banners[2].groupDetails[0].imageUrl)" class="banner_img" :src="fileUrl + currenPage.banners[2].previewBanner" alt="">
+                                <div v-else class="some_img" :style="{'height': currenPage.banners[2].sizeHeight/2 + 'px'}" src="#" alt="">点击此处，编辑广告位</div>
+                            </div>
+                            <!--<img class="banner_img" src="/images/free.jpg">-->
+                            <div class="free_line">
+                                <el-input disabled style="margin-bottom: 15px;" placeholder="您的姓名"></el-input>
+                                <el-input disabled style="margin-bottom: 15px;" placeholder="省/市/区"></el-input>
+                                <!--广告1-->
+                                <div class="edit_img" @click="editBanner(currenPage.banners[0], 0)" v-if="currenPage && currenPage.banners && currenPage.banners[0].groupDetails" :class="{active: currentBanner && currentBanner.group === currenPage.banners[0].group}">
+                                    <img v-if="currenPage.banners[0].previewBanner || (currenPage.banners[0].groupDetails[0] && currenPage.banners[0].groupDetails[0].imageUrl)" class="banner_gutter_img" :src="fileUrl + currenPage.banners[0].previewBanner" alt="">
+                                    <div v-else class="some_img" :style="{'height': currenPage.banners[0].sizeHeight/2 + 'px'}" src="#" alt="">点击此处，编辑广告位</div>
+                                </div>
+                                <el-input placeholder="免费预约" disabled style="padding: 10px 0;"></el-input>
+                            </div>
+                            <!--广告2-->
+                            <div class="edit_img" @click="editBanner(currenPage.banners[1], 1)" v-if="currenPage && currenPage.banners && currenPage.banners[1].groupDetails" :class="{active: currentBanner && currentBanner.group === currenPage.banners[1].group}">
+                                <img v-if="currenPage.banners[1].previewBanner || (currenPage.banners[1].groupDetails[0] && currenPage.banners[1].groupDetails[0].imageUrl)" class="banner_gutter_img" :src="fileUrl + currenPage.banners[1].previewBanner" alt="">
+                                <div v-else class="some_img" :style="{'height': currenPage.banners[1].sizeHeight/2 + 'px'}" src="#" alt="">点击此处，编辑广告位</div>
+                            </div>
+                        </div>
+                        <!--全屋定制/悟空快装的活动报名页面-->
+                        <div class="preview_content auto_scroll back" v-if="currenPage && (currenPage.pagePath === 'activity/sign' || currenPage.pagePath === 'activity/signWK')">
+                            <!--<img class="banner_img" src="/images/bj.png">-->
+                            <div class="free_line" style="margin-top: 200px;">
+                                <el-input disabled style="margin-bottom: 15px;" placeholder="您的姓名"></el-input>
+                                <el-input disabled style="margin-bottom: 15px;" placeholder="省/市/区"></el-input>
+                                <el-input disabled style="margin-bottom: 15px;" placeholder="街道/小区/楼盘"></el-input>
+                                <!--广告1-->
+                                <div class="edit_img" @click="editBanner(currenPage.banners[0], 0)" v-if="currenPage && currenPage.banners && currenPage.banners[0].groupDetails" :class="{active: currentBanner && currentBanner.group === currenPage.banners[0].group}">
+                                    <img v-if="currenPage.banners[0].previewBanner || (currenPage.banners[0].groupDetails[0] && currenPage.banners[0].groupDetails[0].imageUrl)" class="banner_gutter_img" :src="fileUrl + currenPage.banners[0].previewBanner" alt="">
+                                    <div v-else class="some_img" :style="{'height': currenPage.banners[0].sizeHeight/2 + 'px'}" src="#" alt="">点击此处，编辑广告位</div>
+                                </div>
+                                <div class="preview_input">免费预约</div>
+                                <div class="desc">严格保密信息 保护您的隐私</div>
+                            </div>
+                        </div>
+                        <!--全屋定制/悟空快装的详情页面/-->
+                        <div class="preview_content auto_scroll" v-if="currenPage && currenPage.pagePath === 'design/detail' || currenPage && currenPage.pagePath === 'case/detail'">
+                            <!--顶图/轮播图-->
+                            <img class="banner_img" src="/images/details.jpg">
+                            <!--广告1-->
+                            <div class="edit_img" @click="editBanner(currenPage.banners[0], 0)" v-if="currenPage && currenPage.banners && currenPage.banners[0].groupDetails" :class="{active: currentBanner && currentBanner.group === currenPage.banners[0].group}">
+                                <img v-if="currenPage.banners[0].previewBanner || (currenPage.banners[0].groupDetails[0] && currenPage.banners[0].groupDetails[0].imageUrl)" class="banner_img" :src="fileUrl + currenPage.banners[0].previewBanner" alt="">
+                                <div v-else class="some_img" :style="{'height': currenPage.banners[0].sizeHeight/2 + 'px'}" src="#" alt="">点击此处，编辑广告位</div>
+                            </div>
+                        </div>
+                        <!--悟空快装的主页面-->
+                        <div class="preview_content auto_scroll" v-if="currenPage && currenPage.pagePath === 'partialRenovation'">
+                            <!--顶图/轮播图-->
+                            <div class="edit_img"  @click="editBanner(currenPage.banners[0], 0)" v-if="currenPage && currenPage.banners && currenPage.banners[0].groupDetails" :class="{active: currentBanner && currentBanner.group === currenPage.banners[0].group}">
+                                <img v-if="currenPage.banners[0].previewBanner || (currenPage.banners[0].groupDetails[0] && currenPage.banners[0].groupDetails[0].imageUrl)" class="banner_img" :src="fileUrl + currenPage.banners[0].previewBanner" alt="">
+                                <div v-else class="some_img" src="#" alt="">点击此处，编辑广告位</div>
+                            </div>
+                            <!--静态图片-->
+                            <div class="line">
+                                <img class="banner_img" src="/images/part_01.jpg">
+                            </div>
+                            <!--广告1-->
+                            <div class="edit_img" @click="editBanner(currenPage.banners[1], 1)" v-if="currenPage && currenPage.banners && currenPage.banners[1].groupDetails" :class="{active: currentBanner && currentBanner.group === currenPage.banners[1].group}">
+                                <img v-if="currenPage.banners[1].previewBanner || (currenPage.banners[1].groupDetails[0] && currenPage.banners[1].groupDetails[0].imageUrl)" class="banner_img" :src="fileUrl + currenPage.banners[1].previewBanner" alt="">
+                                <div v-else class="some_img" :style="{'height': currenPage.banners[1].sizeHeight/2 + 'px'}" src="#" alt="">点击此处，编辑广告位</div>
+                            </div>
+                            <!--静态图片-->
+                            <div class="line">
+                                <img class="banner_img" src="/images/part_02.jpg">
+                            </div>
+                        </div>
+                        <!--悟空快装的产品套餐列表页面-->
+                        <div class="preview_content auto_scroll" v-if="currenPage && currenPage.pagePath === 'product/list'">
+                            <div class="line">
+                                <img class="banner_img" src="/images/reformList.jpg">
+                            </div>
+                            <div class="edit_img" @click="editBanner(currenPage.banners[0], 0)" v-if="currenPage && currenPage.banners && currenPage.banners[0].groupDetails" :class="{active: currentBanner && currentBanner.group === currenPage.banners[0].group}">
+                                <img v-if="currenPage.banners[0].previewBanner || (currenPage.banners[0].groupDetails[0] && currenPage.banners[0].groupDetails[0].imageUrl)" class="banner_img" :src="fileUrl + currenPage.banners[0].previewBanner" alt="">
+                                <div v-else class="some_img" :style="{'height': currenPage.banners[0].sizeHeight/2 + 'px'}" src="#" alt="">点击此处，编辑广告位</div>
+                            </div>
+                        </div>
+                        <!--全屋定制/我的的页面-->
+                        <div class="preview_content auto_scroll" v-if="currenPage && currenPage.pagePath === 'my/main'">
+                            <!--顶图/轮播图-->
+                            <img src="/images/mine.png">
+                            <div class="main_edit"  style="padding: 10px 20px;">
+                                <div class="edit_img" @click="editBanner(currenPage.banners[0], 0)" v-if="currenPage && currenPage.banners && currenPage.banners[0].groupDetails" :class="{active: currentBanner && currentBanner.group === currenPage.banners[0].group}">
+                                    <img v-if="currenPage.banners[0].previewBanner || (currenPage.banners[0].groupDetails[0] && currenPage.banners[0].groupDetails[0].imageUrl)" class="banner_img" :src="fileUrl + currenPage.banners[0].previewBanner" alt="">
+                                    <div v-else class="some_img" :style="{'height': currenPage.banners[0].sizeHeight/2 + 'px'}" src="#" alt="">点击此处，编辑广告位</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--全屋定制/我的的页面-->
+                        <div class="preview_content auto_scroll" v-if="currenPage && currenPage.pagePath === 'promotion/center'">
+                            <!--顶图/轮播图-->
+                            <img src="/images/promotion_center.jpg">
+                            <div class="main_edit"  style="padding: 10px 20px;">
+                                <div class="edit_img" @click="editBanner(currenPage.banners[0], 0)" v-if="currenPage && currenPage.banners && currenPage.banners[0].groupDetails" :class="{active: currentBanner && currentBanner.group === currenPage.banners[0].group}">
+                                    <img v-if="currenPage.banners[0].previewBanner || (currenPage.banners[0].groupDetails[0] && currenPage.banners[0].groupDetails[0].imageUrl)" class="banner_img" :src="fileUrl + currenPage.banners[0].previewBanner" alt="">
+                                    <div v-else class="some_img" :style="{'height': currenPage.banners[0].sizeHeight/2 + 'px'}" src="#" alt="">点击此处，编辑广告位</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--广告编辑区-->
+                <div class="edit_banner" v-if="currentBanner">
+                    <div class="banner_title">{[currentBanner.desc]}</div>
+                    <div class="edit_content">
+                        <div class="key_item">
+                            <div class="key_name ">位置</div>
+                            <div class="key_value">{[currentBanner.group]}</div>
+                        </div>
+                        <div class="key_item">
+                            <div class="key_name">尺寸</div>
+                            <div class="key_value">{[currentBanner.group === 'INDEX_HEAD'  || currentBanner.group === 'WUKONG_HEAD' ? '强制' : '建议']}{[currentBanner.sizeWidth + 'px*' + currentBanner.sizeHeight + 'px']}</div>
+                        </div>
+                        <div class="edit_num">
+                            <div class="edit_banner_title">广告</div>
+                            <div class="edit_banner_item" v-if="currentBanner.group === 'INDEX_HEAD' || currentBanner.group === 'MINE_BOTTOM'  || currentBanner.group === 'WUKONG_HEAD'"  v-for="(item, index) in currentBanner.groupDetails" :class="{active: currentIndex == index}" @click="editItem(item, index)">
+                                {[index + 1]}
+                            </div>
+                            <div class="edit_banner_item plus" v-if="currentBanner.group === 'INDEX_HEAD' || currentBanner.group === 'MINE_BOTTOM'  || currentBanner.group === 'WUKONG_HEAD'" @click="plusItem">+</div>
+                        </div>
+                        <div class="current_image" v-if="currenItem">
+                            <div class="edit_current_image">
+                                <div class="empty_img" :style="{width: currentBanner.sizeWidth/2 + 'px'}" alt="">
+                                    <el-upload
+                                            v-if="currentBanner.group === 'USER_INFO_U_1' || currentBanner.group === 'USER_INFO_JU_1' || currentBanner.group === 'USER_INFO_U_TOP'"
+                                            class="avatar-uploader"
+                                            action="/api/file-service/file/wechat/admin/upload/"
+                                            :show-file-list="false"
+                                            :on-success="handleAvatarSuccess"
+                                            :before-upload="beforeAvatarUpload">
+                                        <img v-if="currenItem.imageUrl" class="show_img" :src="fileUrl + currenItem.imageUrl" alt="">
+                                        <div class="upload"  v-else>
+                                            <i class="el-icon-upload avatar-uploader-icon"></i>
+                                        </div>
+                                    </el-upload>
+                                    <dsp-cropper v-else :value.sync="currenItem.wechatImage" :default-img.sync="currenItem.imageUrl" :height="currentBanner.sizeHeight/2 + 'px'" :width="currentBanner.sizeWidth/2 + 'px'"></dsp-cropper>
+                                </div>
+                                <div class="button_operate" v-if="currenItem.wechatImage && currenItem.wechatImage.size">
+                                    <div class="size_title font-label">大小</div>
+                                    <div class="size-num">{[Math.round(currenItem.wechatImage.size/1024) || 129]}kb</div>
+                                    <div class="tip font-label">图片大小建议不超过200KB</div>
+                                </div>
+                                <div class="button_operate" :style="{width: currentBanner.sizeWidth/2 + 'px'}"  v-if="currenItem.id && (currentBanner.group === 'INDEX_HEAD'  || currentBanner.group === 'WUKONG_HEAD')">
+                                    <el-button type="text" size="small" :disabled="currentIndex === 0" @click="changeOrder('left', currenItem, currentIndex)">
+                                        <i class="el-icon-arrow-left" style="font-size: 18px;color: #008bff"></i><span style="font-size: 16px;color: #008bff">前移</span>
+                                    </el-button>
+                                    <el-button class="pull-right" type="text" size="small" :disabled="currentBanner.groupDetails.length === currentIndex + 1" @click="changeOrder('right',currenItem, currentIndex)">
+                                        <span style="font-size: 16px;color: #008bff">后移</span><i class="el-icon-arrow-right" style="font-size: 18px;color: #008bff"></i>
+                                    </el-button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="key_item">
+                            <div class="key_name">地区</div>
+                            <el-select class="key_value" multiple v-model="currenItem.city" placeholder=" 所有地区可见" >
+                                <el-option v-for="item in adRigion" :key="item.value" :label="item.label" :value="item.alias">
+                                    仅 {[item.label]} 可见
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <xcx-page-skip
+                                :dsp="DSP"
+                                :uniquecode.sync="currenItem.targetApp"
+                                :onclickurl.sync="currenItem.onclickUrl"
+                                :onclickparams.sync="currenItem.onclickParams"
+                                :tagpram.sync="tagPram"
+                                >
+                        </xcx-page-skip>
+
+                        <div class="save">
+                            <el-button v-if="currenItem.id" type="primary" @click="editAndSubmit">保存</el-button>
+                            <el-button v-else type="primary" :disabled="!currenItem.imageUrl" @click="saveAndSubmit">保存</el-button>
+                            <el-button v-if="currenItem.imageUrl" type="default" @click="previewImage">预览</el-button>
+                            <el-button class="pull-right" v-if="currenItem.id" type="danger"  @click="deleteIndexImage(currenItem, currentIndex)">
+                                <i class="el-icon-delete" style="font-size: 18px"></i>
+                            </el-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/cms/bannerManage.bundle.js"></script>

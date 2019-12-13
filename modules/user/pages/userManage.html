@@ -1,0 +1,138 @@
+<link rel="stylesheet" href="/css/user/userManage.min.css">
+<div id="app" v-cloak>
+    <div class="dsp-list">
+        <!--头部-->
+        <div class="dsp-list_header">
+            <!--标题-->
+            <div class="dsp-list_header-tabs">
+                <div class="dsp-list_header-tabs-item" v-for="item in DSP.xcx"
+                     :class="{active: item.uniqueCode === query.category}" @click="getCurrentCategory(item.uniqueCode)">{[item.name]}
+                </div>
+            </div>
+            <div class="pull-right">
+                <div class="dsp-list_header-query" v-if="query.category">
+                    <el-input placeholder="请输入昵称/备注/电话" suffix-icon="el-icon-search" clearable="true" v-model="query[query.category].nickName" style="width: 280px;" @clear="fetchData(1)" @keyup.enter.native="fetchData(1)"></el-input>
+                    <el-input placeholder="城市查询"  clearable="true" v-model="query[query.category].userCity" style="width: 280px;" @clear="fetchData(1)" @keyup.enter.native="fetchData(1)"></el-input>
+                </div>
+            </div>
+        </div>
+        <div class="dsp-list_table" >
+            <div class="user_list" v-loading="views.loading"  v-if="query.category">
+                <div class="user_list_item" :class="{'emissary':item.isEmissary,'passed':item.designerStatus === 'PASSED','promotionStatus':item.promotionStatus == 1}"
+                     v-for=" (item, index) in list[query.category]" @click="userInformation(item)" :key="item.id">
+                    <div class="img_wrap">
+                        <img :src="item.avatarUrl ||'/images/head_portrait.jpg'" alt="">
+                    </div>
+                    <div class="user_detail">
+                        <div class="user_name font-value">
+                            <div class="name" style="margin: 0" v-if="item.name">
+                                <span>{[item.name]}</span><span>{[item.mobile]}</span>
+                            </div>
+                            <div class="name" style="margin: 0" v-else-if="item.remark">{[item.remark]}</div>
+                            <div class="name" style="margin: 0" v-else>{[item.nickName]}</div>
+                            <img v-if="item.isEmissary && item.designerStatus !== 'PASSED' && ['其它','其他'].includes(item.emissaryType)" src="/images/qt.png" class="jiaobiao">
+                            <img v-else-if="item.isEmissary && item.designerStatus !== 'PASSED' && item.emissaryType==='员工'" src="/images/yg.png" class="jiaobiao">
+                            <img v-else-if="item.isEmissary && item.designerStatus !== 'PASSED'" src="/images/hzf.png" class="jiaobiao">
+
+                            <img v-if="item.designerStatus === 'PASSED'" src="/images/sjs.png" class="jiaobiao">
+                            <img v-if="item.promotionStatus == 1" src="/images/hehuoren.png" class="jiaobiao">
+
+                        </div>
+                        <div class="user_alias font-label" >
+                            {[item.userCity]}&nbsp;
+                        </div>
+                        <div class="user_time font-label">
+                            {[$localDateTimeNumber(item.timeCreated) | datetimes]}
+                        </div>
+                    </div>
+                    <div class="operate" @click.stop>
+                        <el-popover
+                                placement="bottom"
+                                trigger="click">
+                            <div class="operate_content">
+                                <div class="ever" @click="setRemark(item, index)">
+                                    设置备注
+                                </div>
+                                {{#contains user.privileges 'XCX_USER_TO_BE_EMISSARY'}}
+                                    <div class="ever" v-if="!item.isEmissary && item.unionId" @click="setSpread(item, index)">
+                                        推广认证
+                                    </div>
+                                {{/contains}}
+                                {{#contains user.privileges 'XCX_USER_DESIGNER_ADD'}}
+                                    <div class="ever" v-if="item.isEmissary && item.designerStatus!=='PASSED' && item.unionId" @click="setDesign(item, index)">
+                                        设计师认证
+                                    </div>
+                                {{/contains}}
+                            </div>
+                            <i type="text" class="el-icon-setting" slot="reference" ></i>
+                        </el-popover>
+
+                    </div>
+                </div>
+            </div>
+            <!--分页-->
+            <div class="dsp-list_table-pagination" v-if="query.category">
+                <el-pagination
+                        background
+                        @size-change="onSizeChange"
+                        @current-change="onCurrentChange"
+                        :current-page="query[query.category].currentPage"
+                        :page-sizes="[15, 30, 50, 100]"
+                        :page-size="query[query.category].pageSize"
+                        layout= "total, sizes, prev, pager,next"
+                        :total="query[query.category].totalSize">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+    <!--设置备注-->
+    <el-dialog
+            title="设置备注"
+            :visible.sync="views.dialogVisible"
+            width="420px"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            height="260px">
+        <el-input v-model="currenItem.remark" placeholder="备注名称"></el-input>
+        <div slot="footer" class="dialog-footer right">
+            <el-button @click="views.dialogVisible = false" >取 消</el-button>
+            <el-button type="primary" @click="saveRemark" >保 存</el-button>
+        </div>
+    </el-dialog>
+    <!--推广认证-->
+    <el-dialog
+            title="推广认证"
+            :visible.sync="views.spreadVisible"
+            width="420px"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            height="260px">
+        <el-row :gutter="10">
+            <el-col :span="4"  class="form-label">
+                类别
+            </el-col>
+            <el-col :span="20" class="form-value">
+                <el-select v-model="currenSpread.emissaryType" placeholder="类别" @change="typeChange">
+                    <el-option v-for="item in meta.spreadType" :key="item.value" :label="item.label" :value="item.label"></el-option>
+                </el-select>
+            </el-col>
+        </el-row>
+        <el-row v-if="currenSpread.emissaryType " :gutter="10">
+            <el-col :span="4"  class="form-label">
+                大使
+            </el-col>
+            <el-col :span="20" class="form-value">
+                <cms-employee placeholder="员工"  :value.sync="currenSpread.spreadName" :query="employeeQuery" ></cms-employee>
+            </el-col>
+        </el-row>
+        <div slot="footer" class="dialog-footer right">
+            <el-button @click="views.spreadVisible = false">取 消</el-button>
+            <el-button type="primary" :disabled="!currenSpread.emissaryType || !currenSpread.spreadName || (currenSpread.spreadName && !currenSpread.spreadName.id)" @click="saveEmissaryType">保 存</el-button>
+        </div>
+    </el-dialog>
+    <!--设计师认证-->
+    <cms-sjsrz  :cmsflag.sync="views.setDesignDesign" :sjsdata.sync="information" @sjsdata="saveStylist"></cms-sjsrz>
+
+
+</div>
+<script src="/js/user/userManage.bundle.js"></script>

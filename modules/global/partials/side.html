@@ -1,0 +1,27 @@
+<div class="logo">
+    <img src="/images/logo_img.png" style="height: 34px">
+    <div><img src="/images/logo_text.png" style="margin: 13px 15px 13px auto; height: 34px;"></div>
+</div>
+
+<div class="nav">
+    {{#menus}}
+    <div class="menu {{#active}}active{{/active}} {{^empty children}}has-sub-menu{{/empty}}">
+        <a class="menu-item" href="{{url}}">
+            <text>
+                <i class="{{style}}"></i>
+            </text>
+            <p>{{name}}</p>
+        </a>
+        {{^empty children}}
+        <ul class="sub-menu">
+            {{#children}}
+            <li class="sub-menu-item {{#active}}active{{/active}}"><a href="{{url}}">{{name}}</a></li>
+            {{/children}}
+        </ul>
+        {{/empty}}
+    </div>
+    {{/menus}}
+</div>
+<div class="collapse-button">
+    <i class="el-icon-d-arrow-left"></i>
+</div>
