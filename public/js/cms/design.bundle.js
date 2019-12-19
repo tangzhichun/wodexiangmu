@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 322);
+/******/ 	return __webpack_require__(__webpack_require__.s = 324);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -72,7 +72,7 @@
 
 
 var bind = __webpack_require__(3);
-var isBuffer = __webpack_require__(14);
+var isBuffer = __webpack_require__(15);
 
 /*global toString:true*/
 
@@ -381,17 +381,15 @@ module.exports = {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__error__ = __webpack_require__(9);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 
 
 
-var err = {
+let err = {
     code: "810",
     message: '页面打开人员与当前操作人员不一致',
     success: false
@@ -402,8 +400,8 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.defaults.headers.common['X-Request
 __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.request.use(function (config) {
 
     //逐级遍历对象的属性，去除空格
-    var trim = function trim(obj) {
-        for (var key in obj) {
+    let trim = function (obj) {
+        for (let key in obj) {
             if (obj[key] || obj[key] == 0) {
                 if (typeof obj[key] === 'string') {
                     obj[key] = obj[key].trim();
@@ -412,7 +410,7 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.request.use(function 
                     if (obj[key] == '') {
                         delete obj[key];
                     }
-                } else if (_typeof(obj[key]) === 'object') {
+                } else if (typeof obj[key] === 'object') {
                     trim(obj[key]);
                 }
             } else {
@@ -422,7 +420,7 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.request.use(function 
     };
 
     //提交数据前，去除首尾空格
-    var data = config.params || config.data || {};
+    let data = config.params || config.data || {};
     trim(data);
 
     return config;
@@ -434,29 +432,29 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.request.use(function 
 __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.response.use(function (response) {
     //处理200返回码
     if (response && response.status == '200' && response.data) {
-        var result = response.data;
+        let result = response.data;
         if (result.success) {
             return result;
         } else {
             //处理全局错误
             if (result.code == '811' || result.code == '810') {
                 //取前端翻译后的错误码、或者后端直接抛出的错误消息，都没有值，则提示默认错误消息
-                var errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR[result.code] || result.message || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
+                let errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR[result.code] || result.message || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
                 if (Vue && Vue.prototype.$message) {
                     Vue.prototype.$message({
                         message: errorMsg,
                         type: 'error',
                         duration: 5000,
-                        onClose: function onClose() {
+                        onClose: function () {
                             window.location.href = '/logout';
                         }
                     });
                 }
             } else {
                 //取前端翻译后的错误码、或者后端直接抛出的错误消息，都没有值，则提示默认错误消息
-                var _errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR[result.code] || result.message || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
+                let errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR[result.code] || result.message || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
                 if (Vue && Vue.prototype.$message) {
-                    Vue.prototype.$message.error(_errorMsg);
+                    Vue.prototype.$message.error(errorMsg);
                 }
                 return result;
             }
@@ -466,7 +464,7 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.response.use(function
     }
 }, function (err) {
     //取前端翻译后的错误码，如没有值，则提示默认错误消息。不直接取后端直接抛出的错误消息，因为可能包含异常堆栈等敏感且不友好的提示信息。
-    var errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].NETWORK_ERROR[err.response && err.response.status] || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
+    let errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].NETWORK_ERROR[err.response && err.response.status] || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
     console.error(errorMsg + ': %o', {
         status: err.response && err.response.status,
         message: err.message,
@@ -488,8 +486,6 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.response.use(function
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -500,8 +496,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param prop      可以是'prop.prop[i].prop'的格式
      * @returns {*}
      */
-    getProp: function getProp(obj, prop) {
-        var self = this;
+    getProp: function (obj, prop) {
+        let self = this;
 
         if (!obj || !prop) {
             return obj;
@@ -526,23 +522,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         //数组取值
-        var i1 = prop.indexOf('[');
-        var i2 = prop.indexOf('.');
+        let i1 = prop.indexOf('[');
+        let i2 = prop.indexOf('.');
         if (i1 != -1 && i2 != -1 && i1 < i2 || i1 != -1 && i2 == -1) {
-            var p1 = prop.substr(0, i1);
-            var p2 = prop.substr(i1, prop.length);
-            var v1 = obj[p1];
+            let p1 = prop.substr(0, i1);
+            let p2 = prop.substr(i1, prop.length);
+            let v1 = obj[p1];
             if (!v1) {
                 return v1;
-            } else if ((typeof v1 === 'undefined' ? 'undefined' : _typeof(v1)) != 'object' || !(v1 instanceof Array)) {
+            } else if (typeof v1 != 'object' || !(v1 instanceof Array)) {
                 //非数组
                 return null;
             } else {
-                var _props = p2.split('.');
-                prop = _props.shift().replace('[', '').replace(']', '');
+                let props = p2.split('.');
+                prop = props.shift().replace('[', '').replace(']', '');
 
-                if (_props.length > 0) {
-                    return self.getProp(v1[prop], _props.join('.'));
+                if (props.length > 0) {
+                    return self.getProp(v1[prop], props.join('.'));
                 } else {
                     return v1[prop];
                 }
@@ -550,7 +546,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         //对象取值
-        var props = prop.split('.');
+        let props = prop.split('.');
         prop = props.shift();
 
         if (props.length > 0) {
@@ -567,8 +563,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param prop      值
      * @returns {*}
      */
-    setProp: function setProp(obj, prop, val) {
-        var self = this;
+    setProp: function (obj, prop, val) {
+        let self = this;
 
         if (!obj || !prop) {
             return obj;
@@ -590,11 +586,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             return;
         }
 
-        var props = prop.split('.');
+        let props = prop.split('.');
         prop = props.shift();
 
         if (props.length > 0) {
-            if (obj[prop] && _typeof(obj[prop]) == 'object' && !(obj[prop] instanceof Array)) {
+            if (obj[prop] && typeof obj[prop] == 'object' && !(obj[prop] instanceof Array)) {
                 self.setProp(obj[prop], props.join('.'), val);
             } else {
                 obj[prop] = {};
@@ -610,9 +606,30 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /***/ }),
 
 /***/ 12:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__(13);
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
 
 /***/ }),
 
@@ -711,7 +728,7 @@ module.exports = __webpack_require__(13);
         dsp: Object
 
     },
-    data: function data() {
+    data() {
         return {
             dsp: this.dsp,
             //下拉框数据..
@@ -725,67 +742,60 @@ module.exports = __webpack_require__(13);
             }
         };
     },
-
     methods: {
         //修改小程序             路径变空 参数变空
-        changeXcx: function changeXcx(e) {
+        changeXcx(e) {
             this.$emit('update:uniquecode', e);
             this.$emit('update:onclickurl', '');
             this.$emit('update:tagpram', '');
             this.$emit('update:onclickparams', '');
         },
-
         //修改参数路径
-        changePath: function changePath(e) {
+        changePath(e) {
             this.$emit('update:onclickurl', e);
             this.$emit('update:tagpram', '');
             this.$emit('update:onclickparams', '');
         },
-
         //修改参数 修改标签
-        changeTag: function changeTag(e) {
+        changeTag(e) {
             this.$emit('update:tagpram', e);
             this.$emit('update:onclickparams', e && e[1]);
         },
-
         //修改参数xcxManage
-        changeValue: function changeValue(e) {
+        changeValue(e) {
             this.$emit('update:onclickparams', e);
         },
-        getSelectList: function getSelectList(url, list) {
-            var _this = this;
-
+        getSelectList(url, list) {
             if (this.selectList[list].length < 1) {
-                __WEBPACK_IMPORTED_MODULE_0__scripts_module_axios__["default"].get(url).then(function (response) {
+                __WEBPACK_IMPORTED_MODULE_0__scripts_module_axios__["default"].get(url).then(response => {
                     if (Array.isArray(response.data)) {
-                        _this.selectList[list] = response.data;
+                        this.selectList[list] = response.data;
                     } else if (response.data && response.data.results && Array.isArray(response.data.results)) {
-                        _this.selectList[list] = response.data.results;
+                        this.selectList[list] = response.data.results;
                     }
-                }).catch(function (err) {
+                }).catch(err => {
                     console.error(err);
                 });
             }
         }
     },
-    mounted: function mounted() {
-        var self = this;
+    mounted() {
+        let self = this;
         //文章列表
         this.getSelectList('/api/wechat/admin/design/page/size?page=1&size=1000', 'design');
         //专题列表
         this.getSelectList('/api/wechat/admin/special/topic/list?page=1&size=100', 'topic');
         //标签-产品套餐
         this.getSelectList('/api/wechat/admin/sign/find?pageStart=1&pageSize=100&type=PACKAGE', 'package');
-        var xcx = self.dsp.xcx.find(function (el) {
+        let xcx = self.dsp.xcx.find(el => {
             return el.uniqueCode === self.uniquecode;
         });
         this.selectList.path = xcx && xcx.pages;
     },
-
     watch: {
-        'uniquecode': function uniquecode(val) {
-            var self = this;
-            var xcx = self.dsp.xcx.find(function (el) {
+        'uniquecode'(val) {
+            let self = this;
+            let xcx = self.dsp.xcx.find(el => {
                 return el.uniqueCode === val;
             });
             this.selectList.path = xcx && xcx.pages;
@@ -799,12 +809,19 @@ module.exports = __webpack_require__(13);
 /***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
+module.exports = __webpack_require__(14);
+
+/***/ }),
+
+/***/ 14:
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(3);
-var Axios = __webpack_require__(15);
+var Axios = __webpack_require__(16);
 var defaults = __webpack_require__(2);
 
 /**
@@ -839,14 +856,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(8);
-axios.CancelToken = __webpack_require__(29);
+axios.CancelToken = __webpack_require__(30);
 axios.isCancel = __webpack_require__(7);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(30);
+axios.spread = __webpack_require__(31);
 
 module.exports = axios;
 
@@ -856,7 +873,7 @@ module.exports.default = axios;
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /***/ (function(module, exports) {
 
 /*!
@@ -884,7 +901,7 @@ function isSlowBuffer (obj) {
 
 /***/ }),
 
-/***/ 15:
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -892,8 +909,8 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(2);
 var utils = __webpack_require__(0);
-var InterceptorManager = __webpack_require__(24);
-var dispatchRequest = __webpack_require__(25);
+var InterceptorManager = __webpack_require__(25);
+var dispatchRequest = __webpack_require__(26);
 
 /**
  * Create a new instance of Axios
@@ -971,37 +988,17 @@ module.exports = Axios;
 
 /***/ }),
 
-/***/ 16:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(0);
-
-module.exports = function normalizeHeaderName(headers, normalizedName) {
-  utils.forEach(headers, function processHeader(value, name) {
-    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
-      headers[normalizedName] = value;
-      delete headers[name];
-    }
-  });
-};
-
-
-/***/ }),
-
-/***/ 162:
+/***/ 163:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_script_index_0_xcx_page_skip_vue__ = __webpack_require__(124);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_13_7_3_vue_loader_lib_template_compiler_index_id_data_v_cb8f3f36_hasScoped_true_buble_transforms_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_template_index_0_xcx_page_skip_vue__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_13_7_3_vue_loader_lib_template_compiler_index_id_data_v_cb8f3f36_hasScoped_true_buble_transforms_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_template_index_0_xcx_page_skip_vue__ = __webpack_require__(166);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(163)
+  __webpack_require__(164)
 }
 var normalizeComponent = __webpack_require__(39)
 /* script */
@@ -1048,17 +1045,17 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 163:
+/***/ 164:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(164);
+var content = __webpack_require__(165);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(42)("6e2c798c", content, false, {});
+var update = __webpack_require__(41)("6e2c798c", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -1075,10 +1072,10 @@ if(false) {
 
 /***/ }),
 
-/***/ 164:
+/***/ 165:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(41)(false);
+exports = module.exports = __webpack_require__(40)(false);
 // imports
 
 
@@ -1090,7 +1087,7 @@ exports.push([module.i, "\n.key_item[data-v-cb8f3f36] {\n  overflow: hidden;\n  
 
 /***/ }),
 
-/***/ 165:
+/***/ 166:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1479,7 +1476,7 @@ if (false) {
 
 /***/ }),
 
-/***/ 166:
+/***/ 167:
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
@@ -6166,6 +6163,26 @@ return index;
 "use strict";
 
 
+var utils = __webpack_require__(0);
+
+module.exports = function normalizeHeaderName(headers, normalizedName) {
+  utils.forEach(headers, function processHeader(value, name) {
+    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
+      headers[normalizedName] = value;
+      delete headers[name];
+    }
+  });
+};
+
+
+/***/ }),
+
+/***/ 18:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var createError = __webpack_require__(6);
 
 /**
@@ -6194,7 +6211,7 @@ module.exports = function settle(resolve, reject, response) {
 
 /***/ }),
 
-/***/ 18:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6223,82 +6240,6 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 /***/ }),
 
-/***/ 19:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(0);
-
-function encode(val) {
-  return encodeURIComponent(val).
-    replace(/%40/gi, '@').
-    replace(/%3A/gi, ':').
-    replace(/%24/g, '$').
-    replace(/%2C/gi, ',').
-    replace(/%20/g, '+').
-    replace(/%5B/gi, '[').
-    replace(/%5D/gi, ']');
-}
-
-/**
- * Build a URL by appending params to the end
- *
- * @param {string} url The base of the url (e.g., http://www.google.com)
- * @param {object} [params] The params to be appended
- * @returns {string} The formatted url
- */
-module.exports = function buildURL(url, params, paramsSerializer) {
-  /*eslint no-param-reassign:0*/
-  if (!params) {
-    return url;
-  }
-
-  var serializedParams;
-  if (paramsSerializer) {
-    serializedParams = paramsSerializer(params);
-  } else if (utils.isURLSearchParams(params)) {
-    serializedParams = params.toString();
-  } else {
-    var parts = [];
-
-    utils.forEach(params, function serialize(val, key) {
-      if (val === null || typeof val === 'undefined') {
-        return;
-      }
-
-      if (utils.isArray(val)) {
-        key = key + '[]';
-      }
-
-      if (!utils.isArray(val)) {
-        val = [val];
-      }
-
-      utils.forEach(val, function parseValue(v) {
-        if (utils.isDate(v)) {
-          v = v.toISOString();
-        } else if (utils.isObject(v)) {
-          v = JSON.stringify(v);
-        }
-        parts.push(encode(key) + '=' + encode(v));
-      });
-    });
-
-    serializedParams = parts.join('&');
-  }
-
-  if (serializedParams) {
-    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
-  }
-
-  return url;
-};
-
-
-/***/ }),
-
 /***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6306,7 +6247,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(16);
+var normalizeHeaderName = __webpack_require__(17);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -6408,6 +6349,82 @@ module.exports = defaults;
 
 var utils = __webpack_require__(0);
 
+function encode(val) {
+  return encodeURIComponent(val).
+    replace(/%40/gi, '@').
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']');
+}
+
+/**
+ * Build a URL by appending params to the end
+ *
+ * @param {string} url The base of the url (e.g., http://www.google.com)
+ * @param {object} [params] The params to be appended
+ * @returns {string} The formatted url
+ */
+module.exports = function buildURL(url, params, paramsSerializer) {
+  /*eslint no-param-reassign:0*/
+  if (!params) {
+    return url;
+  }
+
+  var serializedParams;
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params);
+  } else if (utils.isURLSearchParams(params)) {
+    serializedParams = params.toString();
+  } else {
+    var parts = [];
+
+    utils.forEach(params, function serialize(val, key) {
+      if (val === null || typeof val === 'undefined') {
+        return;
+      }
+
+      if (utils.isArray(val)) {
+        key = key + '[]';
+      }
+
+      if (!utils.isArray(val)) {
+        val = [val];
+      }
+
+      utils.forEach(val, function parseValue(v) {
+        if (utils.isDate(v)) {
+          v = v.toISOString();
+        } else if (utils.isObject(v)) {
+          v = JSON.stringify(v);
+        }
+        parts.push(encode(key) + '=' + encode(v));
+      });
+    });
+
+    serializedParams = parts.join('&');
+  }
+
+  if (serializedParams) {
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+  }
+
+  return url;
+};
+
+
+/***/ }),
+
+/***/ 21:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(0);
+
 // Headers whose duplicates are ignored by node
 // c.f. https://nodejs.org/api/http.html#http_message_headers
 var ignoreDuplicateOf = [
@@ -6461,7 +6478,7 @@ module.exports = function parseHeaders(headers) {
 
 /***/ }),
 
-/***/ 21:
+/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6537,7 +6554,7 @@ module.exports = (
 
 /***/ }),
 
-/***/ 22:
+/***/ 23:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6581,7 +6598,7 @@ module.exports = btoa;
 
 /***/ }),
 
-/***/ 23:
+/***/ 24:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6642,7 +6659,7 @@ module.exports = (
 
 /***/ }),
 
-/***/ 24:
+/***/ 25:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6702,18 +6719,18 @@ module.exports = InterceptorManager;
 
 /***/ }),
 
-/***/ 25:
+/***/ 26:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var transformData = __webpack_require__(26);
+var transformData = __webpack_require__(27);
 var isCancel = __webpack_require__(7);
 var defaults = __webpack_require__(2);
-var isAbsoluteURL = __webpack_require__(27);
-var combineURLs = __webpack_require__(28);
+var isAbsoluteURL = __webpack_require__(28);
+var combineURLs = __webpack_require__(29);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -6796,7 +6813,7 @@ module.exports = function dispatchRequest(config) {
 
 /***/ }),
 
-/***/ 26:
+/***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6824,7 +6841,7 @@ module.exports = function transformData(data, headers, fns) {
 
 /***/ }),
 
-/***/ 27:
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6846,7 +6863,7 @@ module.exports = function isAbsoluteURL(url) {
 
 /***/ }),
 
-/***/ 28:
+/***/ 29:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6868,7 +6885,26 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 /***/ }),
 
-/***/ 29:
+/***/ 3:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
+
+/***/ }),
+
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6933,26 +6969,7 @@ module.exports = CancelToken;
 
 /***/ }),
 
-/***/ 3:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function bind(fn, thisArg) {
-  return function wrap() {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-    return fn.apply(thisArg, args);
-  };
-};
-
-
-/***/ }),
-
-/***/ 30:
+/***/ 31:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6987,84 +7004,32 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
-/***/ 31:
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
 /***/ 32:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(11);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 
 
-var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
+let bindFieldValidator = function (el, binding, vnode) {
     // 解析动态表达式
-    var prop = binding.expression;
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = Object.keys(vnode.data.attrs)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var key = _step.value;
-
-            if (key && key.startsWith('dsp-index-')) {
-                prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
-            }
-        }
-
-        //binding.expression.replace(/\[[a-zA-Z0-9]*]/g, '.');
-        // let ruleProp = binding.expression.replace(/\[/g, '.').replace(/]/g, '');
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
+    let prop = binding.expression;
+    for (let key of Object.keys(vnode.data.attrs)) {
+        if (key && key.startsWith('dsp-index-')) {
+            prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
         }
     }
 
-    var ruleProp = binding.expression;
+    //binding.expression.replace(/\[[a-zA-Z0-9]*]/g, '.');
+    // let ruleProp = binding.expression.replace(/\[/g, '.').replace(/]/g, '');
+    let ruleProp = binding.expression;
 
     // 解析校验规则
-    var rules = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.$validator.rule');
-    var rule = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(rules, ruleProp);
+    let rules = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.$validator.rule');
+    let rule = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(rules, ruleProp);
     if (!rule) {
         //没有规则，不做校验
         console.warn('can not find validate rule config for ' + ruleProp + ' in $validator.rule, it will not be verified. ');
@@ -7076,10 +7041,10 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
     }
 
     // 字段校验
-    var fieldValidator = function fieldValidator(value) {
-        var val = value || __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.' + prop);
+    let fieldValidator = function (value) {
+        let val = value || __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.' + prop);
 
-        return Promise.resolve({ $prop: prop }).then(function (error) {
+        return Promise.resolve({ $prop: prop }).then(error => {
             if (rule.required) {
                 if (!val) {
                     error.required = true;
@@ -7087,14 +7052,14 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
                     error.required = true;
                 } else if (val instanceof Array && val.length == 0) {
                     error.required = true;
-                } else if ((typeof val === 'undefined' ? 'undefined' : _typeof(val)) == 'object' && Object.keys(val).length == 0) {
+                } else if (typeof val == 'object' && Object.keys(val).length == 0) {
                     error.required = true;
                 } else {
                     error.required = false;
                 }
             }
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.minLength) {
                 if (!val) {
                     error.minLength = false;
@@ -7108,7 +7073,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.min || rule.min === 0) {
                 if (!val) {
                     error.min = false;
@@ -7124,7 +7089,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.max) {
                 if (!val) {
                     error.max = false;
@@ -7140,9 +7105,9 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.remote && typeof rule.remote == 'function') {
-                return rule.remote(vnode.context.$data, val).then(function (pass) {
+                return rule.remote(vnode.context.$data, val).then(pass => {
                     if (!pass) {
                         error.remote = true;
                     } else {
@@ -7154,9 +7119,9 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.customize && typeof rule.customize == 'function') {
-                return rule.customize(vnode.context.$data, val).then(function (pass) {
+                return rule.customize(vnode.context.$data, val).then(pass => {
                     if (!pass) {
                         error.customize = true;
                     } else {
@@ -7168,12 +7133,8 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
-            error.$pass = Object.keys(error).map(function (key) {
-                return error[key];
-            }).filter(function (v) {
-                return v == true;
-            }).length == 0;
+        }).then(error => {
+            error.$pass = Object.keys(error).map(key => error[key]).filter(v => v == true).length == 0;
 
             if (!error.$pass) {
                 // 未通过校验
@@ -7190,7 +7151,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             /* 添加CSS */
 
             if (!el.classList.contains('form-validate-field')) {
@@ -7268,7 +7229,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
     }
 
     // 字段监听
-    var unwatch = vnode.context.$watch(prop, function (newVal, oldVal) {
+    let unwatch = vnode.context.$watch(prop, function (newVal, oldVal) {
         console.debug(prop + ' value changed from %o to: %o', oldVal, newVal);
         fieldValidator(newVal);
     });
@@ -7287,38 +7248,16 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
     console.debug('validator: %o', vnode.context.$data.$validator);
 };
 
-var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
+let unbindFieldValidator = function (el, binding, vnode) {
     // 解析动态表达式
-    var prop = binding.expression;
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
-
-    try {
-        for (var _iterator2 = Object.keys(vnode.data.attrs)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var key = _step2.value;
-
-            if (key && key.startsWith('dsp-index-')) {
-                prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
-            }
-        }
-
-        // 从校验错误中移除
-    } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
-            }
-        } finally {
-            if (_didIteratorError2) {
-                throw _iteratorError2;
-            }
+    let prop = binding.expression;
+    for (let key of Object.keys(vnode.data.attrs)) {
+        if (key && key.startsWith('dsp-index-')) {
+            prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
         }
     }
 
+    // 从校验错误中移除
     if (vnode.context.$data.$validator.error) {
         delete vnode.context.$data.$validator.error[prop];
         console.debug('error removed:' + prop);
@@ -7344,11 +7283,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //只允许输入整数
     integer: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
 
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
@@ -7365,11 +7304,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
                     // let regExp =  /^0{1}$|^[1-9]{1}\d*$/;
-                    var regExp = /^0{1}$|^[0-9]{1}\d*$/;
+                    let regExp = /^0{1}$|^[0-9]{1}\d*$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的整数, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -7395,10 +7334,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入6位数字验证码
     captcha: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
+                let keyCode = $event.keyCode;
 
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
@@ -7410,10 +7349,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^\d{0,6}$/;
+                    let regExp = /^\d{0,6}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的验证码, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -7439,12 +7378,12 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入整数或浮点数，小数点后保留2位
     number: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
 
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
 
@@ -7477,10 +7416,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^0{1}$|^0\.\d{0,2}$|^[1-9]{1}\d*\.?\d{0,2}$/;
+                    let regExp = /^0{1}$|^0\.\d{0,2}$|^[1-9]{1}\d*\.?\d{0,2}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的数值, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -7506,11 +7445,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //座机电话和电话
     telephone: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
 
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
@@ -7527,11 +7466,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
                     // let regExp =  /^0{1}$|^[1-9]{1}\d*$/;
-                    var regExp = /^[\d-]*$/;
+                    let regExp = /^[\d-]*$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的整数, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -7557,12 +7496,12 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入整数或浮点数，小数点后保留4位,用于折扣的输入框
     discount: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
 
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
 
@@ -7595,10 +7534,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^0{1}$|^0\.\d{0,4}$|^1{1}$/;
+                    let regExp = /^0{1}$|^0\.\d{0,4}$|^1{1}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的数值, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -7624,11 +7563,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入手机号码
     mobile: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
                 } else {
@@ -7654,10 +7593,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^1{1}([3|4|5|6|7|8|9]{1}\d{0,9}){0,1}$/;
+                    let regExp = /^1{1}([3|4|5|6|7|8|9]{1}\d{0,9}){0,1}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的手机号码, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -7683,10 +7622,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //只允许输入数字和字母
     code: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
+                let keyCode = $event.keyCode;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
                 } else {
@@ -7697,10 +7636,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^[0-9a-zA-Z]*$/;
+                    let regExp = /^[0-9a-zA-Z]*$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的编码, 还原到上次有效值 %o', newVal, oldVal);
                         __WEBPACK_IMPORTED_MODULE_0__utils__["default"].setProp(vnode.context, '$data.' + prop, oldVal);
@@ -7714,18 +7653,18 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //不允许空格
     trim: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var key = $event.key;
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let key = $event.key;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 32) {
                     $event.preventDefault();
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
                     __WEBPACK_IMPORTED_MODULE_0__utils__["default"].setProp(vnode.context, '$data.' + prop, newVal && newVal.trim() || oldVal);
@@ -7742,7 +7681,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
         //     console.debug('bind: %o', binding.expression);
         //     console.debug('添加校验: %o', binding.expression);
         // },
-        inserted: function inserted(el, binding, vnode) {
+        inserted: function (el, binding, vnode) {
             console.debug('inserted 添加校验: %o', binding.expression);
             bindFieldValidator(el, binding, vnode);
         },
@@ -7753,7 +7692,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
         //     console.debug('componentUpdated 变更校验: %o', binding.expression);
         //     bindFieldValidator(el, binding, vnode);
         // },
-        unbind: function unbind(el, binding, vnode) {
+        unbind: function (el, binding, vnode) {
             console.debug('unbind 取消校验: %o', binding.expression);
             unbindFieldValidator(el, binding, vnode);
         }
@@ -7761,7 +7700,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //表单校验
     validateForm: {
-        bind: function bind(el, binding, vnode) {
+        bind: function (el, binding, vnode) {
             console.debug('form bind');
 
             // 监听器
@@ -7774,7 +7713,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
             // 取消监听
             vnode.context.$data.$validator.unwatch = function () {
                 if (vnode.context.$data.$validator.watcher) {
-                    for (var key in vnode.context.$data.$validator.watcher) {
+                    for (let key in vnode.context.$data.$validator.watcher) {
                         vnode.context.$data.$validator.watcher[key]();
                         delete vnode.context.$data.$validator.watcher[key];
                     }
@@ -7783,46 +7722,25 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
             // 表单校验
             vnode.context.$data.$validator.validateAll = function (group) {
 
-                return Promise.resolve().then(function () {
-                    var validator = vnode.context.$data.$validator.validator;
-                    var promises = [];
+                return Promise.resolve().then(() => {
+                    let validator = vnode.context.$data.$validator.validator;
+                    let promises = [];
 
-                    var _iteratorNormalCompletion3 = true;
-                    var _didIteratorError3 = false;
-                    var _iteratorError3 = undefined;
-
-                    try {
-                        for (var _iterator3 = Object.keys(validator)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                            var key = _step3.value;
-
-                            if (group) {
-                                if (key.startsWith(group + '.')) {
-                                    //按组检验
-                                    promises.push(validator[key]());
-                                }
-                            } else {
-                                //逐个遍历并校验
+                    for (let key of Object.keys(validator)) {
+                        if (group) {
+                            if (key.startsWith(group + '.')) {
+                                //按组检验
                                 promises.push(validator[key]());
                             }
-                        }
-                    } catch (err) {
-                        _didIteratorError3 = true;
-                        _iteratorError3 = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                                _iterator3.return();
-                            }
-                        } finally {
-                            if (_didIteratorError3) {
-                                throw _iteratorError3;
-                            }
+                        } else {
+                            //逐个遍历并校验
+                            promises.push(validator[key]());
                         }
                     }
 
                     return Promise.all(promises);
-                }).then(function () {
-                    var error = vnode.context.$data.$validator.error;
+                }).then(() => {
+                    let error = vnode.context.$data.$validator.error;
                     return !error || Object.keys(error).length == 0;
                 });
             };
@@ -7832,34 +7750,34 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 //清空错误消息
                 vnode.context.$data.$validator.error = {};
 
-                el.querySelectorAll('.is-error').forEach(function (i) {
+                el.querySelectorAll('.is-error').forEach(i => {
                     i.classList.remove('is-error');
                 });
 
-                el.querySelectorAll('.err-required').forEach(function (i) {
+                el.querySelectorAll('.err-required').forEach(i => {
                     i.classList.remove('err-required');
                 });
 
-                el.querySelectorAll('.err-minlength').forEach(function (i) {
+                el.querySelectorAll('.err-minlength').forEach(i => {
                     i.classList.remove('err-minlength');
                 });
 
-                el.querySelectorAll('.err-min').forEach(function (i) {
+                el.querySelectorAll('.err-min').forEach(i => {
                     i.classList.remove('err-min');
                 });
 
-                el.querySelectorAll('.err-remote').forEach(function (i) {
+                el.querySelectorAll('.err-remote').forEach(i => {
                     i.classList.remove('err-remote');
                 });
 
-                el.querySelectorAll('.err-customize').forEach(function (i) {
+                el.querySelectorAll('.err-customize').forEach(i => {
                     i.classList.remove('err-customize');
                 });
             };
 
             console.debug(vnode.context.$data.$validator);
         },
-        unbind: function unbind(el, binding, vnode) {
+        unbind: function (el, binding, vnode) {
             console.debug('form unbind');
 
             vnode.context.$data.$validator.unwatch();
@@ -7879,9 +7797,9 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //折叠面板
     collapsable: {
-        bind: function bind(el, binding, vnode) {
-            var target = el.getAttribute('target');
-            var collapsed = el.getAttribute('collapsed') == 'true';
+        bind: function (el, binding, vnode) {
+            let target = el.getAttribute('target');
+            let collapsed = el.getAttribute('collapsed') == 'true';
             if (!el.classList.contains('dsp-panel-collapsable')) {
                 el.classList.add('dsp-panel-collapsable');
             }
@@ -7889,7 +7807,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 el.classList.add('collapsed');
             }
             el.addEventListener("click", function () {
-                var targetDom = document.querySelector(target);
+                let targetDom = document.querySelector(target);
                 if (targetDom) {
                     if (targetDom.classList.contains('dsp-panel-collapsed__content')) {
                         targetDom.classList.remove('dsp-panel-collapsed__content');
@@ -7907,45 +7825,41 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //图片拖拽
     imgdrag: {
-        bind: function bind(el, binding, vnode) {
+        bind: function (el, binding, vnode) {
 
-            var dialogHeaderEl = el.querySelector('.dsp-img-header');
-            var dragDom = el.querySelector('.dsp-img-preview');
-            var sty = function () {
+            const dialogHeaderEl = el.querySelector('.dsp-img-header');
+            const dragDom = el.querySelector('.dsp-img-preview');
+            const sty = function () {
                 if (window.document.currentStyle) {
-                    return function (dom, attr) {
-                        return dom.currentStyle[attr];
-                    };
+                    return (dom, attr) => dom.currentStyle[attr];
                 } else {
-                    return function (dom, attr) {
-                        return getComputedStyle(dom, false)[attr];
-                    };
+                    return (dom, attr) => getComputedStyle(dom, false)[attr];
                 }
             }();
-            dialogHeaderEl.onmousedown = function (e) {
+            dialogHeaderEl.onmousedown = e => {
                 // 鼠标按下，计算当前元素距离可视区的距离
-                var disX = e.clientX - dialogHeaderEl.offsetLeft;
-                var disY = e.clientY - dialogHeaderEl.offsetTop;
+                const disX = e.clientX - dialogHeaderEl.offsetLeft;
+                const disY = e.clientY - dialogHeaderEl.offsetTop;
 
                 // body当前宽度
-                var screenWidth = document.body.clientWidth;
+                const screenWidth = document.body.clientWidth;
                 // 可见区域高度(应为body高度，可某些环境下无法获取)
-                var screenHeight = document.documentElement.clientHeight;
+                const screenHeight = document.documentElement.clientHeight;
 
                 // 宽度
-                var dragDomWidth = dragDom.offsetWidth;
+                const dragDomWidth = dragDom.offsetWidth;
                 // 高度
-                var dragDomheight = dragDom.offsetHeight;
+                const dragDomheight = dragDom.offsetHeight;
 
-                var minDragDomLeft = dragDom.offsetLeft;
-                var maxDragDomLeft = screenWidth - dragDom.offsetLeft - dragDomWidth;
+                const minDragDomLeft = dragDom.offsetLeft;
+                const maxDragDomLeft = screenWidth - dragDom.offsetLeft - dragDomWidth;
 
-                var minDragDomTop = dragDom.offsetTop;
-                var maxDragDomTop = screenHeight - dragDom.offsetTop - dragDomheight;
+                const minDragDomTop = dragDom.offsetTop;
+                const maxDragDomTop = screenHeight - dragDom.offsetTop - dragDomheight;
 
                 // 获取到的值带px 正则匹配替换
-                var styL = sty(dragDom, 'left');
-                var styT = sty(dragDom, 'top');
+                let styL = sty(dragDom, 'left');
+                let styT = sty(dragDom, 'top');
 
                 if (styL.includes('%')) {
                     styL = +document.body.clientWidth * (+styL.replace(/%/g, '') / 100);
@@ -7956,8 +7870,8 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
                 document.onmousemove = function (e) {
                     // 通过事件委托，计算移动的距离
-                    var left = e.clientX - disX;
-                    var top = e.clientY - disY;
+                    let left = e.clientX - disX;
+                    let top = e.clientY - disY;
                     // 边界处理
                     if (-left > minDragDomLeft) {
                         left = -minDragDomLeft;
@@ -7970,7 +7884,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                         top = maxDragDomTop;
                     }
                     // 移动当前元素
-                    dragDom.style.cssText += ';left:' + (left + styL) + 'px;top:' + (top + styT) + 'px;';
+                    dragDom.style.cssText += `;left:${left + styL}px;top:${top + styT}px;`;
                 };
                 document.onmouseup = function (e) {
                     document.onmousemove = null;
@@ -7982,12 +7896,12 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入0-100的整数或者小数，小数点后保留4位,用于服务费返款费率的输入框
     percentRate: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
 
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
 
@@ -8020,10 +7934,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^(\d|[1-9]\d|100)(\.\d{0,4})?$/;
+                    let regExp = /^(\d|[1-9]\d|100)(\.\d{0,4})?$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的数值, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -8050,20 +7964,18 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
 /***/ }),
 
-/***/ 322:
+/***/ 324:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_select_dsp_emp_vue__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ui_dsp_phone_vue__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_select_dsp_emp_vue__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ui_dsp_phone_vue__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__scripts_module_enums__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_ui_dsp_cropper_vue__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_ui_xcx_page_skip_vue__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_ui_dsp_cropper_vue__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_ui_xcx_page_skip_vue__ = __webpack_require__(163);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__ = __webpack_require__(10);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 
@@ -8074,7 +7986,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 // 引用
-var E = __webpack_require__(166); // 使用 npm 安装
+var E = __webpack_require__(167); // 使用 npm 安装
 // 创建编辑器
 var editor;
 var imgUrl;
@@ -8133,22 +8045,22 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
                 information: {
                     uniqueNo: {
                         required: true,
-                        remote: function remote($data, value) {
+                        remote: function ($data, value) {
                             if (!value || value.length < 5) {
                                 return Promise.resolve(true);
                             }
 
-                            var url = '/api/wechat-admin-service/wechat/admin/design/check/uniqueNo/repeat?uniqueNo=' + value;
+                            let url = `/api/wechat-admin-service/wechat/admin/design/check/uniqueNo/repeat?uniqueNo=${value}`;
                             if ($data.information && $data.information.id) {
                                 url += '&id=' + $data.information.id;
                             }
-                            return __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].get(url).then(function (response) {
+                            return __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].get(url).then(response => {
                                 //返回false，表示验证未通过；返回true，表示验证通过。
                                 return response && response.success && !response.data;
                             });
                         },
-                        customize: function customize($data, value) {
-                            var pass = true;
+                        customize: function ($data, value) {
+                            let pass = true;
                             if (!value || value.length < 5) {
                                 pass = false;
                             }
@@ -8260,86 +8172,61 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
         }
     },
     methods: {
-        contentFormat: function contentFormat(htm) {
+        contentFormat(htm) {
             //特殊字符
-            var regeX = new RegExp('spanyes\';', 'gi');
+            const regeX = new RegExp('spanyes\';', 'gi');
             htm = htm.replace(regeX, 'span ');
             htm = htm.replace(/<style(([\s\S])*?)<\/style>/g, '');
-            var reg = /<!--\[if(?:(?!<!\[endif\]-->)[\s\S])*<!\[endif\]-->/gi;
+            const reg = /<!--\[if(?:(?!<!\[endif\]-->)[\s\S])*<!\[endif\]-->/gi;
             htm = htm.replace(reg, '');
             //font ==> span
-            var fontEnd = new RegExp('/font', 'gi');
+            const fontEnd = new RegExp('/font', 'gi');
             htm = htm.replace(fontEnd, '/span');
-            var fontStart = new RegExp('<font', 'gi');
+            const fontStart = new RegExp('<font', 'gi');
             htm = htm.replace(fontStart, '<span');
             //phelvetica ==》 div
-            var phelveticaEnd = new RegExp('</phelvetica', 'gi');
+            const phelveticaEnd = new RegExp('</phelvetica', 'gi');
             htm = htm.replace(phelveticaEnd, '</div');
-            var phelveticaStart = new RegExp('<phelvetica', 'gi');
+            const phelveticaStart = new RegExp('<phelvetica', 'gi');
             htm = htm.replace(phelveticaStart, '<div');
             //sectionhelvetica ==》 div
-            var sectionhelveticaStart = new RegExp('<sectionhelvetica', 'gi');
+            const sectionhelveticaStart = new RegExp('<sectionhelvetica', 'gi');
             htm = htm.replace(sectionhelveticaStart, '<div');
-            var sectionhelveticaEnd = new RegExp('</sectionhelvetica', 'gi');
+            const sectionhelveticaEnd = new RegExp('</sectionhelvetica', 'gi');
             htm = htm.replace(sectionhelveticaEnd, '</div');
             //一级标题H2
-            var h1Start = new RegExp('<H2', 'gi');
+            const h1Start = new RegExp('<H2', 'gi');
             htm = htm.replace(h1Start, '<h2 style="font-size :18px;color:#303133;font-weight: bold;margin:20px 0;"');
             //二级标题H3
-            var h2Start = new RegExp('<H3', 'gi');
+            const h2Start = new RegExp('<H3', 'gi');
             htm = htm.replace(h2Start, '<h3 style="font-size :16px;color:#303133;font-weight: bold;margin:14px 0;"');
             //三级标题H4
-            var h3Start = new RegExp('<H4', 'gi');
+            const h3Start = new RegExp('<H4', 'gi');
             htm = htm.replace(h3Start, '<h4 style="font-size :14px;color:#303133;font-weight: bold;margin:10px 0;"');
             htm = htm.replaceAll('<p></p>', '');
             return htm;
         },
-
         //处理方案保存数据
-        processing: function processing(e) {
-            var _this = this;
-
-            var ele = JSON.parse(JSON.stringify(e));
+        processing(e) {
+            let ele = JSON.parse(JSON.stringify(e));
             if (ele.contentType === 'dom') {
-                var _iteratorNormalCompletion = true;
-                var _didIteratorError = false;
-                var _iteratorError = undefined;
-
-                try {
-                    for (var _iterator = ele.paragraphs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var el = _step.value;
-
-                        if (!el.content) {
-                            this.$message.error('有dom内容片段为空，请填写正确内容');
-                            return false;
-                        } else if (el.elementType === 'DDD_PIC' && (!el.content || !el.qjtUrl)) {
-                            this.$message.error('有dom内容3D全景缺少内容，请填写正确内容');
-                            return false;
-                        } else if (el.elementType === 'NET_PIC' && !(el.content.indexOf('https:') === 0 || el.content.indexOf('http:') === 0)) {
-                            this.$message.error('有dom内容网络图片格式不正确，请填写正确内容');
-                            return false;
-                        }
-                    }
-                } catch (err) {
-                    _didIteratorError = true;
-                    _iteratorError = err;
-                } finally {
-                    try {
-                        if (!_iteratorNormalCompletion && _iterator.return) {
-                            _iterator.return();
-                        }
-                    } finally {
-                        if (_didIteratorError) {
-                            throw _iteratorError;
-                        }
+                for (let el of ele.paragraphs) {
+                    if (!el.content) {
+                        this.$message.error('有dom内容片段为空，请填写正确内容');
+                        return false;
+                    } else if (el.elementType === 'DDD_PIC' && (!el.content || !el.qjtUrl)) {
+                        this.$message.error('有dom内容3D全景缺少内容，请填写正确内容');
+                        return false;
+                    } else if (el.elementType === 'NET_PIC' && !(el.content.indexOf('https:') === 0 || el.content.indexOf('http:') === 0)) {
+                        this.$message.error('有dom内容网络图片格式不正确，请填写正确内容');
+                        return false;
                     }
                 }
-
-                ele.imageNum = ele.paragraphs.filter(function (el) {
+                ele.imageNum = ele.paragraphs.filter(el => {
                     return ['NET_PIC', 'DDD_PIC', 'GENERAL_PIC'].includes(el.elementType) && el.content;
                 }).length;
             } else {
-                var con = editor.txt.html();
+                let con = editor.txt.html();
                 ele.wechatArticle = {};
                 ele.wechatArticle.title = ele.title;
                 ele.wechatArticle.content = self.contentFormat(con);
@@ -8360,7 +8247,7 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
             if (ele.wechatArticle && ele.wechatArticle.timeCreated) {
                 delete ele.wechatArticle.timeCreated;
             }
-            Object.keys(ele).forEach(function (i) {
+            Object.keys(ele).forEach(i => {
                 if (!ele[i]) {
                     delete ele[i];
                 }
@@ -8379,8 +8266,8 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
             }
             //　没有id 是修改
             if (!ele.id && ele.signs && Array.isArray(ele.signs)) {
-                ele.signs = ele.signs.map(function (el) {
-                    var obj = {
+                ele.signs = ele.signs.map(el => {
+                    let obj = {
                         "signType": el[0],
                         "signId": el[1]
                     };
@@ -8389,41 +8276,41 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
             }
             delete ele.categoryArr;
             if (ele.btnOnclickParams) {
-                ele.btnOnclickParams = DSP.tags.tags.find(function (el) {
-                    return el.id === _this.information.btnOnclickParams;
+                ele.btnOnclickParams = DSP.tags.tags.find(el => {
+                    return el.id === this.information.btnOnclickParams;
                 }).code;
             }
             return ele;
         },
-        addSave: function addSave() {
-            var self = this;
+        addSave() {
+            let self = this;
             if (DSP.type === 'edit') {
                 this.editSave();
                 return;
             }
-            this.$data.$validator.validateAll().then(function (pass) {
+            this.$data.$validator.validateAll().then(pass => {
                 if (pass) {
-                    var obj = self.processing(self.information);
+                    let obj = self.processing(self.information);
                     if (!obj) {
                         return;
                     }
                     self.saveLoading = true;
-                    __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].post('/api/wechat/admin/design', obj).then(function (response) {
+                    __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].post(`/api/wechat/admin/design`, obj).then(response => {
                         if (response.success) {
                             if (self.information && self.information.showLevel !== 'PUBLIC') {
-                                __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].put('/api/wechat/admin/design/publish?ids=' + self.information.id);
+                                __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].put(`/api/wechat/admin/design/publish?ids=${self.information.id}`);
                             }
                             self.$message({
                                 showClose: true,
                                 message: '保存成功方案成功',
                                 type: 'success'
                             });
-                            window.location.href = '/wechat/wechatList#' + window.location.hash;
+                            window.location.href = `/wechat/wechatList#${window.location.hash}`;
                             self.saveLoading = false;
                         } else {
                             self.saveLoading = false;
                         }
-                    }).catch(function (error) {
+                    }).catch(error => {
                         self.saveLoading = false;
                         console.error('error: %o', error);
                     });
@@ -8432,32 +8319,31 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
                 }
             });
         },
-
         //修改保存
-        editSave: function editSave() {
-            this.$data.$validator.validateAll().then(function (pass) {
+        editSave() {
+            this.$data.$validator.validateAll().then(pass => {
                 if (pass) {
-                    var obj = self.processing(self.information);
+                    let obj = self.processing(self.information);
                     if (!obj) {
                         return;
                     }
                     self.saveLoading = true;
-                    __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].put('/api/wechat-admin-service/wechat/admin/design', obj).then(function (response) {
+                    __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].put(`/api/wechat-admin-service/wechat/admin/design`, obj).then(response => {
                         if (response.success) {
                             if (self.information && self.information.showLevel !== 'PUBLIC') {
-                                __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].put('/api/wechat/admin/design/publish?ids=' + self.information.id);
+                                __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].put(`/api/wechat/admin/design/publish?ids=${self.information.id}`);
                             }
                             self.$message({
                                 showClose: true,
                                 message: '修改方案成功',
                                 type: 'success'
                             });
-                            window.location.href = '/wechat/wechatList#' + window.location.hash;
+                            window.location.href = `/wechat/wechatList#${window.location.hash}`;
                             self.saveLoading = false;
                         } else {
                             self.saveLoading = false;
                         }
-                    }).catch(function (error) {
+                    }).catch(error => {
                         self.saveLoading = false;
                         console.error('error: %o', error);
                     });
@@ -8466,12 +8352,9 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
                 }
             });
         },
-
         //获取编辑数据并赋值
-        getEdit: function getEdit(e) {
-            var _this2 = this;
-
-            __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].get('/api/wechat/admin/design/detail?id=' + e).then(function (res) {
+        getEdit(e) {
+            __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].get(`/api/wechat/admin/design/detail?id=${e}`).then(res => {
                 if (res.success) {
                     self.editInformation = JSON.parse(JSON.stringify(res.data));
                     self.information = JSON.parse(JSON.stringify(res.data));
@@ -8483,46 +8366,46 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
                     }
                     //新增模式
                     if (!self.information.paragraphs) {
-                        _this2.$set(self.information, 'paragraphs', []);
+                        this.$set(self.information, 'paragraphs', []);
                     }
 
                     if (!self.information.wechatImage) {
                         self.information.wechatImage = {};
-                        _this2.$set(self.information.wechatImage, 'ext', null);
-                        _this2.$set(self.information.wechatImage, 'imageMd5', null);
-                        _this2.$set(self.information.wechatImage, 'imageUrl', null);
-                        _this2.$set(self.information.wechatImage, 'name', null);
-                        _this2.$set(self.information.wechatImage, 'reduceUrl', null);
+                        this.$set(self.information.wechatImage, 'ext', null);
+                        this.$set(self.information.wechatImage, 'imageMd5', null);
+                        this.$set(self.information.wechatImage, 'imageUrl', null);
+                        this.$set(self.information.wechatImage, 'name', null);
+                        this.$set(self.information.wechatImage, 'reduceUrl', null);
                     }
                     if (!self.information.posterImage) {
                         self.information.posterImage = {};
-                        _this2.$set(self.information.posterImage, 'ext', null);
-                        _this2.$set(self.information.posterImage, 'imageMd5', null);
-                        _this2.$set(self.information.posterImage, 'imageUrl', null);
-                        _this2.$set(self.information.posterImage, 'name', null);
-                        _this2.$set(self.information.posterImage, 'reduceUrl', null);
+                        this.$set(self.information.posterImage, 'ext', null);
+                        this.$set(self.information.posterImage, 'imageMd5', null);
+                        this.$set(self.information.posterImage, 'imageUrl', null);
+                        this.$set(self.information.posterImage, 'name', null);
+                        this.$set(self.information.posterImage, 'reduceUrl', null);
                     }
                     if (!self.information.bindingSignResultEntities) {
-                        _this2.$set(_this2.information, 'signs', []);
+                        this.$set(this.information, 'signs', []);
                     } else {
-                        var ar = JSON.parse(JSON.stringify(self.information.bindingSignResultEntities));
-                        var arr = ar.map(function (el) {
+                        let ar = JSON.parse(JSON.stringify(self.information.bindingSignResultEntities));
+                        let arr = ar.map(el => {
                             return [el.signType, el.signId];
                         });
-                        _this2.$set(_this2.information, 'signs', arr);
+                        this.$set(this.information, 'signs', arr);
                     }
                     if (!self.information.btnOnclickUrl) {
-                        _this2.$set(_this2.information, 'btnOnclickUrl', null);
+                        this.$set(this.information, 'btnOnclickUrl', null);
                     }
                     if (!self.information.btnOnclickParams) {
-                        _this2.$set(_this2.information, 'btnOnclickParams', null);
+                        this.$set(this.information, 'btnOnclickParams', null);
                     }
                     self.informationData = JSON.parse(JSON.stringify(self.information));
                     // designerType
                     if (!self.informationData.designer) {
-                        self.$set(_this2.information, 'designerType', 'rest');
+                        self.$set(this.information, 'designerType', 'rest');
                     }
-                    var categoryArr = self.information.kind.split('.');
+                    let categoryArr = self.information.kind.split('.');
                     self.decoded = {
                         column: {
                             value: self.information.kind,
@@ -8534,25 +8417,24 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
                         }
                     };
                     if (categoryArr.length > 1) {
-                        _this2.information.categoryArr = [categoryArr[0], self.information.kind];
+                        this.information.categoryArr = [categoryArr[0], self.information.kind];
                     } else {
-                        _this2.information.categoryArr = [categoryArr[0]];
+                        this.information.categoryArr = [categoryArr[0]];
                     }
                     // 链接转跳标签
-                    if (_this2.information.btnOnclickUrl && _this2.information.btnOnclickUrl === '/pages/design/listBytag/main' && _this2.information.btnOnclickParams) {
-                        var tagobj = DSP.tags.tags.find(function (el) {
-                            return el.code === _this2.information.btnOnclickParams;
+                    if (this.information.btnOnclickUrl && this.information.btnOnclickUrl === '/pages/design/listBytag/main' && this.information.btnOnclickParams) {
+                        let tagobj = DSP.tags.tags.find(el => {
+                            return el.code === this.information.btnOnclickParams;
                         });
-                        _this2.information.btnTag = [tagobj.type, tagobj.id];
+                        this.information.btnTag = [tagobj.type, tagobj.id];
                     }
 
                     self.changeTemplateId('first');
                 }
             });
         },
-
         //更换栏目
-        onCategoryChanged: function onCategoryChanged(e) {
+        onCategoryChanged(e) {
             this.information.topicId = null;
             this.information.kind = e && e[1] || e[0];
             this.decoded.column.parent = e[0];
@@ -8569,10 +8451,9 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
             this.information.designerName = null;
             this.information.designer = null;
         },
-
         // 预览
-        preview: function preview() {
-            var con = editor.txt.html();
+        preview() {
+            let con = editor.txt.html();
             if (!self.information.wechatArticle) {
                 self.information.wechatArticle = {};
             }
@@ -8580,26 +8461,25 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
 
             editor.txt.html(con);
         },
-
         // 自定义按钮链接修改
-        bannerChange: function bannerChange(e) {
+        bannerChange(e) {
             this.information.btnOnclickParams = null;
         },
-        changeXcx: function changeXcx() {
+        changeXcx() {
             this.information.btnOnclickParams = null;
             this.information.btnOnclickUrl = null;
         },
-        blurSigns: function blurSigns(flag) {
-            var self = this;
-            setTimeout(function () {
+        blurSigns(flag) {
+            let self = this;
+            setTimeout(() => {
                 if (!flag && self.information.id && self.information.signs && Array.isArray(self.information.signs)) {
-                    var shu = JSON.parse(JSON.stringify(self.information.signs));
-                    var obj = {
+                    let shu = JSON.parse(JSON.stringify(self.information.signs));
+                    let obj = {
                         realm: "WECHAT_DESIGN",
                         realmId: self.information.id
                     };
-                    obj.wechatSysSignBindings = shu.map(function (el) {
-                        var ob = {
+                    obj.wechatSysSignBindings = shu.map(el => {
+                        let ob = {
                             "realm": "WECHAT_DESIGN",
                             "realmId": obj.realmId,
                             "signId": el[1],
@@ -8609,9 +8489,9 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
                     });
                     if (!self.view.putTag) {
                         self.view.putTag = true;
-                        __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].post('/api/wechat/admin/binding/tag/save', obj).then(function (ele) {
+                        __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].post('/api/wechat/admin/binding/tag/save', obj).then(ele => {
                             self.view.putTag = false;
-                        }).catch(function (err) {
+                        }).catch(err => {
                             self.view.putTag = false;
                             self.$message({
                                 showClose: true,
@@ -8629,14 +8509,13 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
                 }
             }, 1);
         },
-
         // 模版变化
-        changeTemplateId: function changeTemplateId(type) {
-            var self = this;
+        changeTemplateId(type) {
+            let self = this;
             if (!this.information.templateId) {
                 return;
             }
-            this.posterImage.template = DSP.template.results.find(function (el) {
+            this.posterImage.template = DSP.template.results.find(el => {
                 return el.id === self.information.templateId;
             });
             if (this.posterImage.template) {
@@ -8655,14 +8534,14 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
                 this.posterImage.rw = JSON.parse(JSON.stringify(this.posterImage.template.articleImageHigh));
             }
         },
-        handleAvatarSuccess: function handleAvatarSuccess(res, file, item) {
+        handleAvatarSuccess(res, file, item) {
             self.view.viewLoading = false;
             console.log(res.data.relativePath);
             item.content = res.data.relativePath;
         },
-        beforeAvatarUpload: function beforeAvatarUpload(file) {
-            var isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
-            var isLt200kb = file.size / 1024 < 200;
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
+            const isLt200kb = file.size / 1024 < 200;
             self.view.viewLoading = true;
             if (!isJPG) {
                 self.view.viewLoading = false;
@@ -8674,10 +8553,9 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
             }
             return isJPG && isLt200kb;
         },
-
         //新增节点
-        addNode: function addNode(e) {
-            var nodeobj = {
+        addNode(e) {
+            let nodeobj = {
                 content: '',
                 elementType: e
             };
@@ -8686,45 +8564,41 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
             }
             self.information.paragraphs.push(nodeobj);
         },
-
         //删除节点
-        delNode: function delNode(e) {
+        delNode(e) {
             self.information.paragraphs.splice(e, 1);
             self.information.paragraphs = Object.assign([], self.information.paragraphs);
         },
-
         //移动节点
-        move: function move(e, type, fl) {
+        move(e, type, fl) {
             if (fl) {
                 return;
             }
-            var self = this;
-            var arr = JSON.parse(JSON.stringify(self.information.paragraphs));
+            let self = this;
+            let arr = JSON.parse(JSON.stringify(self.information.paragraphs));
             //要换的元素下标
-            var yao = type === 'top' ? e * 1 - 1 : e * 1 + 1;
+            let yao = type === 'top' ? e * 1 - 1 : e * 1 + 1;
             //将原来元素保存
-            var k = arr[e];
+            let k = arr[e];
             arr[e] = arr[yao];
             arr[yao] = k;
             self.information.paragraphs = Object.assign([], arr);
         },
 
-
         //设计师列表
-        getDesignerList: function getDesignerList() {
-            var self = this;
-            __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].get('/api/mpuser/service/designer/page/size?page=1&size=10000').then(function (res) {
+        getDesignerList() {
+            let self = this;
+            __WEBPACK_IMPORTED_MODULE_6__scripts_module_axios__["default"].get('/api/mpuser/service/designer/page/size?page=1&size=10000').then(res => {
                 self.designerList = res.data && res.data.results;
             });
         },
-        changeDesignerType: function changeDesignerType() {
+        changeDesignerType() {
             this.information.designerName = null;
             this.information.designer = null;
         },
-
         //切换设计师
-        changeDesigner: function changeDesigner(e) {
-            var obj = this.designerList.find(function (el) {
+        changeDesigner(e) {
+            let obj = this.designerList.find(el => {
                 return el.id === e;
             });
             this.information.designer = e;
@@ -8732,19 +8606,19 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
         }
     },
     // 页面加载完成后获取所有菜单信息
-    mounted: function mounted() {
-        var self = this;
+    mounted() {
+        let self = this;
         self.getDesignerList();
         if (DSP.type === 'edit') {
             this.getEdit(DSP.id);
         } else {
             this.information.contentType = 'dom';
         }
-        var hash = window.location.hash;
+        let hash = window.location.hash;
         if (hash != '') {
             try {
-                var decoded = this.$base64Decode(hash.slice(1));
-                if ((typeof decoded === 'undefined' ? 'undefined' : _typeof(decoded)) === 'object') {
+                let decoded = this.$base64Decode(hash.slice(1));
+                if (typeof decoded === 'object') {
                     decoded = decoded.leftData;
                     this.decoded = decoded;
                     this.information.kind = decoded.column.value;
@@ -8801,12 +8675,12 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
 
 
         editor.customConfig.uploadImgHooks = {
-            before: function before(xhr, editor, files) {
+            before: function (xhr, editor, files) {
                 // 图片上传之前触发
                 // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，files 是选择的图片文件
                 imgUrl = URL.createObjectURL(files[0]);
             },
-            success: function success(xhr, editor, result) {
+            success: function (xhr, editor, result) {
                 // 图片上传并返回结果，图片插入成功之后触发
                 // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，result 是服务器端返回的结果
                 // var url = result.data.url;
@@ -8814,12 +8688,12 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
                 // editor.txt.append(url);
                 // alert("成功");
             },
-            fail: function fail(xhr, editor, result) {
+            fail: function (xhr, editor, result) {
                 // 图片上传并返回结果，但图片插入错误时触发
                 // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，result 是服务器端返回的结果
                 alert("失败");
             },
-            error: function error(xhr, editor) {
+            error: function (xhr, editor) {
                 // 图片上传出错时触发
                 // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象
                 console.log(xhr);
@@ -8827,12 +8701,12 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
             },
             // 如果服务器端返回的不是 {errno:0, data: [...]} 这种格式，可使用该配置
             // （但是，服务器端返回的必须是一个 JSON 格式字符串！！！否则会报错）
-            customInsert: function customInsert(insertImg, result, editor) {
+            customInsert: function (insertImg, result, editor) {
                 // 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
                 // insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
                 // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
                 // var url = result.data[0];
-                var url = DSP.globalConfig.fileBaseUrl + result.data.relativePath;
+                let url = DSP.globalConfig.fileBaseUrl + result.data.relativePath;
                 insertImg(url);
                 // result 必须是一个 JSON 格式字符串！！！否则报错
             }
@@ -8857,33 +8731,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 __webpack_require__(34)();
 
 //汉字的数字
-var cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
+const cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
 //基本单位
-var cnIntRadice = new Array('', '拾', '佰', '仟');
+const cnIntRadice = new Array('', '拾', '佰', '仟');
 //对应整数部分扩展单位
-var cnIntUnits = new Array('', '万', '亿', '兆');
+const cnIntUnits = new Array('', '万', '亿', '兆');
 //对应小数部分单位
-var cnDecUnits = new Array('角', '分', '毫', '厘');
+const cnDecUnits = new Array('角', '分', '毫', '厘');
 //整数金额时后面跟的字符
-var cnInteger = '整';
+const cnInteger = '整';
 //整型完以后的单位
-var cnIntLast = '元';
+const cnIntLast = '元';
 //最大处理的数字
-var maxNum = 999999999999999.9999;
+const maxNum = 999999999999999.9999;
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
     //小写变大写
-    capitalize: function capitalize(value) {
+    capitalize: function (value) {
         if (!value) return '';
         value = value.toString();
         return value.toUpperCase();
     },
 
     //金额
-    amount: function amount(value) {
+    amount: function (value) {
         if (!value && value != 0) return value;
-        var old = value;
+        let old = value;
         value = parseFloat(value).toFixed(2);
         value = value.replace('.00', '');
         if (isNaN(value)) {
@@ -8894,7 +8768,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //面积
-    area: function area(value) {
+    area: function (value) {
         if (!value && value != 0) return '';
         value = parseFloat(value).toFixed(4);
         value = value.replace('.0000', '');
@@ -8903,7 +8777,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //比率
-    rate: function rate(value) {
+    rate: function (value) {
         if (!value && value != 0) return '';
         value = parseFloat(value).toFixed(2);
         value = value.replace('.00', '');
@@ -8911,19 +8785,19 @@ var maxNum = 999999999999999.9999;
     },
 
     //取整
-    integer: function integer(value) {
+    integer: function (value) {
         if (!value) return '';
         return Math.round(value);
     },
 
     //保留两位小数
-    float: function float(value) {
+    float: function (value) {
         if (!value) return '';
         return parseFloat(value).toFixed(2);
     },
 
     //日期
-    date: function date(value) {
+    date: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('yyyy-MM-dd');
@@ -8937,7 +8811,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //日期时间
-    time: function time(value) {
+    time: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('hh:mm');
@@ -8949,7 +8823,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //日期时间
-    datetime: function datetime(value) {
+    datetime: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('yyyy-MM-dd hh:mm');
@@ -8960,7 +8834,7 @@ var maxNum = 999999999999999.9999;
         }
     },
     //秒级
-    datetimes: function datetimes(value) {
+    datetimes: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('yyyy-MM-dd hh:mm:ss');
@@ -8971,7 +8845,7 @@ var maxNum = 999999999999999.9999;
         }
     },
     // 61秒，显示成1分1秒； 3800秒， 显示成1时3分20秒
-    formatseconds: function formatseconds(value) {
+    formatseconds: function (value) {
         var theTime = parseInt(value); // 秒
         var middle = 0; // 分
         var hour = 0; // 小时
@@ -8994,16 +8868,14 @@ var maxNum = 999999999999999.9999;
         return result;
     },
     //过滤器
-    filter: function filter(list, keyword, props) {
+    filter: function (list, keyword, props) {
         if (!list || !list.length || !keyword) return list;
 
-        return list.filter(function (item) {
+        return list.filter(item => {
             if (props && props.length) {
                 return props.map(function (prop) {
                     return prop && item[prop] && item[prop].toLowerCase().indexOf(keyword.toLowerCase()) != -1;
-                }).find(function (result) {
-                    return result;
-                });
+                }).find(result => result);
             } else {
                 return typeof item == 'string' ? item.toLowerCase().indexOf(keyword.toLowerCase()) != -1 : true;
             }
@@ -9011,7 +8883,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //兼容老系统产生的绝对路径路由
-    url: function url(value) {
+    url: function (value) {
         if (!value) return '';
         if (value.startsWith("http")) {
             return value;
@@ -9021,15 +8893,15 @@ var maxNum = 999999999999999.9999;
     },
 
     //代码如下所示：
-    convertCurrency: function convertCurrency(money) {
+    convertCurrency(money) {
         //金额整数部分
-        var integerNum = void 0;
+        let integerNum;
         //金额小数部分
-        var decimalNum = void 0;
+        let decimalNum;
         //输出的中文金额字符串
-        var chineseStr = '';
+        let chineseStr = '';
         //分离金额后用的数组，预定义
-        var parts = void 0;
+        let parts;
         if (money == '') {
             return '';
         }
@@ -9054,13 +8926,13 @@ var maxNum = 999999999999999.9999;
         }
         //获取整型部分转换
         if (parseInt(integerNum, 10) > 0) {
-            var zeroCount = 0;
-            var IntLen = integerNum.length;
-            for (var i = 0; i < IntLen; i++) {
-                var n = integerNum.substr(i, 1);
-                var p = IntLen - i - 1;
-                var q = p / 4;
-                var m = p % 4;
+            let zeroCount = 0;
+            let IntLen = integerNum.length;
+            for (let i = 0; i < IntLen; i++) {
+                let n = integerNum.substr(i, 1);
+                let p = IntLen - i - 1;
+                let q = p / 4;
+                let m = p % 4;
                 if (n == '0') {
                     zeroCount++;
                 } else {
@@ -9079,11 +8951,11 @@ var maxNum = 999999999999999.9999;
         }
         //小数部分
         if (decimalNum != '') {
-            var decLen = decimalNum.length;
-            for (var _i = 0; _i < decLen; _i++) {
-                var _n = decimalNum.substr(_i, 1);
-                if (_n != '0') {
-                    chineseStr += cnNums[Number(_n)] + cnDecUnits[_i];
+            let decLen = decimalNum.length;
+            for (let i = 0; i < decLen; i++) {
+                let n = decimalNum.substr(i, 1);
+                if (n != '0') {
+                    chineseStr += cnNums[Number(n)] + cnDecUnits[i];
                 }
             }
         }
@@ -9094,6 +8966,7 @@ var maxNum = 999999999999999.9999;
         }
         return chineseStr;
     }
+
 });
 
 /***/ }),
@@ -9179,16 +9052,15 @@ module.exports = function () {
             "S": this.getMilliseconds() //毫秒
         };
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o) {
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
-        }return fmt;
+        for (var k in o) if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+        return fmt;
     };
 
     Number.prototype.toFixed = function (n) {
         if (n > 20 || n < 0) {
             throw new RangeError('tofixed()数字参数必须是0和20之间');
         }
-        var number = this;
+        const number = this;
         if (isNaN(number) || number >= Math.pow(10, 21)) {
             return number.toString();
         }
@@ -9196,35 +9068,35 @@ module.exports = function () {
             return Math.round(number).toString();
         }
 
-        var result = number.toString();
-        var arr = result.split('.');
+        let result = number.toString();
+        const arr = result.split('.');
 
         // 整数的情况
         if (arr.length < 2) {
             result += '.';
-            for (var i = 0; i < n; i += 1) {
+            for (let i = 0; i < n; i += 1) {
                 result += '0';
             }
             return result;
         }
 
-        var integer = arr[0];
-        var decimal = arr[1];
+        const integer = arr[0];
+        const decimal = arr[1];
         if (decimal.length == n) {
             return result;
         }
         if (decimal.length < n) {
-            for (var _i = 0; _i < n - decimal.length; _i += 1) {
+            for (let i = 0; i < n - decimal.length; i += 1) {
                 result += '0';
             }
             return result;
         }
         result = integer + '.' + decimal.substr(0, n);
-        var last = decimal.substr(n, 1);
+        const last = decimal.substr(n, 1);
 
         // 四舍五入，转换为整数再处理，避免浮点数精度的损失
         if (parseInt(last, 10) >= 5) {
-            var x = Math.pow(10, n);
+            const x = Math.pow(10, n);
             result = (Math.round(parseFloat(result) * x) + 1) / x;
             result = result.toFixed(n);
         }
@@ -9242,29 +9114,27 @@ module.exports = function () {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_js_base64__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_js_base64___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_js_base64__);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     // 业务字典翻译
-    $translate: function $translate(dict, value) {
+    $translate: function (dict, value) {
         if (!dict || !dict.length || !value) {
             return value;
         }
 
-        var match = null;
-        dict.forEach(function (d) {
+        let match = null;
+        dict.forEach(d => {
             if (d.value == value) {
                 match = d;
             } else if (d.children && d.children.length) {
-                d.children.forEach(function (c) {
+                d.children.forEach(c => {
                     if (c.value == value) {
                         match = c;
                     } else if (c.children && c.children.length) {
-                        c.children.forEach(function (i) {
+                        c.children.forEach(i => {
                             if (i.value == value) {
                                 match = i;
                             }
@@ -9276,7 +9146,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         return match && match.label || value;
     },
-    $sceneInfo: function $sceneInfo(s) {
+    $sceneInfo(s) {
         var scene = [];
         s = s * 1;
         switch (s) {
@@ -9425,12 +9295,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 scene.push('未知入口');
                 break;
         }
-        var str = scene[1] || scene[0];
+        let str = scene[1] || scene[0];
         return str;
     },
-
     // 合并两个对象
-    $merge: function $merge(obj, src) {
+    $merge: function (obj, src) {
         for (var key in src) {
             if (src.hasOwnProperty(key)) obj[key] = src[key];
         }
@@ -9438,21 +9307,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // 解析浏览器地址栏请求参数
-    $parseQuery: function $parseQuery() {
-        var query = {};
-        var search = window.location.search;
+    $parseQuery: function () {
+        let query = {};
+        let search = window.location.search;
         if (search.startsWith('?')) {
             search = search.substr(1, search.length);
             search = search.split('&');
 
-            search.forEach(function (s) {
-                var idx = s.indexOf('=');
+            search.forEach(s => {
+                let idx = s.indexOf('=');
                 if (idx !== -1) {
-                    var prop = s.substr(0, idx);
-                    var val = s.substr(idx + 1, s.length);
+                    let prop = s.substr(0, idx);
+                    let val = s.substr(idx + 1, s.length);
 
                     if (query[prop]) {
-                        var arr = [].concat(query[prop]).concat(val);
+                        let arr = [].concat(query[prop]).concat(val);
                         query[prop] = arr;
                     } else {
                         query[prop] = val;
@@ -9465,12 +9334,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // base64编码
-    $base64Encode: function $base64Encode(obj) {
+    $base64Encode: function (obj) {
         if (obj == undefined || obj == null) {
             return '';
         }
 
-        if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) == 'object') {
+        if (typeof obj == 'object') {
             return __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].encode(JSON.stringify(obj));
         } else if (typeof obj == 'string') {
             return __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].encode(JSON.stringify(obj));
@@ -9480,12 +9349,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // base64解码
-    $base64Decode: function $base64Decode(str) {
+    $base64Decode: function (str) {
         if (!str) {
             return;
         }
 
-        var decoded = __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].decode(str);
+        let decoded = __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].decode(str);
         try {
             return JSON.parse(decoded);
         } catch (err) {
@@ -9500,23 +9369,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
          * 参数求和，sum(1,2,3) = 6
          * @returns {number}
          */
-        sum: function sum() {
+        sum: function () {
             if (arguments.length == 0) {
                 return 0;
             }
 
-            var args = [];
+            let args = [];
             if (arguments.length == 1 && arguments[0] instanceof Array) {
                 args = arguments[0];
             } else {
                 args = arguments;
             }
 
-            var sum = 0;
+            let sum = 0;
             for (var i = 0; i < args.length; i++) {
-                if (_typeof(args[i] == 'number')) {
+                if (typeof (args[i] == 'number')) {
                     sum += parseFloat(args[i]);
-                } else if (_typeof(args[i] == 'string') && !isNaN(args[i])) {
+                } else if (typeof (args[i] == 'string') && !isNaN(args[i])) {
                     sum += parseFloat(args[i]);
                 }
             }
@@ -9526,7 +9395,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     $history: {
-        back: function back() {
+        back: function () {
             if (document.referrer) {
                 window.location.href = document.referrer;
             } else {
@@ -9540,7 +9409,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param privilege 业务权限值
      * @returns {boolean} true：具备，false：不具备
      */
-    $hasPrivilege: function $hasPrivilege(privilege) {
+    $hasPrivilege: function (privilege) {
         if (!privilege) {
             return true;
         }
@@ -9558,7 +9427,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param privilege 业务权限值
      * @returns {boolean} true：具备，false：不具备
      */
-    $hasBizPrivilege: function $hasBizPrivilege(type, privilege) {
+    $hasBizPrivilege: function (type, privilege) {
         if (!privilege) {
             return true;
         }
@@ -9575,13 +9444,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return DSP.user.currPosition.bizPrivileges[type].indexOf(privilege) != -1;
     },
     // 根据单位确定计算方式，并返回金额
-    $price: function $price(unit, product) {
-        var price = product.price,
-            quantity = product.quantity,
-            ratio = product.ratio,
-            width = product.width,
-            height = product.height;
-
+    $price: function (unit, product) {
+        var { price, quantity, ratio, width, height } = product;
         var base = (price || 0) * (ratio || 0) * (quantity || 0);
         var area = ((width || 0) * 0.001 * (height || 0) * 0.001 || 0).toFixed(4);
         var obj = {
@@ -9602,10 +9466,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // 将java的LocalDateTime时间格式变成时间戳
-    $localDateTimeNumber: function $localDateTimeNumber(el) {
-        var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 's';
-
-        el = new Date((el.year + '-' + el.monthValue + '-' + el.dayOfMonth + ' ' + el.hour + ':' + el.minute + ':' + el.second).replace(/-/g, '/'));
+    $localDateTimeNumber: function (el, type = 's') {
+        el = new Date(`${el.year}-${el.monthValue}-${el.dayOfMonth} ${el.hour}:${el.minute}:${el.second}`.replace(/-/g, '/'));
         el = el.getTime();
         return el;
     }
@@ -9853,7 +9715,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return {Base64: global.Base64}
 }));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
 
 /***/ }),
 
@@ -10206,7 +10068,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 41:
+/***/ 40:
 /***/ (function(module, exports) {
 
 /*
@@ -10289,7 +10151,7 @@ function toComment(sourceMap) {
 
 /***/ }),
 
-/***/ 42:
+/***/ 41:
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -10308,7 +10170,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(46)
+var listToStyles = __webpack_require__(45)
 
 /*
 type StyleObject = {
@@ -10629,11 +10491,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     /**************************             业务字典                  **************************/
     $dict: null,
-    dict: function dict(type) {
-        var self = this;
+    dict: function (type) {
+        let self = this;
         if (!self.$dict) {
-            var script = document.querySelector('script[type="text/json"][name="dict"]');
-            var text = script && script.innerText || '{}';
+            let script = document.querySelector('script[type="text/json"][name="dict"]');
+            let text = script && script.innerText || '{}';
             try {
                 self.$dict = JSON.parse(text);
             } catch (e) {}
@@ -10644,7 +10506,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 46:
+/***/ 45:
 /***/ (function(module, exports) {
 
 /**
@@ -10682,7 +10544,7 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_cropperjs__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_cropperjs__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_cropperjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_cropperjs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__ = __webpack_require__(10);
 //
@@ -10742,7 +10604,7 @@ module.exports = function listToStyles (parentId, list) {
         defaultImg: String,
         maxsize: Number //MB
     },
-    data: function data() {
+    data() {
         return {
             // 基础图片地址
             fileBaseUrl: DSP.globalConfig.fileBaseUrl,
@@ -10755,8 +10617,8 @@ module.exports = function listToStyles (parentId, list) {
             loading: false
         };
     },
-    mounted: function mounted() {
-        var that = this;
+    mounted() {
+        let that = this;
         var val = that.value;
         var num = new Date().getTime();
         that.$forceUpdate();
@@ -10793,41 +10655,37 @@ module.exports = function listToStyles (parentId, list) {
             rotatable: true, // 是否允许旋转图片
             viewMode: 2,
             background: false,
-            ready: function ready() {
+            ready: function () {
                 that.croppable = true;
             },
-            crop: function crop(event) {
+            crop(event) {
                 // console.log(event.detail.x);
             }
         });
     },
-
     methods: {
-        imgurl: function imgurl(url) {
+        imgurl(url) {
             if (url && url.indexOf('http:') > -1) {
                 return url;
             } else {
                 return DSP.globalConfig.fileBaseUrl + url;
             }
         },
-
         // 缩放
-        scale: function scale(type) {
+        scale(type) {
             var that = this;
             var num = type === -1 ? -0.1 : 0.1;
             that.cropper.zoom(num);
         },
-
         // 旋转
-        roteta: function roteta(direction) {
+        roteta(direction) {
             var that = this;
             var reg = direction === 'left' ? -90 : 90;
             that.cropper.rotate(reg);
         },
-
         // 确定截取
-        crop: function crop() {
-            var that = this;
+        crop() {
+            let that = this;
             var croppedCanvas;
             var roundedCanvas;
             if (!this.croppable) {
@@ -10851,10 +10709,9 @@ module.exports = function listToStyles (parentId, list) {
             roundedCanvas = this.getRoundedCanvas(croppedCanvas); // 生成裁切后的图片
             that.postImg(roundedCanvas);
         },
-
         // 截取图片制成canvas
-        getRoundedCanvas: function getRoundedCanvas(sourceCanvas) {
-            var that = this;
+        getRoundedCanvas(sourceCanvas) {
+            let that = this;
             var canvas = document.createElement('canvas');
             var context = canvas.getContext('2d');
             var width = sourceCanvas.width;
@@ -10869,7 +10726,7 @@ module.exports = function listToStyles (parentId, list) {
             // context.globalCompositeOperation = 'destination-in';
             return canvas;
         },
-        getObjectURL: function getObjectURL(file) {
+        getObjectURL(file) {
             var url = null;
             if (window.createObjectURL != undefined) {
                 // basic
@@ -10883,11 +10740,10 @@ module.exports = function listToStyles (parentId, list) {
             }
             return url;
         },
-
         // 选取的图片更改后
-        change: function change(e) {
+        change(e) {
             var that = this;
-            var files = e.target.files || e.dataTransfer.files;
+            let files = e.target.files || e.dataTransfer.files;
             if (!files.length) return;
             this.panel = true;
             this.picValue = files[0];
@@ -10903,16 +10759,14 @@ module.exports = function listToStyles (parentId, list) {
             // 展示截取的界面
             this.panel = true;
         },
-
         // 点击取消按钮
-        cancelCrop: function cancelCrop() {
+        cancelCrop() {
             var that = this;
             that.panel = false;
             that.clearInputFile(); // 清除选中的图片的value
         },
-
         // 清除选中的图片的value,防止同一图片不能反复提交
-        clearInputFile: function clearInputFile() {
+        clearInputFile() {
             var that = this;
             var eleId = '';
             if (that.type) {
@@ -10936,27 +10790,26 @@ module.exports = function listToStyles (parentId, list) {
                 }
             }
         },
-
         // 提交图片到后台
-        postImg: function postImg(file) {
+        postImg(file) {
             var that = this;
             // file.toBlob() canvas转成blob
-            file.toBlob(function (blob) {
+            file.toBlob(blob => {
                 // 将 blob 图片转成文件格式  var file = new File([file], name)
                 var files = new File([blob], 'file.png');
-                var formData = new FormData();
+                const formData = new FormData();
                 formData.append('file', files);
-                var sis = (files.size / 1024 / 1024).toFixed(2);
+                let sis = (files.size / 1024 / 1024).toFixed(2);
                 console.log(sis);
                 if (that.maxsize && that.maxsize < files.size / 1024 / 1024) {
-                    var si = (files.size / 1024 / 1024).toFixed(2);
-                    that.$message.error("\u526A\u5207\u540E\u56FE\u7247\u5927\u5C0F\u4E3A" + si + "MB\uFF0C\u4E0D\u80FD\u5927\u4E8E" + that.maxsize + "MB");
+                    let si = (files.size / 1024 / 1024).toFixed(2);
+                    that.$message.error(`剪切后图片大小为${si}MB，不能大于${that.maxsize}MB`);
                     return;
                 }
                 that.loading = true;
                 var url = '/api/file-service/file/wechat/admin/upload';
                 var config = { headers: { "Content-Type": "multipart/form-data" } };
-                __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__["default"].post(url, formData, config).then(function (res) {
+                __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__["default"].post(url, formData, config).then(res => {
                     if (res && res.success) {
                         var newValue = that.value && that.value.imageUrl ? JSON.parse(JSON.stringify(that.value)) : {};
                         if (that.value && that.value.id) {
@@ -10974,16 +10827,15 @@ module.exports = function listToStyles (parentId, list) {
                         that.clearInputFile(); // 清除选中的图片的value
                     }
                     that.loading = false;
-                }).catch(function (err) {
+                }).catch(err => {
                     that.loading = false;
                     console.log(error);
                 });
             }, 'image/jpeg');
         },
-
         // 点击图片或空容器，指向img的点击事件
-        chioce: function chioce() {
-            var that = this;
+        chioce() {
+            let that = this;
             //that.type === 'poster' ? 'changeP' : 'change'
             var eleId = '';
             if (that.type) {
@@ -10996,7 +10848,7 @@ module.exports = function listToStyles (parentId, list) {
         }
     },
     watch: {
-        'value': function value(val, oldVal) {
+        'value'(val, oldVal) {
             var that = this;
             this.headerImage = this.fileBaseUrl + (val && val.imageUrl);
         }
@@ -11012,12 +10864,12 @@ module.exports = function listToStyles (parentId, list) {
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var settle = __webpack_require__(17);
-var buildURL = __webpack_require__(19);
-var parseHeaders = __webpack_require__(20);
-var isURLSameOrigin = __webpack_require__(21);
+var settle = __webpack_require__(18);
+var buildURL = __webpack_require__(20);
+var parseHeaders = __webpack_require__(21);
+var isURLSameOrigin = __webpack_require__(22);
 var createError = __webpack_require__(6);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(22);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(23);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -11114,7 +10966,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(23);
+      var cookies = __webpack_require__(24);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -11194,17 +11046,17 @@ module.exports = function xhrAdapter(config) {
 
 /***/ }),
 
-/***/ 52:
+/***/ 50:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_script_index_0_dsp_cropper_vue__ = __webpack_require__(47);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_13_7_3_vue_loader_lib_template_compiler_index_id_data_v_3493686e_hasScoped_false_buble_transforms_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_template_index_0_dsp_cropper_vue__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_13_7_3_vue_loader_lib_template_compiler_index_id_data_v_3493686e_hasScoped_false_buble_transforms_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_template_index_0_dsp_cropper_vue__ = __webpack_require__(55);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(54)
+  __webpack_require__(52)
 }
 var normalizeComponent = __webpack_require__(39)
 /* script */
@@ -11251,17 +11103,17 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 54:
+/***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(55);
+var content = __webpack_require__(53);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(42)("3641c26c", content, false, {});
+var update = __webpack_require__(41)("3641c26c", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -11278,10 +11130,10 @@ if(false) {
 
 /***/ }),
 
-/***/ 55:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(41)(false);
+exports = module.exports = __webpack_require__(40)(false);
 // imports
 
 
@@ -11293,17 +11145,17 @@ exports.push([module.i, "/*@import \"../../global/styles/global\";*/\n.demo #but
 
 /***/ }),
 
-/***/ 56:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
- * Cropper.js v1.5.4
+ * Cropper.js v1.5.6
  * https://fengyuanchen.github.io/cropperjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2019-08-03T08:38:42.128Z
+ * Date: 2019-10-04T04:33:48.372Z
  */
 
 (function (global, factory) {
@@ -11346,6 +11198,55 @@ exports.push([module.i, "/*@import \"../../global/styles/global\";*/\n.demo #but
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
     return Constructor;
+  }
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly) symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+      keys.push.apply(keys, symbols);
+    }
+
+    return keys;
+  }
+
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+
+      if (i % 2) {
+        ownKeys(source, true).forEach(function (key) {
+          _defineProperty(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys(source).forEach(function (key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+
+    return target;
   }
 
   function _toConsumableArray(arr) {
@@ -12038,7 +11939,8 @@ exports.push([module.i, "/*@import \"../../global/styles/global\";*/\n.demo #but
    */
 
   function getMaxZoomRatio(pointers) {
-    var pointers2 = assign({}, pointers);
+    var pointers2 = _objectSpread2({}, pointers);
+
     var ratios = [];
     forEach(pointers, function (pointer, pointerId) {
       delete pointers2[pointerId];
@@ -12072,7 +11974,7 @@ exports.push([module.i, "/*@import \"../../global/styles/global\";*/\n.demo #but
       endX: pageX,
       endY: pageY
     };
-    return endOnly ? end : assign({
+    return endOnly ? end : _objectSpread2({
       startX: pageX,
       startY: pageY
     }, end);
@@ -13116,10 +13018,10 @@ exports.push([module.i, "/*@import \"../../global/styles/global\";*/\n.demo #but
       var buttons = event.buttons,
           button = event.button;
 
-      if (this.disabled // No primary button (Usually the left button)
-      // Note that touch events have no `buttons` or `button` property
-      || isNumber(buttons) && buttons !== 1 || isNumber(button) && button !== 0 // Open context menu
-      || event.ctrlKey) {
+      if (this.disabled // Handle mouse event and pointer event and ignore touch event
+      || (event.type === 'mousedown' || event.type === 'pointerdown' && event.pointerType === 'mouse') && ( // No primary button (Usually the left button)
+      isNumber(buttons) && buttons !== 1 || isNumber(button) && button !== 0 // Open context menu
+      || event.ctrlKey)) {
         return;
       }
 
@@ -14866,7 +14768,7 @@ exports.push([module.i, "/*@import \"../../global/styles/global\";*/\n.demo #but
 
 /***/ }),
 
-/***/ 57:
+/***/ 55:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15078,7 +14980,7 @@ if (false) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(18);
+var enhanceError = __webpack_require__(19);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -15098,7 +15000,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 /***/ }),
 
-/***/ 65:
+/***/ 64:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15291,7 +15193,7 @@ module.exports = function createError(message, config, code, request, response) 
         designData: Object,
         width: String
     },
-    data: function data() {
+    data() {
         return {
             fwhx: {
                 BS: '别墅',
@@ -15330,9 +15232,8 @@ module.exports = function createError(message, config, code, request, response) 
             }
         };
     },
-
     methods: {
-        datetime: function datetime(value) {
+        datetime: function (value) {
 
             if (!value) return '';
             if (typeof value == 'number') {
@@ -15343,13 +15244,13 @@ module.exports = function createError(message, config, code, request, response) 
                 return value;
             }
         },
-        yanzhe: function yanzhe(dat) {
+        yanzhe(dat) {
             if (dat && dat.formaled === false && dat.panorama) {
                 window.location.href = dat.panorama;
             }
         }
     },
-    created: function created() {
+    created() {
 
         if (!this.designData.contentSyllabus) {
 
@@ -15376,7 +15277,7 @@ module.exports = function isCancel(value) {
 
 /***/ }),
 
-/***/ 70:
+/***/ 74:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15483,7 +15384,7 @@ module.exports = function isCancel(value) {
         //    2019年3月22日过滤人员 （用于指派）
         filer: String // 可填写值 : 社群SQ || 电商DS || 渠道QD || 商超SC || 自然客流ZRKL
     },
-    data: function data() {
+    data() {
         return {
             loading: false,
             meta: {
@@ -15504,13 +15405,12 @@ module.exports = function isCancel(value) {
 
         };
     },
-
     methods: {
-        methodsFiler: function methodsFiler(data) {
-            var self = this;
-            return data.map(function (el) {
-                var arr = [];
-                el.data.map(function (emp) {
+        methodsFiler(data) {
+            let self = this;
+            return data.map(el => {
+                let arr = [];
+                el.data.map(emp => {
                     if (!emp.team.sources && !emp.connectorTeams) {
                         arr.push(emp);
                     } else if (!emp.team.sources && emp.connectorTeams && emp.connectorTeams.length < 0) {
@@ -15521,7 +15421,7 @@ module.exports = function isCancel(value) {
                         arr.push(emp);
                     } else if (emp.team.sources.indexOf(self.filer) > -1) {
                         arr.push(emp);
-                    } else if ((!emp.team.sources || emp.team.sources.length < 1) && emp.connectorTeams.find(function (e) {
+                    } else if ((!emp.team.sources || emp.team.sources.length < 1) && emp.connectorTeams.find(e => {
                         return e.channelSource === self.filer;
                     })) {
                         arr.push(emp);
@@ -15531,12 +15431,12 @@ module.exports = function isCancel(value) {
                 return el;
             });
         },
-        remoteQuery: function remoteQuery() {
-            var self = this;
+        remoteQuery() {
+            let self = this;
             if (self.type) {
                 //按标签查询
                 self.group = self.type.split(',').length > 1;
-                var params = '';
+                let params = '';
                 params += 'label=' + self.type + '&';
                 params += self.org && self.org != '' ? 'orgId=' + self.org + '&' : '';
                 params += self.isTeamEmp ? 'isTeamEmp=' + self.isTeamEmp + '&' : '';
@@ -15551,7 +15451,7 @@ module.exports = function isCancel(value) {
                 //是否结队
                 params += self.isTroop ? 'isTroop=' + self.isTroop + '&' : '';
                 params += self.dspbrands || '';
-                var url = '/api/dealer/employee/list/org/position/label?' + params;
+                let url = '/api/dealer/employee/list/org/position/label?' + params;
                 __WEBPACK_IMPORTED_MODULE_0__scripts_module_axios__["default"].get(url).then(function (response) {
                     if (response.data && response.success) {
                         response.data.forEach(function (ele) {
@@ -15562,7 +15462,7 @@ module.exports = function isCancel(value) {
                             if (self.filer) {
                                 self.allData = self.methodsFiler(self.allData);
                             }
-                            self.options = self.allData.map(function (item) {
+                            self.options = self.allData.map(item => {
                                 item.data = item.data && item.data.slice(0, 50);
                                 return item;
                             });
@@ -15571,100 +15471,94 @@ module.exports = function isCancel(value) {
                             self.options = response.data[0].data.slice(0, 50);
                         }
                     }
-                }).catch(function (error) {
+                }).catch(error => {
                     self.options = [];
                     console.error(error);
                 });
             } else {
                 self.group = false;
-                var _params = self.org && self.org != '' ? 'orgId=' + self.org : '';
-                _params += self.sogal ? 'sogal=' + self.sogal + '&' : '';
-                _params += self.schmidt ? 'schmidt=' + self.schmidt + '&' : '';
-                _params += self.milana ? 'milana=' + self.milana + '&' : '';
+                let params = self.org && self.org != '' ? 'orgId=' + self.org : '';
+                params += self.sogal ? 'sogal=' + self.sogal + '&' : '';
+                params += self.schmidt ? 'schmidt=' + self.schmidt + '&' : '';
+                params += self.milana ? 'milana=' + self.milana + '&' : '';
                 //
-                _params += self.dspbrands || '';
+                params += self.dspbrands || '';
 
-                var _url = '/api/dealer/employee/list/condition?' + _params;
-                __WEBPACK_IMPORTED_MODULE_0__scripts_module_axios__["default"].get(_url).then(function (response) {
+                let url = '/api/dealer/employee/list/condition?' + params;
+                __WEBPACK_IMPORTED_MODULE_0__scripts_module_axios__["default"].get(url).then(function (response) {
                     self.allData = JSON.parse(JSON.stringify(response.data));
                     self.options = response.data.slice(0, 50);
-                }).catch(function (error) {
+                }).catch(error => {
                     self.options = [];
                     console.error(error);
                 });
             }
         },
-        change: function change() {
+        change() {
             //值改变传给父元素
-            var self = this;
+            let self = this;
 
             if (self.employee) {
-                var arr = self.employee.split('_');
-                var items = [];
+                let arr = self.employee.split('_');
+                let items = [];
                 if (self.group) {
-                    self.options.forEach(function (g) {
+                    self.options.forEach(g => {
                         items = items.concat(g.data);
                     });
                 } else {
                     items = items.concat(self.options);
                 }
-                var emp = null;
+                let emp = null;
                 if (this.isDimission) {
-                    emp = items.find(function (ele) {
-                        return ele.id == arr[0];
-                    });
+                    emp = items.find(ele => ele.id == arr[0]);
                 } else {
-                    emp = items.find(function (ele) {
-                        return ele.id == arr[0] && ele.positionId == arr[1];
-                    });
+                    emp = items.find(ele => ele.id == arr[0] && ele.positionId == arr[1]);
                 }
                 self.$emit('update:value', emp);
             } else {
                 self.$emit('update:value', null);
             }
         },
-        remoteMethod: function remoteMethod(query) {
-            var _this = this;
-
+        remoteMethod(query) {
             // let allda = JSON.parse(JSON.stringify(this.allData));
             this.loading = true;
             if (!query.replace(/\s/g, "")) {
                 if (this.group) {
                     //标签大于1
-                    setTimeout(function () {
-                        _this.loading = false;
-                        var allda = JSON.parse(JSON.stringify(_this.allData));
-                        _this.options = allda.map(function (ele) {
+                    setTimeout(() => {
+                        this.loading = false;
+                        let allda = JSON.parse(JSON.stringify(this.allData));
+                        this.options = allda.map(ele => {
                             ele.data = ele.data.slice(0, 50);
                             return ele;
                         });
                     }, 200);
                 } else {
-                    setTimeout(function () {
-                        _this.loading = false;
-                        var allda = JSON.parse(JSON.stringify(_this.allData));
-                        _this.options = allda.slice(0, 50);
+                    setTimeout(() => {
+                        this.loading = false;
+                        let allda = JSON.parse(JSON.stringify(this.allData));
+                        this.options = allda.slice(0, 50);
                     }, 200);
                 }
                 return;
             }
             if (this.group) {
                 //标签大于1
-                setTimeout(function () {
-                    var allda = JSON.parse(JSON.stringify(_this.allData));
-                    _this.loading = false;
-                    _this.options = allda.map(function (ele) {
-                        ele.data = ele.data.filter(function (item) {
+                setTimeout(() => {
+                    let allda = JSON.parse(JSON.stringify(this.allData));
+                    this.loading = false;
+                    this.options = allda.map(ele => {
+                        ele.data = ele.data.filter(item => {
                             return item.name.toLowerCase().indexOf(query.replace(/\s/g, "").toLowerCase()) > -1;
                         }).slice(0, 50);
                         return ele;
                     });
                 }, 200);
             } else {
-                setTimeout(function () {
-                    _this.loading = false;
-                    var allda = JSON.parse(JSON.stringify(_this.allData));
-                    _this.options = allda.filter(function (item) {
+                setTimeout(() => {
+                    this.loading = false;
+                    let allda = JSON.parse(JSON.stringify(this.allData));
+                    this.options = allda.filter(item => {
                         return item.name && item.name.toLowerCase().indexOf(query.replace(/\s/g, "").toLowerCase()) > -1 || item.mobile && item.mobile.indexOf(query.replace(/\s/g, "")) == 0;
                     }).slice(0, 50);
                 }, 200);
@@ -15672,14 +15566,14 @@ module.exports = function isCancel(value) {
         }
     },
     watch: {
-        'value': function value(val, oldVal) {
+        'value'(val, oldVal) {
             if (!this.value) {
                 this.employee = null;
                 this.remoteMethod('');
             }
         },
-        'org': function org(val, oldVal) {
-            var self = this;
+        'org'(val, oldVal) {
+            let self = this;
             if (self.orgRequired) {
                 self.allData = [];
                 self.employee = null;
@@ -15689,12 +15583,10 @@ module.exports = function isCancel(value) {
                 self.remoteQuery();
             }
         },
-        'options': function options(val, oldVal) {
-            var self = this;
+        'options'(val, oldVal) {
+            let self = this;
             if (self.value && !self.value.positionId && !self.value.name) {
-                self.value = val.find(function (i) {
-                    return i.id === self.value.id;
-                });
+                self.value = val.find(i => i.id === self.value.id);
                 if (self.value) {
                     self.employee = self.value.id + '_' + self.value.positionId;
                 }
@@ -15702,14 +15594,14 @@ module.exports = function isCancel(value) {
         }
     },
     filters: {
-        capitalize: function capitalize(value) {
-            return value.map(function (el) {
+        capitalize: function (value) {
+            return value.map(el => {
                 return el.name;
             }).join(',');
         }
     },
-    created: function created() {
-        var self = this;
+    created: function () {
+        let self = this;
         if (self.orgRequired) {
             if (self.org) {
                 self.remoteQuery();
@@ -15722,44 +15614,17 @@ module.exports = function isCancel(value) {
 
 /***/ }),
 
-/***/ 8:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * A `Cancel` is an object that is thrown when an operation is canceled.
- *
- * @class
- * @param {string=} message The message.
- */
-function Cancel(message) {
-  this.message = message;
-}
-
-Cancel.prototype.toString = function toString() {
-  return 'Cancel' + (this.message ? ': ' + this.message : '');
-};
-
-Cancel.prototype.__CANCEL__ = true;
-
-module.exports = Cancel;
-
-
-/***/ }),
-
-/***/ 82:
+/***/ 75:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_script_index_0_dsp_phone_vue__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_script_index_0_dsp_phone_vue__ = __webpack_require__(64);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_13_7_3_vue_loader_lib_template_compiler_index_id_data_v_5af67d2a_hasScoped_false_buble_transforms_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_template_index_0_dsp_phone_vue__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_13_7_3_vue_loader_lib_template_compiler_index_id_data_v_5af67d2a_hasScoped_false_buble_transforms_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_template_index_0_dsp_phone_vue__ = __webpack_require__(78);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(83)
+  __webpack_require__(76)
 }
 var normalizeComponent = __webpack_require__(39)
 /* script */
@@ -15806,17 +15671,17 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 83:
+/***/ 76:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(84);
+var content = __webpack_require__(77);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(42)("3881abf8", content, false, {});
+var update = __webpack_require__(41)("3881abf8", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -15833,10 +15698,10 @@ if(false) {
 
 /***/ }),
 
-/***/ 84:
+/***/ 77:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(41)(false);
+exports = module.exports = __webpack_require__(40)(false);
 // imports
 
 
@@ -15848,7 +15713,7 @@ exports.push([module.i, "\n.mobile {\n  margin-left: 16px;\n  width: 300px;\n  m
 
 /***/ }),
 
-/***/ 85:
+/***/ 78:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16644,6 +16509,33 @@ if (false) {
 
 /***/ }),
 
+/***/ 8:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
+
+
+/***/ }),
+
 /***/ 9:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -16683,17 +16575,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 94:
+/***/ 96:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_script_index_0_dsp_emp_vue__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_script_index_0_dsp_emp_vue__ = __webpack_require__(74);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_13_7_3_vue_loader_lib_template_compiler_index_id_data_v_d775fd28_hasScoped_false_buble_transforms_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_template_index_0_dsp_emp_vue__ = __webpack_require__(97);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_13_7_3_vue_loader_lib_template_compiler_index_id_data_v_d775fd28_hasScoped_false_buble_transforms_node_modules_vue_loader_13_7_3_vue_loader_lib_selector_type_template_index_0_dsp_emp_vue__ = __webpack_require__(99);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(95)
+  __webpack_require__(97)
 }
 var normalizeComponent = __webpack_require__(39)
 /* script */
@@ -16740,17 +16632,17 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 95:
+/***/ 97:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(96);
+var content = __webpack_require__(98);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(42)("448ba70c", content, false, {});
+var update = __webpack_require__(41)("448ba70c", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -16767,10 +16659,10 @@ if(false) {
 
 /***/ }),
 
-/***/ 96:
+/***/ 98:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(41)(false);
+exports = module.exports = __webpack_require__(40)(false);
 // imports
 
 
@@ -16782,7 +16674,7 @@ exports.push([module.i, "\n.option-value {\n    float: left;\n}\n.option-tip {\n
 
 /***/ }),
 
-/***/ 97:
+/***/ 99:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

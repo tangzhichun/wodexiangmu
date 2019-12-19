@@ -75,33 +75,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 __webpack_require__(34)();
 
 //汉字的数字
-var cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
+const cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
 //基本单位
-var cnIntRadice = new Array('', '拾', '佰', '仟');
+const cnIntRadice = new Array('', '拾', '佰', '仟');
 //对应整数部分扩展单位
-var cnIntUnits = new Array('', '万', '亿', '兆');
+const cnIntUnits = new Array('', '万', '亿', '兆');
 //对应小数部分单位
-var cnDecUnits = new Array('角', '分', '毫', '厘');
+const cnDecUnits = new Array('角', '分', '毫', '厘');
 //整数金额时后面跟的字符
-var cnInteger = '整';
+const cnInteger = '整';
 //整型完以后的单位
-var cnIntLast = '元';
+const cnIntLast = '元';
 //最大处理的数字
-var maxNum = 999999999999999.9999;
+const maxNum = 999999999999999.9999;
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
     //小写变大写
-    capitalize: function capitalize(value) {
+    capitalize: function (value) {
         if (!value) return '';
         value = value.toString();
         return value.toUpperCase();
     },
 
     //金额
-    amount: function amount(value) {
+    amount: function (value) {
         if (!value && value != 0) return value;
-        var old = value;
+        let old = value;
         value = parseFloat(value).toFixed(2);
         value = value.replace('.00', '');
         if (isNaN(value)) {
@@ -112,7 +112,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //面积
-    area: function area(value) {
+    area: function (value) {
         if (!value && value != 0) return '';
         value = parseFloat(value).toFixed(4);
         value = value.replace('.0000', '');
@@ -121,7 +121,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //比率
-    rate: function rate(value) {
+    rate: function (value) {
         if (!value && value != 0) return '';
         value = parseFloat(value).toFixed(2);
         value = value.replace('.00', '');
@@ -129,19 +129,19 @@ var maxNum = 999999999999999.9999;
     },
 
     //取整
-    integer: function integer(value) {
+    integer: function (value) {
         if (!value) return '';
         return Math.round(value);
     },
 
     //保留两位小数
-    float: function float(value) {
+    float: function (value) {
         if (!value) return '';
         return parseFloat(value).toFixed(2);
     },
 
     //日期
-    date: function date(value) {
+    date: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('yyyy-MM-dd');
@@ -155,7 +155,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //日期时间
-    time: function time(value) {
+    time: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('hh:mm');
@@ -167,7 +167,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //日期时间
-    datetime: function datetime(value) {
+    datetime: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('yyyy-MM-dd hh:mm');
@@ -178,7 +178,7 @@ var maxNum = 999999999999999.9999;
         }
     },
     //秒级
-    datetimes: function datetimes(value) {
+    datetimes: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('yyyy-MM-dd hh:mm:ss');
@@ -189,7 +189,7 @@ var maxNum = 999999999999999.9999;
         }
     },
     // 61秒，显示成1分1秒； 3800秒， 显示成1时3分20秒
-    formatseconds: function formatseconds(value) {
+    formatseconds: function (value) {
         var theTime = parseInt(value); // 秒
         var middle = 0; // 分
         var hour = 0; // 小时
@@ -212,16 +212,14 @@ var maxNum = 999999999999999.9999;
         return result;
     },
     //过滤器
-    filter: function filter(list, keyword, props) {
+    filter: function (list, keyword, props) {
         if (!list || !list.length || !keyword) return list;
 
-        return list.filter(function (item) {
+        return list.filter(item => {
             if (props && props.length) {
                 return props.map(function (prop) {
                     return prop && item[prop] && item[prop].toLowerCase().indexOf(keyword.toLowerCase()) != -1;
-                }).find(function (result) {
-                    return result;
-                });
+                }).find(result => result);
             } else {
                 return typeof item == 'string' ? item.toLowerCase().indexOf(keyword.toLowerCase()) != -1 : true;
             }
@@ -229,7 +227,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //兼容老系统产生的绝对路径路由
-    url: function url(value) {
+    url: function (value) {
         if (!value) return '';
         if (value.startsWith("http")) {
             return value;
@@ -239,15 +237,15 @@ var maxNum = 999999999999999.9999;
     },
 
     //代码如下所示：
-    convertCurrency: function convertCurrency(money) {
+    convertCurrency(money) {
         //金额整数部分
-        var integerNum = void 0;
+        let integerNum;
         //金额小数部分
-        var decimalNum = void 0;
+        let decimalNum;
         //输出的中文金额字符串
-        var chineseStr = '';
+        let chineseStr = '';
         //分离金额后用的数组，预定义
-        var parts = void 0;
+        let parts;
         if (money == '') {
             return '';
         }
@@ -272,13 +270,13 @@ var maxNum = 999999999999999.9999;
         }
         //获取整型部分转换
         if (parseInt(integerNum, 10) > 0) {
-            var zeroCount = 0;
-            var IntLen = integerNum.length;
-            for (var i = 0; i < IntLen; i++) {
-                var n = integerNum.substr(i, 1);
-                var p = IntLen - i - 1;
-                var q = p / 4;
-                var m = p % 4;
+            let zeroCount = 0;
+            let IntLen = integerNum.length;
+            for (let i = 0; i < IntLen; i++) {
+                let n = integerNum.substr(i, 1);
+                let p = IntLen - i - 1;
+                let q = p / 4;
+                let m = p % 4;
                 if (n == '0') {
                     zeroCount++;
                 } else {
@@ -297,11 +295,11 @@ var maxNum = 999999999999999.9999;
         }
         //小数部分
         if (decimalNum != '') {
-            var decLen = decimalNum.length;
-            for (var _i = 0; _i < decLen; _i++) {
-                var _n = decimalNum.substr(_i, 1);
-                if (_n != '0') {
-                    chineseStr += cnNums[Number(_n)] + cnDecUnits[_i];
+            let decLen = decimalNum.length;
+            for (let i = 0; i < decLen; i++) {
+                let n = decimalNum.substr(i, 1);
+                if (n != '0') {
+                    chineseStr += cnNums[Number(n)] + cnDecUnits[i];
                 }
             }
         }
@@ -312,6 +310,7 @@ var maxNum = 999999999999999.9999;
         }
         return chineseStr;
     }
+
 });
 
 /***/ }),
@@ -397,16 +396,15 @@ module.exports = function () {
             "S": this.getMilliseconds() //毫秒
         };
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o) {
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
-        }return fmt;
+        for (var k in o) if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+        return fmt;
     };
 
     Number.prototype.toFixed = function (n) {
         if (n > 20 || n < 0) {
             throw new RangeError('tofixed()数字参数必须是0和20之间');
         }
-        var number = this;
+        const number = this;
         if (isNaN(number) || number >= Math.pow(10, 21)) {
             return number.toString();
         }
@@ -414,35 +412,35 @@ module.exports = function () {
             return Math.round(number).toString();
         }
 
-        var result = number.toString();
-        var arr = result.split('.');
+        let result = number.toString();
+        const arr = result.split('.');
 
         // 整数的情况
         if (arr.length < 2) {
             result += '.';
-            for (var i = 0; i < n; i += 1) {
+            for (let i = 0; i < n; i += 1) {
                 result += '0';
             }
             return result;
         }
 
-        var integer = arr[0];
-        var decimal = arr[1];
+        const integer = arr[0];
+        const decimal = arr[1];
         if (decimal.length == n) {
             return result;
         }
         if (decimal.length < n) {
-            for (var _i = 0; _i < n - decimal.length; _i += 1) {
+            for (let i = 0; i < n - decimal.length; i += 1) {
                 result += '0';
             }
             return result;
         }
         result = integer + '.' + decimal.substr(0, n);
-        var last = decimal.substr(n, 1);
+        const last = decimal.substr(n, 1);
 
         // 四舍五入，转换为整数再处理，避免浮点数精度的损失
         if (parseInt(last, 10) >= 5) {
-            var x = Math.pow(10, n);
+            const x = Math.pow(10, n);
             result = (Math.round(parseFloat(result) * x) + 1) / x;
             result = result.toFixed(n);
         }

@@ -1,0 +1,13 @@
+{
+  "oauth": {
+    "appId": "CONSOLE-TEST-WEB",
+    "appSecret": "eyJhbGciOiJIUzI1NiJ9.Q09OU09MRS1URVNULVdFQg.gv-4RGX8KeQtVabhVG7d3L8mjNfFxTjSIME0cvMoczA",
+    "url": "http://10.72.1.39:4100"
+  },
+  "globalConfig": {
+    "fileBaseUrl": "https://test.yishimeijia.com/upload/",
+    "sso": {
+      "dsp": "https://test.yishimeijia.com"
+    }
+  }
+}

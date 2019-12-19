@@ -1,0 +1,13 @@
+{
+  "oauth": {
+    "appId": "CONSOLE-PROD-WEB",
+    "appSecret": "eyJhbGciOiJIUzI1NiJ9.Q09OU09MRS1QUk9ELVdFQg.dO8sGCE6EwMlIb1tiJLcq_ufDLMX8f75N3w1u1tdFBs",
+    "url": "http://10.72.1.60:4100"
+  },
+  "globalConfig": {
+    "fileBaseUrl": "http://ftp.sfygroup.shop/upload/",
+    "sso": {
+      "dsp": "https://www.sfygroup.shop"
+    }
+  }
+}

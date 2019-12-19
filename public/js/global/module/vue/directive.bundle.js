@@ -70,8 +70,6 @@
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -82,8 +80,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param prop      可以是'prop.prop[i].prop'的格式
      * @returns {*}
      */
-    getProp: function getProp(obj, prop) {
-        var self = this;
+    getProp: function (obj, prop) {
+        let self = this;
 
         if (!obj || !prop) {
             return obj;
@@ -108,23 +106,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         //数组取值
-        var i1 = prop.indexOf('[');
-        var i2 = prop.indexOf('.');
+        let i1 = prop.indexOf('[');
+        let i2 = prop.indexOf('.');
         if (i1 != -1 && i2 != -1 && i1 < i2 || i1 != -1 && i2 == -1) {
-            var p1 = prop.substr(0, i1);
-            var p2 = prop.substr(i1, prop.length);
-            var v1 = obj[p1];
+            let p1 = prop.substr(0, i1);
+            let p2 = prop.substr(i1, prop.length);
+            let v1 = obj[p1];
             if (!v1) {
                 return v1;
-            } else if ((typeof v1 === 'undefined' ? 'undefined' : _typeof(v1)) != 'object' || !(v1 instanceof Array)) {
+            } else if (typeof v1 != 'object' || !(v1 instanceof Array)) {
                 //非数组
                 return null;
             } else {
-                var _props = p2.split('.');
-                prop = _props.shift().replace('[', '').replace(']', '');
+                let props = p2.split('.');
+                prop = props.shift().replace('[', '').replace(']', '');
 
-                if (_props.length > 0) {
-                    return self.getProp(v1[prop], _props.join('.'));
+                if (props.length > 0) {
+                    return self.getProp(v1[prop], props.join('.'));
                 } else {
                     return v1[prop];
                 }
@@ -132,7 +130,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         //对象取值
-        var props = prop.split('.');
+        let props = prop.split('.');
         prop = props.shift();
 
         if (props.length > 0) {
@@ -149,8 +147,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param prop      值
      * @returns {*}
      */
-    setProp: function setProp(obj, prop, val) {
-        var self = this;
+    setProp: function (obj, prop, val) {
+        let self = this;
 
         if (!obj || !prop) {
             return obj;
@@ -172,11 +170,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             return;
         }
 
-        var props = prop.split('.');
+        let props = prop.split('.');
         prop = props.shift();
 
         if (props.length > 0) {
-            if (obj[prop] && _typeof(obj[prop]) == 'object' && !(obj[prop] instanceof Array)) {
+            if (obj[prop] && typeof obj[prop] == 'object' && !(obj[prop] instanceof Array)) {
                 self.setProp(obj[prop], props.join('.'), val);
             } else {
                 obj[prop] = {};
@@ -197,50 +195,26 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(11);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 
 
-var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
+let bindFieldValidator = function (el, binding, vnode) {
     // 解析动态表达式
-    var prop = binding.expression;
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = Object.keys(vnode.data.attrs)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var key = _step.value;
-
-            if (key && key.startsWith('dsp-index-')) {
-                prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
-            }
-        }
-
-        //binding.expression.replace(/\[[a-zA-Z0-9]*]/g, '.');
-        // let ruleProp = binding.expression.replace(/\[/g, '.').replace(/]/g, '');
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
+    let prop = binding.expression;
+    for (let key of Object.keys(vnode.data.attrs)) {
+        if (key && key.startsWith('dsp-index-')) {
+            prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
         }
     }
 
-    var ruleProp = binding.expression;
+    //binding.expression.replace(/\[[a-zA-Z0-9]*]/g, '.');
+    // let ruleProp = binding.expression.replace(/\[/g, '.').replace(/]/g, '');
+    let ruleProp = binding.expression;
 
     // 解析校验规则
-    var rules = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.$validator.rule');
-    var rule = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(rules, ruleProp);
+    let rules = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.$validator.rule');
+    let rule = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(rules, ruleProp);
     if (!rule) {
         //没有规则，不做校验
         console.warn('can not find validate rule config for ' + ruleProp + ' in $validator.rule, it will not be verified. ');
@@ -252,10 +226,10 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
     }
 
     // 字段校验
-    var fieldValidator = function fieldValidator(value) {
-        var val = value || __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.' + prop);
+    let fieldValidator = function (value) {
+        let val = value || __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.' + prop);
 
-        return Promise.resolve({ $prop: prop }).then(function (error) {
+        return Promise.resolve({ $prop: prop }).then(error => {
             if (rule.required) {
                 if (!val) {
                     error.required = true;
@@ -263,14 +237,14 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
                     error.required = true;
                 } else if (val instanceof Array && val.length == 0) {
                     error.required = true;
-                } else if ((typeof val === 'undefined' ? 'undefined' : _typeof(val)) == 'object' && Object.keys(val).length == 0) {
+                } else if (typeof val == 'object' && Object.keys(val).length == 0) {
                     error.required = true;
                 } else {
                     error.required = false;
                 }
             }
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.minLength) {
                 if (!val) {
                     error.minLength = false;
@@ -284,7 +258,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.min || rule.min === 0) {
                 if (!val) {
                     error.min = false;
@@ -300,7 +274,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.max) {
                 if (!val) {
                     error.max = false;
@@ -316,9 +290,9 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.remote && typeof rule.remote == 'function') {
-                return rule.remote(vnode.context.$data, val).then(function (pass) {
+                return rule.remote(vnode.context.$data, val).then(pass => {
                     if (!pass) {
                         error.remote = true;
                     } else {
@@ -330,9 +304,9 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.customize && typeof rule.customize == 'function') {
-                return rule.customize(vnode.context.$data, val).then(function (pass) {
+                return rule.customize(vnode.context.$data, val).then(pass => {
                     if (!pass) {
                         error.customize = true;
                     } else {
@@ -344,12 +318,8 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
-            error.$pass = Object.keys(error).map(function (key) {
-                return error[key];
-            }).filter(function (v) {
-                return v == true;
-            }).length == 0;
+        }).then(error => {
+            error.$pass = Object.keys(error).map(key => error[key]).filter(v => v == true).length == 0;
 
             if (!error.$pass) {
                 // 未通过校验
@@ -366,7 +336,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             /* 添加CSS */
 
             if (!el.classList.contains('form-validate-field')) {
@@ -444,7 +414,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
     }
 
     // 字段监听
-    var unwatch = vnode.context.$watch(prop, function (newVal, oldVal) {
+    let unwatch = vnode.context.$watch(prop, function (newVal, oldVal) {
         console.debug(prop + ' value changed from %o to: %o', oldVal, newVal);
         fieldValidator(newVal);
     });
@@ -463,38 +433,16 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
     console.debug('validator: %o', vnode.context.$data.$validator);
 };
 
-var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
+let unbindFieldValidator = function (el, binding, vnode) {
     // 解析动态表达式
-    var prop = binding.expression;
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
-
-    try {
-        for (var _iterator2 = Object.keys(vnode.data.attrs)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var key = _step2.value;
-
-            if (key && key.startsWith('dsp-index-')) {
-                prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
-            }
-        }
-
-        // 从校验错误中移除
-    } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
-            }
-        } finally {
-            if (_didIteratorError2) {
-                throw _iteratorError2;
-            }
+    let prop = binding.expression;
+    for (let key of Object.keys(vnode.data.attrs)) {
+        if (key && key.startsWith('dsp-index-')) {
+            prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
         }
     }
 
+    // 从校验错误中移除
     if (vnode.context.$data.$validator.error) {
         delete vnode.context.$data.$validator.error[prop];
         console.debug('error removed:' + prop);
@@ -520,11 +468,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //只允许输入整数
     integer: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
 
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
@@ -541,11 +489,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
                     // let regExp =  /^0{1}$|^[1-9]{1}\d*$/;
-                    var regExp = /^0{1}$|^[0-9]{1}\d*$/;
+                    let regExp = /^0{1}$|^[0-9]{1}\d*$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的整数, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -571,10 +519,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入6位数字验证码
     captcha: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
+                let keyCode = $event.keyCode;
 
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
@@ -586,10 +534,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^\d{0,6}$/;
+                    let regExp = /^\d{0,6}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的验证码, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -615,12 +563,12 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入整数或浮点数，小数点后保留2位
     number: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
 
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
 
@@ -653,10 +601,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^0{1}$|^0\.\d{0,2}$|^[1-9]{1}\d*\.?\d{0,2}$/;
+                    let regExp = /^0{1}$|^0\.\d{0,2}$|^[1-9]{1}\d*\.?\d{0,2}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的数值, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -682,11 +630,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //座机电话和电话
     telephone: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
 
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
@@ -703,11 +651,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
                     // let regExp =  /^0{1}$|^[1-9]{1}\d*$/;
-                    var regExp = /^[\d-]*$/;
+                    let regExp = /^[\d-]*$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的整数, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -733,12 +681,12 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入整数或浮点数，小数点后保留4位,用于折扣的输入框
     discount: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
 
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
 
@@ -771,10 +719,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^0{1}$|^0\.\d{0,4}$|^1{1}$/;
+                    let regExp = /^0{1}$|^0\.\d{0,4}$|^1{1}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的数值, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -800,11 +748,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入手机号码
     mobile: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
                 } else {
@@ -830,10 +778,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^1{1}([3|4|5|6|7|8|9]{1}\d{0,9}){0,1}$/;
+                    let regExp = /^1{1}([3|4|5|6|7|8|9]{1}\d{0,9}){0,1}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的手机号码, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -859,10 +807,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //只允许输入数字和字母
     code: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
+                let keyCode = $event.keyCode;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
                 } else {
@@ -873,10 +821,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^[0-9a-zA-Z]*$/;
+                    let regExp = /^[0-9a-zA-Z]*$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的编码, 还原到上次有效值 %o', newVal, oldVal);
                         __WEBPACK_IMPORTED_MODULE_0__utils__["default"].setProp(vnode.context, '$data.' + prop, oldVal);
@@ -890,18 +838,18 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //不允许空格
     trim: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var key = $event.key;
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let key = $event.key;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 32) {
                     $event.preventDefault();
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
                     __WEBPACK_IMPORTED_MODULE_0__utils__["default"].setProp(vnode.context, '$data.' + prop, newVal && newVal.trim() || oldVal);
@@ -918,7 +866,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
         //     console.debug('bind: %o', binding.expression);
         //     console.debug('添加校验: %o', binding.expression);
         // },
-        inserted: function inserted(el, binding, vnode) {
+        inserted: function (el, binding, vnode) {
             console.debug('inserted 添加校验: %o', binding.expression);
             bindFieldValidator(el, binding, vnode);
         },
@@ -929,7 +877,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
         //     console.debug('componentUpdated 变更校验: %o', binding.expression);
         //     bindFieldValidator(el, binding, vnode);
         // },
-        unbind: function unbind(el, binding, vnode) {
+        unbind: function (el, binding, vnode) {
             console.debug('unbind 取消校验: %o', binding.expression);
             unbindFieldValidator(el, binding, vnode);
         }
@@ -937,7 +885,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //表单校验
     validateForm: {
-        bind: function bind(el, binding, vnode) {
+        bind: function (el, binding, vnode) {
             console.debug('form bind');
 
             // 监听器
@@ -950,7 +898,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
             // 取消监听
             vnode.context.$data.$validator.unwatch = function () {
                 if (vnode.context.$data.$validator.watcher) {
-                    for (var key in vnode.context.$data.$validator.watcher) {
+                    for (let key in vnode.context.$data.$validator.watcher) {
                         vnode.context.$data.$validator.watcher[key]();
                         delete vnode.context.$data.$validator.watcher[key];
                     }
@@ -959,46 +907,25 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
             // 表单校验
             vnode.context.$data.$validator.validateAll = function (group) {
 
-                return Promise.resolve().then(function () {
-                    var validator = vnode.context.$data.$validator.validator;
-                    var promises = [];
+                return Promise.resolve().then(() => {
+                    let validator = vnode.context.$data.$validator.validator;
+                    let promises = [];
 
-                    var _iteratorNormalCompletion3 = true;
-                    var _didIteratorError3 = false;
-                    var _iteratorError3 = undefined;
-
-                    try {
-                        for (var _iterator3 = Object.keys(validator)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                            var key = _step3.value;
-
-                            if (group) {
-                                if (key.startsWith(group + '.')) {
-                                    //按组检验
-                                    promises.push(validator[key]());
-                                }
-                            } else {
-                                //逐个遍历并校验
+                    for (let key of Object.keys(validator)) {
+                        if (group) {
+                            if (key.startsWith(group + '.')) {
+                                //按组检验
                                 promises.push(validator[key]());
                             }
-                        }
-                    } catch (err) {
-                        _didIteratorError3 = true;
-                        _iteratorError3 = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                                _iterator3.return();
-                            }
-                        } finally {
-                            if (_didIteratorError3) {
-                                throw _iteratorError3;
-                            }
+                        } else {
+                            //逐个遍历并校验
+                            promises.push(validator[key]());
                         }
                     }
 
                     return Promise.all(promises);
-                }).then(function () {
-                    var error = vnode.context.$data.$validator.error;
+                }).then(() => {
+                    let error = vnode.context.$data.$validator.error;
                     return !error || Object.keys(error).length == 0;
                 });
             };
@@ -1008,34 +935,34 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 //清空错误消息
                 vnode.context.$data.$validator.error = {};
 
-                el.querySelectorAll('.is-error').forEach(function (i) {
+                el.querySelectorAll('.is-error').forEach(i => {
                     i.classList.remove('is-error');
                 });
 
-                el.querySelectorAll('.err-required').forEach(function (i) {
+                el.querySelectorAll('.err-required').forEach(i => {
                     i.classList.remove('err-required');
                 });
 
-                el.querySelectorAll('.err-minlength').forEach(function (i) {
+                el.querySelectorAll('.err-minlength').forEach(i => {
                     i.classList.remove('err-minlength');
                 });
 
-                el.querySelectorAll('.err-min').forEach(function (i) {
+                el.querySelectorAll('.err-min').forEach(i => {
                     i.classList.remove('err-min');
                 });
 
-                el.querySelectorAll('.err-remote').forEach(function (i) {
+                el.querySelectorAll('.err-remote').forEach(i => {
                     i.classList.remove('err-remote');
                 });
 
-                el.querySelectorAll('.err-customize').forEach(function (i) {
+                el.querySelectorAll('.err-customize').forEach(i => {
                     i.classList.remove('err-customize');
                 });
             };
 
             console.debug(vnode.context.$data.$validator);
         },
-        unbind: function unbind(el, binding, vnode) {
+        unbind: function (el, binding, vnode) {
             console.debug('form unbind');
 
             vnode.context.$data.$validator.unwatch();
@@ -1055,9 +982,9 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //折叠面板
     collapsable: {
-        bind: function bind(el, binding, vnode) {
-            var target = el.getAttribute('target');
-            var collapsed = el.getAttribute('collapsed') == 'true';
+        bind: function (el, binding, vnode) {
+            let target = el.getAttribute('target');
+            let collapsed = el.getAttribute('collapsed') == 'true';
             if (!el.classList.contains('dsp-panel-collapsable')) {
                 el.classList.add('dsp-panel-collapsable');
             }
@@ -1065,7 +992,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 el.classList.add('collapsed');
             }
             el.addEventListener("click", function () {
-                var targetDom = document.querySelector(target);
+                let targetDom = document.querySelector(target);
                 if (targetDom) {
                     if (targetDom.classList.contains('dsp-panel-collapsed__content')) {
                         targetDom.classList.remove('dsp-panel-collapsed__content');
@@ -1083,45 +1010,41 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //图片拖拽
     imgdrag: {
-        bind: function bind(el, binding, vnode) {
+        bind: function (el, binding, vnode) {
 
-            var dialogHeaderEl = el.querySelector('.dsp-img-header');
-            var dragDom = el.querySelector('.dsp-img-preview');
-            var sty = function () {
+            const dialogHeaderEl = el.querySelector('.dsp-img-header');
+            const dragDom = el.querySelector('.dsp-img-preview');
+            const sty = function () {
                 if (window.document.currentStyle) {
-                    return function (dom, attr) {
-                        return dom.currentStyle[attr];
-                    };
+                    return (dom, attr) => dom.currentStyle[attr];
                 } else {
-                    return function (dom, attr) {
-                        return getComputedStyle(dom, false)[attr];
-                    };
+                    return (dom, attr) => getComputedStyle(dom, false)[attr];
                 }
             }();
-            dialogHeaderEl.onmousedown = function (e) {
+            dialogHeaderEl.onmousedown = e => {
                 // 鼠标按下，计算当前元素距离可视区的距离
-                var disX = e.clientX - dialogHeaderEl.offsetLeft;
-                var disY = e.clientY - dialogHeaderEl.offsetTop;
+                const disX = e.clientX - dialogHeaderEl.offsetLeft;
+                const disY = e.clientY - dialogHeaderEl.offsetTop;
 
                 // body当前宽度
-                var screenWidth = document.body.clientWidth;
+                const screenWidth = document.body.clientWidth;
                 // 可见区域高度(应为body高度，可某些环境下无法获取)
-                var screenHeight = document.documentElement.clientHeight;
+                const screenHeight = document.documentElement.clientHeight;
 
                 // 宽度
-                var dragDomWidth = dragDom.offsetWidth;
+                const dragDomWidth = dragDom.offsetWidth;
                 // 高度
-                var dragDomheight = dragDom.offsetHeight;
+                const dragDomheight = dragDom.offsetHeight;
 
-                var minDragDomLeft = dragDom.offsetLeft;
-                var maxDragDomLeft = screenWidth - dragDom.offsetLeft - dragDomWidth;
+                const minDragDomLeft = dragDom.offsetLeft;
+                const maxDragDomLeft = screenWidth - dragDom.offsetLeft - dragDomWidth;
 
-                var minDragDomTop = dragDom.offsetTop;
-                var maxDragDomTop = screenHeight - dragDom.offsetTop - dragDomheight;
+                const minDragDomTop = dragDom.offsetTop;
+                const maxDragDomTop = screenHeight - dragDom.offsetTop - dragDomheight;
 
                 // 获取到的值带px 正则匹配替换
-                var styL = sty(dragDom, 'left');
-                var styT = sty(dragDom, 'top');
+                let styL = sty(dragDom, 'left');
+                let styT = sty(dragDom, 'top');
 
                 if (styL.includes('%')) {
                     styL = +document.body.clientWidth * (+styL.replace(/%/g, '') / 100);
@@ -1132,8 +1055,8 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
                 document.onmousemove = function (e) {
                     // 通过事件委托，计算移动的距离
-                    var left = e.clientX - disX;
-                    var top = e.clientY - disY;
+                    let left = e.clientX - disX;
+                    let top = e.clientY - disY;
                     // 边界处理
                     if (-left > minDragDomLeft) {
                         left = -minDragDomLeft;
@@ -1146,7 +1069,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                         top = maxDragDomTop;
                     }
                     // 移动当前元素
-                    dragDom.style.cssText += ';left:' + (left + styL) + 'px;top:' + (top + styT) + 'px;';
+                    dragDom.style.cssText += `;left:${left + styL}px;top:${top + styT}px;`;
                 };
                 document.onmouseup = function (e) {
                     document.onmousemove = null;
@@ -1158,12 +1081,12 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入0-100的整数或者小数，小数点后保留4位,用于服务费返款费率的输入框
     percentRate: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
 
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
 
@@ -1196,10 +1119,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^(\d|[1-9]\d|100)(\.\d{0,4})?$/;
+                    let regExp = /^(\d|[1-9]\d|100)(\.\d{0,4})?$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的数值, 还原到上次有效值 %o', newVal, oldVal);
                         //

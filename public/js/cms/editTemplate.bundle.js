@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 345);
+/******/ 	return __webpack_require__(__webpack_require__.s = 351);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -72,7 +72,7 @@
 
 
 var bind = __webpack_require__(3);
-var isBuffer = __webpack_require__(14);
+var isBuffer = __webpack_require__(15);
 
 /*global toString:true*/
 
@@ -381,17 +381,15 @@ module.exports = {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__error__ = __webpack_require__(9);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 
 
 
-var err = {
+let err = {
     code: "810",
     message: '页面打开人员与当前操作人员不一致',
     success: false
@@ -402,8 +400,8 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.defaults.headers.common['X-Request
 __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.request.use(function (config) {
 
     //逐级遍历对象的属性，去除空格
-    var trim = function trim(obj) {
-        for (var key in obj) {
+    let trim = function (obj) {
+        for (let key in obj) {
             if (obj[key] || obj[key] == 0) {
                 if (typeof obj[key] === 'string') {
                     obj[key] = obj[key].trim();
@@ -412,7 +410,7 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.request.use(function 
                     if (obj[key] == '') {
                         delete obj[key];
                     }
-                } else if (_typeof(obj[key]) === 'object') {
+                } else if (typeof obj[key] === 'object') {
                     trim(obj[key]);
                 }
             } else {
@@ -422,7 +420,7 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.request.use(function 
     };
 
     //提交数据前，去除首尾空格
-    var data = config.params || config.data || {};
+    let data = config.params || config.data || {};
     trim(data);
 
     return config;
@@ -434,29 +432,29 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.request.use(function 
 __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.response.use(function (response) {
     //处理200返回码
     if (response && response.status == '200' && response.data) {
-        var result = response.data;
+        let result = response.data;
         if (result.success) {
             return result;
         } else {
             //处理全局错误
             if (result.code == '811' || result.code == '810') {
                 //取前端翻译后的错误码、或者后端直接抛出的错误消息，都没有值，则提示默认错误消息
-                var errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR[result.code] || result.message || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
+                let errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR[result.code] || result.message || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
                 if (Vue && Vue.prototype.$message) {
                     Vue.prototype.$message({
                         message: errorMsg,
                         type: 'error',
                         duration: 5000,
-                        onClose: function onClose() {
+                        onClose: function () {
                             window.location.href = '/logout';
                         }
                     });
                 }
             } else {
                 //取前端翻译后的错误码、或者后端直接抛出的错误消息，都没有值，则提示默认错误消息
-                var _errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR[result.code] || result.message || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
+                let errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR[result.code] || result.message || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
                 if (Vue && Vue.prototype.$message) {
-                    Vue.prototype.$message.error(_errorMsg);
+                    Vue.prototype.$message.error(errorMsg);
                 }
                 return result;
             }
@@ -466,7 +464,7 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.response.use(function
     }
 }, function (err) {
     //取前端翻译后的错误码，如没有值，则提示默认错误消息。不直接取后端直接抛出的错误消息，因为可能包含异常堆栈等敏感且不友好的提示信息。
-    var errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].NETWORK_ERROR[err.response && err.response.status] || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
+    let errorMsg = __WEBPACK_IMPORTED_MODULE_1__error__["default"].NETWORK_ERROR[err.response && err.response.status] || __WEBPACK_IMPORTED_MODULE_1__error__["default"].SYSTEM_ERROR.DEFAULT;
     console.error(errorMsg + ': %o', {
         status: err.response && err.response.status,
         message: err.message,
@@ -488,8 +486,6 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.response.use(function
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -500,8 +496,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param prop      可以是'prop.prop[i].prop'的格式
      * @returns {*}
      */
-    getProp: function getProp(obj, prop) {
-        var self = this;
+    getProp: function (obj, prop) {
+        let self = this;
 
         if (!obj || !prop) {
             return obj;
@@ -526,23 +522,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         //数组取值
-        var i1 = prop.indexOf('[');
-        var i2 = prop.indexOf('.');
+        let i1 = prop.indexOf('[');
+        let i2 = prop.indexOf('.');
         if (i1 != -1 && i2 != -1 && i1 < i2 || i1 != -1 && i2 == -1) {
-            var p1 = prop.substr(0, i1);
-            var p2 = prop.substr(i1, prop.length);
-            var v1 = obj[p1];
+            let p1 = prop.substr(0, i1);
+            let p2 = prop.substr(i1, prop.length);
+            let v1 = obj[p1];
             if (!v1) {
                 return v1;
-            } else if ((typeof v1 === 'undefined' ? 'undefined' : _typeof(v1)) != 'object' || !(v1 instanceof Array)) {
+            } else if (typeof v1 != 'object' || !(v1 instanceof Array)) {
                 //非数组
                 return null;
             } else {
-                var _props = p2.split('.');
-                prop = _props.shift().replace('[', '').replace(']', '');
+                let props = p2.split('.');
+                prop = props.shift().replace('[', '').replace(']', '');
 
-                if (_props.length > 0) {
-                    return self.getProp(v1[prop], _props.join('.'));
+                if (props.length > 0) {
+                    return self.getProp(v1[prop], props.join('.'));
                 } else {
                     return v1[prop];
                 }
@@ -550,7 +546,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
 
         //对象取值
-        var props = prop.split('.');
+        let props = prop.split('.');
         prop = props.shift();
 
         if (props.length > 0) {
@@ -567,8 +563,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param prop      值
      * @returns {*}
      */
-    setProp: function setProp(obj, prop, val) {
-        var self = this;
+    setProp: function (obj, prop, val) {
+        let self = this;
 
         if (!obj || !prop) {
             return obj;
@@ -590,11 +586,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             return;
         }
 
-        var props = prop.split('.');
+        let props = prop.split('.');
         prop = props.shift();
 
         if (props.length > 0) {
-            if (obj[prop] && _typeof(obj[prop]) == 'object' && !(obj[prop] instanceof Array)) {
+            if (obj[prop] && typeof obj[prop] == 'object' && !(obj[prop] instanceof Array)) {
                 self.setProp(obj[prop], props.join('.'), val);
             } else {
                 obj[prop] = {};
@@ -610,13 +606,41 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /***/ }),
 
 /***/ 12:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__(13);
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
 
 /***/ }),
 
 /***/ 13:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(14);
+
+/***/ }),
+
+/***/ 14:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -624,7 +648,7 @@ module.exports = __webpack_require__(13);
 
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(3);
-var Axios = __webpack_require__(15);
+var Axios = __webpack_require__(16);
 var defaults = __webpack_require__(2);
 
 /**
@@ -659,14 +683,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(8);
-axios.CancelToken = __webpack_require__(29);
+axios.CancelToken = __webpack_require__(30);
 axios.isCancel = __webpack_require__(7);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(30);
+axios.spread = __webpack_require__(31);
 
 module.exports = axios;
 
@@ -676,7 +700,7 @@ module.exports.default = axios;
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /***/ (function(module, exports) {
 
 /*!
@@ -704,7 +728,7 @@ function isSlowBuffer (obj) {
 
 /***/ }),
 
-/***/ 15:
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -712,8 +736,8 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(2);
 var utils = __webpack_require__(0);
-var InterceptorManager = __webpack_require__(24);
-var dispatchRequest = __webpack_require__(25);
+var InterceptorManager = __webpack_require__(25);
+var dispatchRequest = __webpack_require__(26);
 
 /**
  * Create a new instance of Axios
@@ -791,7 +815,7 @@ module.exports = Axios;
 
 /***/ }),
 
-/***/ 16:
+/***/ 17:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -811,7 +835,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 /***/ }),
 
-/***/ 17:
+/***/ 18:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -845,7 +869,7 @@ module.exports = function settle(resolve, reject, response) {
 
 /***/ }),
 
-/***/ 18:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -874,82 +898,6 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 /***/ }),
 
-/***/ 19:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(0);
-
-function encode(val) {
-  return encodeURIComponent(val).
-    replace(/%40/gi, '@').
-    replace(/%3A/gi, ':').
-    replace(/%24/g, '$').
-    replace(/%2C/gi, ',').
-    replace(/%20/g, '+').
-    replace(/%5B/gi, '[').
-    replace(/%5D/gi, ']');
-}
-
-/**
- * Build a URL by appending params to the end
- *
- * @param {string} url The base of the url (e.g., http://www.google.com)
- * @param {object} [params] The params to be appended
- * @returns {string} The formatted url
- */
-module.exports = function buildURL(url, params, paramsSerializer) {
-  /*eslint no-param-reassign:0*/
-  if (!params) {
-    return url;
-  }
-
-  var serializedParams;
-  if (paramsSerializer) {
-    serializedParams = paramsSerializer(params);
-  } else if (utils.isURLSearchParams(params)) {
-    serializedParams = params.toString();
-  } else {
-    var parts = [];
-
-    utils.forEach(params, function serialize(val, key) {
-      if (val === null || typeof val === 'undefined') {
-        return;
-      }
-
-      if (utils.isArray(val)) {
-        key = key + '[]';
-      }
-
-      if (!utils.isArray(val)) {
-        val = [val];
-      }
-
-      utils.forEach(val, function parseValue(v) {
-        if (utils.isDate(v)) {
-          v = v.toISOString();
-        } else if (utils.isObject(v)) {
-          v = JSON.stringify(v);
-        }
-        parts.push(encode(key) + '=' + encode(v));
-      });
-    });
-
-    serializedParams = parts.join('&');
-  }
-
-  if (serializedParams) {
-    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
-  }
-
-  return url;
-};
-
-
-/***/ }),
-
 /***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -957,7 +905,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(16);
+var normalizeHeaderName = __webpack_require__(17);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -1059,6 +1007,82 @@ module.exports = defaults;
 
 var utils = __webpack_require__(0);
 
+function encode(val) {
+  return encodeURIComponent(val).
+    replace(/%40/gi, '@').
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']');
+}
+
+/**
+ * Build a URL by appending params to the end
+ *
+ * @param {string} url The base of the url (e.g., http://www.google.com)
+ * @param {object} [params] The params to be appended
+ * @returns {string} The formatted url
+ */
+module.exports = function buildURL(url, params, paramsSerializer) {
+  /*eslint no-param-reassign:0*/
+  if (!params) {
+    return url;
+  }
+
+  var serializedParams;
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params);
+  } else if (utils.isURLSearchParams(params)) {
+    serializedParams = params.toString();
+  } else {
+    var parts = [];
+
+    utils.forEach(params, function serialize(val, key) {
+      if (val === null || typeof val === 'undefined') {
+        return;
+      }
+
+      if (utils.isArray(val)) {
+        key = key + '[]';
+      }
+
+      if (!utils.isArray(val)) {
+        val = [val];
+      }
+
+      utils.forEach(val, function parseValue(v) {
+        if (utils.isDate(v)) {
+          v = v.toISOString();
+        } else if (utils.isObject(v)) {
+          v = JSON.stringify(v);
+        }
+        parts.push(encode(key) + '=' + encode(v));
+      });
+    });
+
+    serializedParams = parts.join('&');
+  }
+
+  if (serializedParams) {
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+  }
+
+  return url;
+};
+
+
+/***/ }),
+
+/***/ 21:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(0);
+
 // Headers whose duplicates are ignored by node
 // c.f. https://nodejs.org/api/http.html#http_message_headers
 var ignoreDuplicateOf = [
@@ -1112,7 +1136,7 @@ module.exports = function parseHeaders(headers) {
 
 /***/ }),
 
-/***/ 21:
+/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1188,7 +1212,7 @@ module.exports = (
 
 /***/ }),
 
-/***/ 22:
+/***/ 23:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1232,7 +1256,7 @@ module.exports = btoa;
 
 /***/ }),
 
-/***/ 23:
+/***/ 24:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1293,7 +1317,7 @@ module.exports = (
 
 /***/ }),
 
-/***/ 24:
+/***/ 25:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1353,18 +1377,18 @@ module.exports = InterceptorManager;
 
 /***/ }),
 
-/***/ 25:
+/***/ 26:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var transformData = __webpack_require__(26);
+var transformData = __webpack_require__(27);
 var isCancel = __webpack_require__(7);
 var defaults = __webpack_require__(2);
-var isAbsoluteURL = __webpack_require__(27);
-var combineURLs = __webpack_require__(28);
+var isAbsoluteURL = __webpack_require__(28);
+var combineURLs = __webpack_require__(29);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -1447,7 +1471,7 @@ module.exports = function dispatchRequest(config) {
 
 /***/ }),
 
-/***/ 26:
+/***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1475,7 +1499,7 @@ module.exports = function transformData(data, headers, fns) {
 
 /***/ }),
 
-/***/ 27:
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1497,7 +1521,7 @@ module.exports = function isAbsoluteURL(url) {
 
 /***/ }),
 
-/***/ 28:
+/***/ 29:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1519,7 +1543,26 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 /***/ }),
 
-/***/ 29:
+/***/ 3:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
+
+/***/ }),
+
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1584,26 +1627,7 @@ module.exports = CancelToken;
 
 /***/ }),
 
-/***/ 3:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function bind(fn, thisArg) {
-  return function wrap() {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-    return fn.apply(thisArg, args);
-  };
-};
-
-
-/***/ }),
-
-/***/ 30:
+/***/ 31:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1638,84 +1662,32 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
-/***/ 31:
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
 /***/ 32:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(11);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 
 
-var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
+let bindFieldValidator = function (el, binding, vnode) {
     // 解析动态表达式
-    var prop = binding.expression;
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = Object.keys(vnode.data.attrs)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var key = _step.value;
-
-            if (key && key.startsWith('dsp-index-')) {
-                prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
-            }
-        }
-
-        //binding.expression.replace(/\[[a-zA-Z0-9]*]/g, '.');
-        // let ruleProp = binding.expression.replace(/\[/g, '.').replace(/]/g, '');
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
+    let prop = binding.expression;
+    for (let key of Object.keys(vnode.data.attrs)) {
+        if (key && key.startsWith('dsp-index-')) {
+            prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
         }
     }
 
-    var ruleProp = binding.expression;
+    //binding.expression.replace(/\[[a-zA-Z0-9]*]/g, '.');
+    // let ruleProp = binding.expression.replace(/\[/g, '.').replace(/]/g, '');
+    let ruleProp = binding.expression;
 
     // 解析校验规则
-    var rules = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.$validator.rule');
-    var rule = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(rules, ruleProp);
+    let rules = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.$validator.rule');
+    let rule = __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(rules, ruleProp);
     if (!rule) {
         //没有规则，不做校验
         console.warn('can not find validate rule config for ' + ruleProp + ' in $validator.rule, it will not be verified. ');
@@ -1727,10 +1699,10 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
     }
 
     // 字段校验
-    var fieldValidator = function fieldValidator(value) {
-        var val = value || __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.' + prop);
+    let fieldValidator = function (value) {
+        let val = value || __WEBPACK_IMPORTED_MODULE_0__utils__["default"].getProp(vnode.context, '$data.' + prop);
 
-        return Promise.resolve({ $prop: prop }).then(function (error) {
+        return Promise.resolve({ $prop: prop }).then(error => {
             if (rule.required) {
                 if (!val) {
                     error.required = true;
@@ -1738,14 +1710,14 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
                     error.required = true;
                 } else if (val instanceof Array && val.length == 0) {
                     error.required = true;
-                } else if ((typeof val === 'undefined' ? 'undefined' : _typeof(val)) == 'object' && Object.keys(val).length == 0) {
+                } else if (typeof val == 'object' && Object.keys(val).length == 0) {
                     error.required = true;
                 } else {
                     error.required = false;
                 }
             }
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.minLength) {
                 if (!val) {
                     error.minLength = false;
@@ -1759,7 +1731,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.min || rule.min === 0) {
                 if (!val) {
                     error.min = false;
@@ -1775,7 +1747,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.max) {
                 if (!val) {
                     error.max = false;
@@ -1791,9 +1763,9 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.remote && typeof rule.remote == 'function') {
-                return rule.remote(vnode.context.$data, val).then(function (pass) {
+                return rule.remote(vnode.context.$data, val).then(pass => {
                     if (!pass) {
                         error.remote = true;
                     } else {
@@ -1805,9 +1777,9 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             if (rule.customize && typeof rule.customize == 'function') {
-                return rule.customize(vnode.context.$data, val).then(function (pass) {
+                return rule.customize(vnode.context.$data, val).then(pass => {
                     if (!pass) {
                         error.customize = true;
                     } else {
@@ -1819,12 +1791,8 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
-            error.$pass = Object.keys(error).map(function (key) {
-                return error[key];
-            }).filter(function (v) {
-                return v == true;
-            }).length == 0;
+        }).then(error => {
+            error.$pass = Object.keys(error).map(key => error[key]).filter(v => v == true).length == 0;
 
             if (!error.$pass) {
                 // 未通过校验
@@ -1841,7 +1809,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
             }
 
             return error;
-        }).then(function (error) {
+        }).then(error => {
             /* 添加CSS */
 
             if (!el.classList.contains('form-validate-field')) {
@@ -1919,7 +1887,7 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
     }
 
     // 字段监听
-    var unwatch = vnode.context.$watch(prop, function (newVal, oldVal) {
+    let unwatch = vnode.context.$watch(prop, function (newVal, oldVal) {
         console.debug(prop + ' value changed from %o to: %o', oldVal, newVal);
         fieldValidator(newVal);
     });
@@ -1938,38 +1906,16 @@ var bindFieldValidator = function bindFieldValidator(el, binding, vnode) {
     console.debug('validator: %o', vnode.context.$data.$validator);
 };
 
-var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
+let unbindFieldValidator = function (el, binding, vnode) {
     // 解析动态表达式
-    var prop = binding.expression;
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
-
-    try {
-        for (var _iterator2 = Object.keys(vnode.data.attrs)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var key = _step2.value;
-
-            if (key && key.startsWith('dsp-index-')) {
-                prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
-            }
-        }
-
-        // 从校验错误中移除
-    } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
-            }
-        } finally {
-            if (_didIteratorError2) {
-                throw _iteratorError2;
-            }
+    let prop = binding.expression;
+    for (let key of Object.keys(vnode.data.attrs)) {
+        if (key && key.startsWith('dsp-index-')) {
+            prop = prop.replace(key.substr('dsp-index-'.length, key.length), vnode.data.attrs[key]);
         }
     }
 
+    // 从校验错误中移除
     if (vnode.context.$data.$validator.error) {
         delete vnode.context.$data.$validator.error[prop];
         console.debug('error removed:' + prop);
@@ -1995,11 +1941,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //只允许输入整数
     integer: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
 
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
@@ -2016,11 +1962,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
                     // let regExp =  /^0{1}$|^[1-9]{1}\d*$/;
-                    var regExp = /^0{1}$|^[0-9]{1}\d*$/;
+                    let regExp = /^0{1}$|^[0-9]{1}\d*$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的整数, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -2046,10 +1992,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入6位数字验证码
     captcha: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
+                let keyCode = $event.keyCode;
 
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
@@ -2061,10 +2007,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^\d{0,6}$/;
+                    let regExp = /^\d{0,6}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的验证码, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -2090,12 +2036,12 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入整数或浮点数，小数点后保留2位
     number: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
 
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
 
@@ -2128,10 +2074,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^0{1}$|^0\.\d{0,2}$|^[1-9]{1}\d*\.?\d{0,2}$/;
+                    let regExp = /^0{1}$|^0\.\d{0,2}$|^[1-9]{1}\d*\.?\d{0,2}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的数值, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -2157,11 +2103,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //座机电话和电话
     telephone: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
 
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
@@ -2178,11 +2124,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
                     // let regExp =  /^0{1}$|^[1-9]{1}\d*$/;
-                    var regExp = /^[\d-]*$/;
+                    let regExp = /^[\d-]*$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的整数, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -2208,12 +2154,12 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入整数或浮点数，小数点后保留4位,用于折扣的输入框
     discount: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
 
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
 
@@ -2246,10 +2192,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^0{1}$|^0\.\d{0,4}$|^1{1}$/;
+                    let regExp = /^0{1}$|^0\.\d{0,4}$|^1{1}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的数值, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -2275,11 +2221,11 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入手机号码
     mobile: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
                 } else {
@@ -2305,10 +2251,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^1{1}([3|4|5|6|7|8|9]{1}\d{0,9}){0,1}$/;
+                    let regExp = /^1{1}([3|4|5|6|7|8|9]{1}\d{0,9}){0,1}$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的手机号码, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -2334,10 +2280,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //只允许输入数字和字母
     code: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
+                let keyCode = $event.keyCode;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
                 } else {
@@ -2348,10 +2294,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^[0-9a-zA-Z]*$/;
+                    let regExp = /^[0-9a-zA-Z]*$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的编码, 还原到上次有效值 %o', newVal, oldVal);
                         __WEBPACK_IMPORTED_MODULE_0__utils__["default"].setProp(vnode.context, '$data.' + prop, oldVal);
@@ -2365,18 +2311,18 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //不允许空格
     trim: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
             el.onkeydown = function ($event) {
-                var key = $event.key;
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let key = $event.key;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 32) {
                     $event.preventDefault();
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
                     __WEBPACK_IMPORTED_MODULE_0__utils__["default"].setProp(vnode.context, '$data.' + prop, newVal && newVal.trim() || oldVal);
@@ -2393,7 +2339,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
         //     console.debug('bind: %o', binding.expression);
         //     console.debug('添加校验: %o', binding.expression);
         // },
-        inserted: function inserted(el, binding, vnode) {
+        inserted: function (el, binding, vnode) {
             console.debug('inserted 添加校验: %o', binding.expression);
             bindFieldValidator(el, binding, vnode);
         },
@@ -2404,7 +2350,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
         //     console.debug('componentUpdated 变更校验: %o', binding.expression);
         //     bindFieldValidator(el, binding, vnode);
         // },
-        unbind: function unbind(el, binding, vnode) {
+        unbind: function (el, binding, vnode) {
             console.debug('unbind 取消校验: %o', binding.expression);
             unbindFieldValidator(el, binding, vnode);
         }
@@ -2412,7 +2358,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //表单校验
     validateForm: {
-        bind: function bind(el, binding, vnode) {
+        bind: function (el, binding, vnode) {
             console.debug('form bind');
 
             // 监听器
@@ -2425,7 +2371,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
             // 取消监听
             vnode.context.$data.$validator.unwatch = function () {
                 if (vnode.context.$data.$validator.watcher) {
-                    for (var key in vnode.context.$data.$validator.watcher) {
+                    for (let key in vnode.context.$data.$validator.watcher) {
                         vnode.context.$data.$validator.watcher[key]();
                         delete vnode.context.$data.$validator.watcher[key];
                     }
@@ -2434,46 +2380,25 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
             // 表单校验
             vnode.context.$data.$validator.validateAll = function (group) {
 
-                return Promise.resolve().then(function () {
-                    var validator = vnode.context.$data.$validator.validator;
-                    var promises = [];
+                return Promise.resolve().then(() => {
+                    let validator = vnode.context.$data.$validator.validator;
+                    let promises = [];
 
-                    var _iteratorNormalCompletion3 = true;
-                    var _didIteratorError3 = false;
-                    var _iteratorError3 = undefined;
-
-                    try {
-                        for (var _iterator3 = Object.keys(validator)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                            var key = _step3.value;
-
-                            if (group) {
-                                if (key.startsWith(group + '.')) {
-                                    //按组检验
-                                    promises.push(validator[key]());
-                                }
-                            } else {
-                                //逐个遍历并校验
+                    for (let key of Object.keys(validator)) {
+                        if (group) {
+                            if (key.startsWith(group + '.')) {
+                                //按组检验
                                 promises.push(validator[key]());
                             }
-                        }
-                    } catch (err) {
-                        _didIteratorError3 = true;
-                        _iteratorError3 = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                                _iterator3.return();
-                            }
-                        } finally {
-                            if (_didIteratorError3) {
-                                throw _iteratorError3;
-                            }
+                        } else {
+                            //逐个遍历并校验
+                            promises.push(validator[key]());
                         }
                     }
 
                     return Promise.all(promises);
-                }).then(function () {
-                    var error = vnode.context.$data.$validator.error;
+                }).then(() => {
+                    let error = vnode.context.$data.$validator.error;
                     return !error || Object.keys(error).length == 0;
                 });
             };
@@ -2483,34 +2408,34 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 //清空错误消息
                 vnode.context.$data.$validator.error = {};
 
-                el.querySelectorAll('.is-error').forEach(function (i) {
+                el.querySelectorAll('.is-error').forEach(i => {
                     i.classList.remove('is-error');
                 });
 
-                el.querySelectorAll('.err-required').forEach(function (i) {
+                el.querySelectorAll('.err-required').forEach(i => {
                     i.classList.remove('err-required');
                 });
 
-                el.querySelectorAll('.err-minlength').forEach(function (i) {
+                el.querySelectorAll('.err-minlength').forEach(i => {
                     i.classList.remove('err-minlength');
                 });
 
-                el.querySelectorAll('.err-min').forEach(function (i) {
+                el.querySelectorAll('.err-min').forEach(i => {
                     i.classList.remove('err-min');
                 });
 
-                el.querySelectorAll('.err-remote').forEach(function (i) {
+                el.querySelectorAll('.err-remote').forEach(i => {
                     i.classList.remove('err-remote');
                 });
 
-                el.querySelectorAll('.err-customize').forEach(function (i) {
+                el.querySelectorAll('.err-customize').forEach(i => {
                     i.classList.remove('err-customize');
                 });
             };
 
             console.debug(vnode.context.$data.$validator);
         },
-        unbind: function unbind(el, binding, vnode) {
+        unbind: function (el, binding, vnode) {
             console.debug('form unbind');
 
             vnode.context.$data.$validator.unwatch();
@@ -2530,9 +2455,9 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //折叠面板
     collapsable: {
-        bind: function bind(el, binding, vnode) {
-            var target = el.getAttribute('target');
-            var collapsed = el.getAttribute('collapsed') == 'true';
+        bind: function (el, binding, vnode) {
+            let target = el.getAttribute('target');
+            let collapsed = el.getAttribute('collapsed') == 'true';
             if (!el.classList.contains('dsp-panel-collapsable')) {
                 el.classList.add('dsp-panel-collapsable');
             }
@@ -2540,7 +2465,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 el.classList.add('collapsed');
             }
             el.addEventListener("click", function () {
-                var targetDom = document.querySelector(target);
+                let targetDom = document.querySelector(target);
                 if (targetDom) {
                     if (targetDom.classList.contains('dsp-panel-collapsed__content')) {
                         targetDom.classList.remove('dsp-panel-collapsed__content');
@@ -2558,45 +2483,41 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //图片拖拽
     imgdrag: {
-        bind: function bind(el, binding, vnode) {
+        bind: function (el, binding, vnode) {
 
-            var dialogHeaderEl = el.querySelector('.dsp-img-header');
-            var dragDom = el.querySelector('.dsp-img-preview');
-            var sty = function () {
+            const dialogHeaderEl = el.querySelector('.dsp-img-header');
+            const dragDom = el.querySelector('.dsp-img-preview');
+            const sty = function () {
                 if (window.document.currentStyle) {
-                    return function (dom, attr) {
-                        return dom.currentStyle[attr];
-                    };
+                    return (dom, attr) => dom.currentStyle[attr];
                 } else {
-                    return function (dom, attr) {
-                        return getComputedStyle(dom, false)[attr];
-                    };
+                    return (dom, attr) => getComputedStyle(dom, false)[attr];
                 }
             }();
-            dialogHeaderEl.onmousedown = function (e) {
+            dialogHeaderEl.onmousedown = e => {
                 // 鼠标按下，计算当前元素距离可视区的距离
-                var disX = e.clientX - dialogHeaderEl.offsetLeft;
-                var disY = e.clientY - dialogHeaderEl.offsetTop;
+                const disX = e.clientX - dialogHeaderEl.offsetLeft;
+                const disY = e.clientY - dialogHeaderEl.offsetTop;
 
                 // body当前宽度
-                var screenWidth = document.body.clientWidth;
+                const screenWidth = document.body.clientWidth;
                 // 可见区域高度(应为body高度，可某些环境下无法获取)
-                var screenHeight = document.documentElement.clientHeight;
+                const screenHeight = document.documentElement.clientHeight;
 
                 // 宽度
-                var dragDomWidth = dragDom.offsetWidth;
+                const dragDomWidth = dragDom.offsetWidth;
                 // 高度
-                var dragDomheight = dragDom.offsetHeight;
+                const dragDomheight = dragDom.offsetHeight;
 
-                var minDragDomLeft = dragDom.offsetLeft;
-                var maxDragDomLeft = screenWidth - dragDom.offsetLeft - dragDomWidth;
+                const minDragDomLeft = dragDom.offsetLeft;
+                const maxDragDomLeft = screenWidth - dragDom.offsetLeft - dragDomWidth;
 
-                var minDragDomTop = dragDom.offsetTop;
-                var maxDragDomTop = screenHeight - dragDom.offsetTop - dragDomheight;
+                const minDragDomTop = dragDom.offsetTop;
+                const maxDragDomTop = screenHeight - dragDom.offsetTop - dragDomheight;
 
                 // 获取到的值带px 正则匹配替换
-                var styL = sty(dragDom, 'left');
-                var styT = sty(dragDom, 'top');
+                let styL = sty(dragDom, 'left');
+                let styT = sty(dragDom, 'top');
 
                 if (styL.includes('%')) {
                     styL = +document.body.clientWidth * (+styL.replace(/%/g, '') / 100);
@@ -2607,8 +2528,8 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
                 document.onmousemove = function (e) {
                     // 通过事件委托，计算移动的距离
-                    var left = e.clientX - disX;
-                    var top = e.clientY - disY;
+                    let left = e.clientX - disX;
+                    let top = e.clientY - disY;
                     // 边界处理
                     if (-left > minDragDomLeft) {
                         left = -minDragDomLeft;
@@ -2621,7 +2542,7 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                         top = maxDragDomTop;
                     }
                     // 移动当前元素
-                    dragDom.style.cssText += ';left:' + (left + styL) + 'px;top:' + (top + styT) + 'px;';
+                    dragDom.style.cssText += `;left:${left + styL}px;top:${top + styT}px;`;
                 };
                 document.onmouseup = function (e) {
                     document.onmousemove = null;
@@ -2633,12 +2554,12 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
 
     //允许输入0-100的整数或者小数，小数点后保留4位,用于服务费返款费率的输入框
     percentRate: {
-        bind: function bind(el, binding, vnode) {
-            var input = el.tagName === 'INPUT' ? el : el.querySelector('input');
+        bind: function (el, binding, vnode) {
+            let input = el.tagName === 'INPUT' ? el : el.querySelector('input');
 
             el.onkeydown = function ($event) {
-                var keyCode = $event.keyCode;
-                var val = input.value;
+                let keyCode = $event.keyCode;
+                let val = input.value;
                 if (keyCode === 8 || keyCode === 9 || keyCode === 46 || keyCode === 37 || keyCode === 39 || keyCode === 17 || keyCode === 86) {
                     //退格、Tab键、删除、方向、Control+V键
 
@@ -2671,10 +2592,10 @@ var unbindFieldValidator = function unbindFieldValidator(el, binding, vnode) {
                 }
             };
 
-            var prop = binding.expression;
+            let prop = binding.expression;
             if (prop) {
                 vnode.context.$watch(prop, function (newVal, oldVal) {
-                    var regExp = /^(\d|[1-9]\d|100)(\.\d{0,4})?$/;
+                    let regExp = /^(\d|[1-9]\d|100)(\.\d{0,4})?$/;
                     if (newVal && !regExp.test(newVal)) {
                         console.debug('%o 不是有效的数值, 还原到上次有效值 %o', newVal, oldVal);
                         //
@@ -2711,33 +2632,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 __webpack_require__(34)();
 
 //汉字的数字
-var cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
+const cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
 //基本单位
-var cnIntRadice = new Array('', '拾', '佰', '仟');
+const cnIntRadice = new Array('', '拾', '佰', '仟');
 //对应整数部分扩展单位
-var cnIntUnits = new Array('', '万', '亿', '兆');
+const cnIntUnits = new Array('', '万', '亿', '兆');
 //对应小数部分单位
-var cnDecUnits = new Array('角', '分', '毫', '厘');
+const cnDecUnits = new Array('角', '分', '毫', '厘');
 //整数金额时后面跟的字符
-var cnInteger = '整';
+const cnInteger = '整';
 //整型完以后的单位
-var cnIntLast = '元';
+const cnIntLast = '元';
 //最大处理的数字
-var maxNum = 999999999999999.9999;
+const maxNum = 999999999999999.9999;
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
     //小写变大写
-    capitalize: function capitalize(value) {
+    capitalize: function (value) {
         if (!value) return '';
         value = value.toString();
         return value.toUpperCase();
     },
 
     //金额
-    amount: function amount(value) {
+    amount: function (value) {
         if (!value && value != 0) return value;
-        var old = value;
+        let old = value;
         value = parseFloat(value).toFixed(2);
         value = value.replace('.00', '');
         if (isNaN(value)) {
@@ -2748,7 +2669,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //面积
-    area: function area(value) {
+    area: function (value) {
         if (!value && value != 0) return '';
         value = parseFloat(value).toFixed(4);
         value = value.replace('.0000', '');
@@ -2757,7 +2678,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //比率
-    rate: function rate(value) {
+    rate: function (value) {
         if (!value && value != 0) return '';
         value = parseFloat(value).toFixed(2);
         value = value.replace('.00', '');
@@ -2765,19 +2686,19 @@ var maxNum = 999999999999999.9999;
     },
 
     //取整
-    integer: function integer(value) {
+    integer: function (value) {
         if (!value) return '';
         return Math.round(value);
     },
 
     //保留两位小数
-    float: function float(value) {
+    float: function (value) {
         if (!value) return '';
         return parseFloat(value).toFixed(2);
     },
 
     //日期
-    date: function date(value) {
+    date: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('yyyy-MM-dd');
@@ -2791,7 +2712,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //日期时间
-    time: function time(value) {
+    time: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('hh:mm');
@@ -2803,7 +2724,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //日期时间
-    datetime: function datetime(value) {
+    datetime: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('yyyy-MM-dd hh:mm');
@@ -2814,7 +2735,7 @@ var maxNum = 999999999999999.9999;
         }
     },
     //秒级
-    datetimes: function datetimes(value) {
+    datetimes: function (value) {
         if (!value) return '';
         if (typeof value == 'number') {
             return new Date(parseInt(value)).format('yyyy-MM-dd hh:mm:ss');
@@ -2825,7 +2746,7 @@ var maxNum = 999999999999999.9999;
         }
     },
     // 61秒，显示成1分1秒； 3800秒， 显示成1时3分20秒
-    formatseconds: function formatseconds(value) {
+    formatseconds: function (value) {
         var theTime = parseInt(value); // 秒
         var middle = 0; // 分
         var hour = 0; // 小时
@@ -2848,16 +2769,14 @@ var maxNum = 999999999999999.9999;
         return result;
     },
     //过滤器
-    filter: function filter(list, keyword, props) {
+    filter: function (list, keyword, props) {
         if (!list || !list.length || !keyword) return list;
 
-        return list.filter(function (item) {
+        return list.filter(item => {
             if (props && props.length) {
                 return props.map(function (prop) {
                     return prop && item[prop] && item[prop].toLowerCase().indexOf(keyword.toLowerCase()) != -1;
-                }).find(function (result) {
-                    return result;
-                });
+                }).find(result => result);
             } else {
                 return typeof item == 'string' ? item.toLowerCase().indexOf(keyword.toLowerCase()) != -1 : true;
             }
@@ -2865,7 +2784,7 @@ var maxNum = 999999999999999.9999;
     },
 
     //兼容老系统产生的绝对路径路由
-    url: function url(value) {
+    url: function (value) {
         if (!value) return '';
         if (value.startsWith("http")) {
             return value;
@@ -2875,15 +2794,15 @@ var maxNum = 999999999999999.9999;
     },
 
     //代码如下所示：
-    convertCurrency: function convertCurrency(money) {
+    convertCurrency(money) {
         //金额整数部分
-        var integerNum = void 0;
+        let integerNum;
         //金额小数部分
-        var decimalNum = void 0;
+        let decimalNum;
         //输出的中文金额字符串
-        var chineseStr = '';
+        let chineseStr = '';
         //分离金额后用的数组，预定义
-        var parts = void 0;
+        let parts;
         if (money == '') {
             return '';
         }
@@ -2908,13 +2827,13 @@ var maxNum = 999999999999999.9999;
         }
         //获取整型部分转换
         if (parseInt(integerNum, 10) > 0) {
-            var zeroCount = 0;
-            var IntLen = integerNum.length;
-            for (var i = 0; i < IntLen; i++) {
-                var n = integerNum.substr(i, 1);
-                var p = IntLen - i - 1;
-                var q = p / 4;
-                var m = p % 4;
+            let zeroCount = 0;
+            let IntLen = integerNum.length;
+            for (let i = 0; i < IntLen; i++) {
+                let n = integerNum.substr(i, 1);
+                let p = IntLen - i - 1;
+                let q = p / 4;
+                let m = p % 4;
                 if (n == '0') {
                     zeroCount++;
                 } else {
@@ -2933,11 +2852,11 @@ var maxNum = 999999999999999.9999;
         }
         //小数部分
         if (decimalNum != '') {
-            var decLen = decimalNum.length;
-            for (var _i = 0; _i < decLen; _i++) {
-                var _n = decimalNum.substr(_i, 1);
-                if (_n != '0') {
-                    chineseStr += cnNums[Number(_n)] + cnDecUnits[_i];
+            let decLen = decimalNum.length;
+            for (let i = 0; i < decLen; i++) {
+                let n = decimalNum.substr(i, 1);
+                if (n != '0') {
+                    chineseStr += cnNums[Number(n)] + cnDecUnits[i];
                 }
             }
         }
@@ -2948,6 +2867,7 @@ var maxNum = 999999999999999.9999;
         }
         return chineseStr;
     }
+
 });
 
 /***/ }),
@@ -3033,16 +2953,15 @@ module.exports = function () {
             "S": this.getMilliseconds() //毫秒
         };
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o) {
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
-        }return fmt;
+        for (var k in o) if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+        return fmt;
     };
 
     Number.prototype.toFixed = function (n) {
         if (n > 20 || n < 0) {
             throw new RangeError('tofixed()数字参数必须是0和20之间');
         }
-        var number = this;
+        const number = this;
         if (isNaN(number) || number >= Math.pow(10, 21)) {
             return number.toString();
         }
@@ -3050,35 +2969,35 @@ module.exports = function () {
             return Math.round(number).toString();
         }
 
-        var result = number.toString();
-        var arr = result.split('.');
+        let result = number.toString();
+        const arr = result.split('.');
 
         // 整数的情况
         if (arr.length < 2) {
             result += '.';
-            for (var i = 0; i < n; i += 1) {
+            for (let i = 0; i < n; i += 1) {
                 result += '0';
             }
             return result;
         }
 
-        var integer = arr[0];
-        var decimal = arr[1];
+        const integer = arr[0];
+        const decimal = arr[1];
         if (decimal.length == n) {
             return result;
         }
         if (decimal.length < n) {
-            for (var _i = 0; _i < n - decimal.length; _i += 1) {
+            for (let i = 0; i < n - decimal.length; i += 1) {
                 result += '0';
             }
             return result;
         }
         result = integer + '.' + decimal.substr(0, n);
-        var last = decimal.substr(n, 1);
+        const last = decimal.substr(n, 1);
 
         // 四舍五入，转换为整数再处理，避免浮点数精度的损失
         if (parseInt(last, 10) >= 5) {
-            var x = Math.pow(10, n);
+            const x = Math.pow(10, n);
             result = (Math.round(parseFloat(result) * x) + 1) / x;
             result = result.toFixed(n);
         }
@@ -3089,405 +3008,6 @@ module.exports = function () {
 
 /***/ }),
 
-/***/ 345:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__ = __webpack_require__(10);
-/* jshint esversion: 6 */
-
-
-
-var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
-    el: '#app',
-    delimiters: ['{[', ']}'],
-    data: {
-        // 校验规则
-        $validator: {
-            rule: {
-                information: {
-                    templateNo: {
-                        required: true,
-                        //返回Promise对象
-                        remote: function remote($data, value) {
-                            var pass = {
-                                id: self.information && self.information.id || null,
-                                templateNo: value
-                            };
-                            return __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__["default"].get('/api/wechat/admin/share/template/check/template/no', { params: pass }).then(function (response) {
-                                //返回false，表示验证未通过；返回true，表示验证通过。
-                                return response && response.success && !response.data;
-                            });
-                        }
-                    },
-                    backgroundImage: { required: true }
-                }
-            }
-        },
-        // src图片路径 w宽度 h高度 x左坐标  y坐标 text文字 f是否显示 d默认的图片
-        informationOne: [{
-            l: '分享文章配图',
-            f: 'articleImageValid',
-            w: 'articleImageWidth',
-            h: 'articleImageHigh',
-            x: 'articleImageX',
-            y: 'articleImageY',
-            d: 'http://ftp.sfygroup.shop/upload/wechat/20190618/20190618103450670_e90db12c0a0f45d0b476048a059172da.png',
-            type: 'img'
-        }, {
-            l: '分享文章标题',
-            f: 'articleTitleValid',
-            // w:'articleTitleWidth',
-            // h:'articleTitleHigh',
-            x: 'articleTitleX',
-            y: 'articleTitleY',
-            s: 'articleTitleSize',
-            type: 'div'
-        }, {
-            l: '分享人头像',
-            f: 'avatarUrlValid',
-            w: 'avatarUrlWidth',
-            h: 'avatarUrlWidth',
-            x: 'avatarUrlX',
-            y: 'avatarUrlY',
-            d: 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=436058079,3311955223&fm=26&gp=0.jpg',
-            type: 'img'
-        }, {
-            l: '分享人昵称',
-            f: 'nickNameValid',
-            // w:'nickNameWidth',
-            // h:'nickNameHigh',
-            x: 'nickNameX',
-            y: 'nickNameY',
-            s: 'nickNameSize',
-            type: 'div'
-        }, {
-            l: '前景图1',
-            f: 'foreground1Valid',
-            w: 'foreground1Width',
-            h: 'foreground1High',
-            src: 'foreground1',
-            x: 'foreground1X',
-            y: 'foreground1Y',
-            type: 'img'
-        }, {
-            l: '前景图2',
-            f: 'foreground2Valid',
-            src: 'foreground2',
-            w: 'foreground2Width',
-            h: 'foreground2High',
-            x: 'foreground2X',
-            y: 'foreground2Y',
-            type: 'img'
-        }, {
-            w: 'appletCodeWidth',
-            h: 'appletCodeWidth',
-            x: 'appletCodeX',
-            y: 'appletCodeY',
-            d: '/images/qrcode.jpeg',
-            type: 'img'
-        }],
-        //templateType      one 单图   more多图
-        templateType: null,
-        //   用以显示的其他参数
-        qt: {
-            // 单图模版的样式
-            'templateMobile': ''
-        },
-        information: {
-            templateNo: null, //海报编号
-            backgroundImage: null, //背景图
-            posterWidth: null, //海报宽
-            posterHigh: null, //海报高
-            //分享文章配图    也就是文章的海报配图
-            articleImageValid: false,
-
-            articleImageWidth: 750, //分享文章配图宽
-            articleImageHigh: 600, //分享文章配图高
-            articleImageX: 0, //分享文章配图X
-            articleImageY: 0, //分享文章配图Y
-            //文章标题
-            articleTitle: null,
-            articleTitleValid: false, //文章标题是否显示
-            // articleTitleWidth:null,     //文章尺寸
-            articleTitleSize: 35,
-            articleTitleX: 0,
-            articleTitleY: 0,
-            //分享人头像
-            avatarUrl: null,
-            avatarUrlValid: false, //分享人头像是否显示
-            avatarUrlWidth: 50, //分享人头像尺寸
-            avatarUrlX: 100, //分享人头像位置
-            avatarUrlY: 400, //分享人头像位置
-            //分享人昵称
-            nickNameValid: false,
-            nickNameX: 0,
-            nickNameY: 0,
-            // nickNameWidth:null,
-            // nickNameHigh:null,
-            nickNameSize: 28,
-            nickNameLength: 6,
-            //前景图1
-            foreground1: null,
-            foreground1Valid: false,
-            foreground1Width: null,
-            foreground1High: null,
-            foreground1X: 0,
-            foreground1Y: 0,
-            //前景图2
-            foreground2: null,
-            foreground2Valid: false,
-            foreground2Width: null,
-            foreground2High: null,
-            foreground2X: 0,
-            foreground2Y: 0,
-            //小程序码
-            appletCode: '小程序码',
-            appletCodeType: 'APPLET',
-            appletCodeWidth: 100,
-            appletCodeX: 160,
-            appletCodeY: 600,
-            templateType: 'one'
-        },
-        imgUrl: null,
-        loading: {
-            save: false,
-            clickpreview: false,
-
-            viewPreview: false
-        },
-        previewImg: null
-    },
-    methods: {
-        move: function move(e) {
-            var _this = this;
-
-            var odiv = e.target;
-            var x = e.target.getAttribute('data-x');
-            var y = e.target.getAttribute('data-y');
-            var scale = 1;
-            if (self.information.posterWidth > 420) {
-                scale = 420 / self.information.posterWidth;
-            }
-            //算出鼠标相对元素的位置
-            var disX = e.clientX / scale - odiv.offsetLeft;
-            var disY = e.clientY / scale - odiv.offsetTop;
-
-            //元素的宽高
-            var odivW = e.target.offsetWidth;
-            var odivH = e.target.offsetHeight;
-
-            var fuW = self.information.posterWidth || 420;
-            var fuH = self.information.posterHigh || 746;
-            document.onmousemove = function (e) {
-                //鼠标按下并移动的事件
-                //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
-                var left = e.clientX / scale - disX > fuW - odivW ? fuW - odivW : e.clientX / scale - disX < 0 ? 0 : e.clientX / scale - disX;
-                var top = e.clientY / scale - disY > fuH - odivH ? fuH - odivH : e.clientY / scale - disY < 0 ? 0 : e.clientY / scale - disY;
-                left = parseInt(left);
-                top = parseInt(top);
-                //绑定元素位置到positionX和positionY上面
-                _this.information[x] = left;
-                _this.information[y] = top;
-
-                //移动当前元素
-                odiv.style.left = left + 'px';
-                odiv.style.top = top + 'px';
-            };
-            document.onmouseup = function (e) {
-                document.onmousemove = null;
-                document.onmouseup = null;
-            };
-        },
-        beforeUpload: function beforeUpload(file) {
-            //限制上传格式
-            var imgtype = ['image/jpeg', 'image/png'];
-            if (imgtype.indexOf(file.type) < 0) {
-                this.$message.error('只支持png/jpg格式图片');
-                return false;
-            }
-            //限制上传大小
-            if (file.size / 512 / 1024 > 1) {
-                this.$message.error('文件大小不能超过0.5MB!');
-                return false;
-            }
-
-            return true;
-        },
-
-        //上传失败后
-        uploadFailed: function uploadFailed(response, file, fileList) {
-            this.$message.error('\u6587\u4EF6\u4E0A\u4F20\u5931\u8D25\uFF0C\u8BF7\u7A0D\u540E\u91CD\u8BD5');
-        },
-        uploadSucceed: function uploadSucceed(response, file, fileList) {
-            this.$message.success('\u6587\u4EF6\u4E0A\u4F20\u6210\u529F');
-            this.information[this.imgUrl] = response && response.data && response.data.relativePath;
-            if (this.imgUrl === 'backgroundImage') {
-                setTimeout(function () {
-                    var fu = document.getElementsByClassName('template-mobile')[0];
-                    self.information.posterWidth = fu.offsetWidth;
-                    self.information.posterHigh = fu.offsetHeight;
-                    if (fu.offsetWidth > 420) {
-                        self.qt.templateMobile = 'transform-origin: 0px 0px;transform:scale(' + 420 / fu.offsetWidth + ')';
-                    }
-                }, 100);
-            } else {
-                var a = '[data-w="' + this.imgUrl + 'Width"]';
-                setTimeout(function () {
-                    var ele = document.querySelector(a);
-                    self.information[self.imgUrl + 'Width'] = ele.naturalWidth;
-                    self.information[self.imgUrl + 'High'] = ele.naturalHeight;
-                }, 100);
-            }
-        },
-        addSave: function addSave() {
-            var _this2 = this;
-
-            var self = this;
-            if (this.information.id && DSP.type === 'edit') {
-                this.editSave();
-                return;
-            }
-            this.$data.$validator.validateAll().then(function (pass) {
-                if (pass) {
-                    delete self.information.id;
-                    delete self.information.timeCreated;
-                    delete self.information.timeUpdated;
-                    console.log(_this2.information);
-                    self.loading.save = true;
-                    if (!_this2.information.previewImage) {
-                        _this2.information.previewImage = {
-                            avatarUrl: "string",
-                            nickName: "string",
-                            realmNo: "string",
-                            userNo: "string"
-                        };
-                    }
-                    var obj = JSON.parse(JSON.stringify(_this2.information));
-                    if (obj.appletCodeType !== 'WECHAT_SERVICE_ACCOUNT') {
-                        delete obj.appId;
-                    }
-                    __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__["default"].post('/api/wechat/admin/share/template/add', obj).then(function (res) {
-                        if (res.code === '000') {
-                            _this2.$message.success('保存成功');
-                            window.location = '/cms/template#eyJ0b3RhbFNpemUiOjAsInBhZ2VTaXplIjoxNTAsImN1cnJlbnRQYWdlIjoxLCJ0ZW1wbGF0ZVR5cGUiOiJvbmUifQ==';
-                        } else {
-                            self.loading.save = false;
-                            _this2.$message.error(res.message);
-                        }
-                    }).catch(function (err) {
-                        self.loading.save = false;
-                    });
-                }
-            });
-        },
-        editSave: function editSave() {
-            var _this3 = this;
-
-            var self = this;
-            this.$data.$validator.validateAll().then(function (pass) {
-                if (pass) {
-                    self.loading.save = true;
-                    delete self.information.timeCreated;
-                    delete self.information.timeUpdated;
-                    var obj = JSON.parse(JSON.stringify(_this3.information));
-                    if (obj.appletCodeType !== 'WECHAT_SERVICE_ACCOUNT') {
-                        delete obj.appId;
-                    }
-                    self.loading.save = true;
-                    __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__["default"].put('/api/wechat/admin/share/template/' + self.information.id, obj).then(function (res) {
-                        if (res.code === '000') {
-                            _this3.$message.success('保存成功');
-                            window.location = '/cms/template#eyJ0b3RhbFNpemUiOjAsInBhZ2VTaXplIjoxNTAsImN1cnJlbnRQYWdlIjoxLCJ0ZW1wbGF0ZVR5cGUiOiJvbmUifQ==';
-                        } else {
-                            self.loading.save = false;
-
-                            _this3.$message.error(res.message);
-                        }
-                    });
-                }
-            });
-        },
-
-        //等比例
-        wh: function wh(e, querySelector) {
-            var a = '[data-w="' + querySelector + 'Width"]';
-            var ele = document.querySelector(a);
-
-            if (ele && !(querySelector === 'articleImage' && DSP.type === 'add')) {
-                var bi = ele.naturalWidth / ele.naturalHeight;
-                if (e.indexOf('Width') > -1) {
-                    self.information[querySelector + 'High'] = parseInt(self.information[querySelector + 'Width'] / bi);
-                } else {
-                    self.information[querySelector + 'Width'] = parseInt(self.information[querySelector + 'High'] * bi);
-                }
-            }
-        },
-
-        //生成预览图
-        clickpreview: function clickpreview(e) {
-            var _this4 = this;
-
-            this.loading.clickpreview = true;
-            var query = {
-                avatarUrl: "string",
-                nickName: "string",
-                realmNo: "string",
-                userNo: "string"
-            };
-            __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__["default"].post('/api/wechat/admin/share/template/generate/preview/image/' + self.information.id, query).then(function (res) {
-                _this4.loading.clickpreview = false;
-                if (res.code === '000') {
-                    _this4.loading.viewPreview = true;
-                    _this4.previewImg = res.data.path;
-                }
-            }).catch(function (err) {
-                _this4.loading.clickpreview = false;
-            });
-        },
-        changeAppletCodeType: function changeAppletCodeType(e) {
-            switch (this.information.appletCodeType) {
-                case 'APPLET':
-                    this.informationOne[6].d = '/images/qrcode.jpeg';
-                    break;
-                case 'WECHAT_SERVICE_ACCOUNT':
-                    this.informationOne[6].d = '/images/cms_qrcode.png';
-                    console.log(this.information);
-                    if (!this.information.appId) {
-                        this.$set(this.information, 'appId', DSP.gzh[0].appid);
-                    }
-                    break;
-                case 'POSTER_QRCODE':
-                    this.informationOne[6].d = '/images/qrcodewithlogo.jpg';
-                    break;
-            }
-        }
-    },
-    created: function created() {
-        this.templateType = JSON.parse(JSON.stringify(DSP.templateType));
-
-        this.$set(this.information, 'templateType', DSP.templateType);
-        if (DSP.template) {
-            this.information = JSON.parse(JSON.stringify(DSP.template));
-            if (!this.information.appletCodeType) {
-                this.$set(this.information, 'appletCodeType', 'APPLET');
-            }
-            console.log(this.information.posterWidth);
-            if (this.information.posterWidth > 420) {
-                this.qt.templateMobile = 'transform-origin: 0px 0px;transform:scale(' + 420 / this.information.posterWidth + ')';
-            }
-            this.changeAppletCodeType();
-        }
-        if (DSP.type === 'add') {
-            delete this.information.id;
-        }
-    }
-});
-
-/***/ }),
-
 /***/ 35:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3495,29 +3015,27 @@ var self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_js_base64__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_js_base64___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_js_base64__);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     // 业务字典翻译
-    $translate: function $translate(dict, value) {
+    $translate: function (dict, value) {
         if (!dict || !dict.length || !value) {
             return value;
         }
 
-        var match = null;
-        dict.forEach(function (d) {
+        let match = null;
+        dict.forEach(d => {
             if (d.value == value) {
                 match = d;
             } else if (d.children && d.children.length) {
-                d.children.forEach(function (c) {
+                d.children.forEach(c => {
                     if (c.value == value) {
                         match = c;
                     } else if (c.children && c.children.length) {
-                        c.children.forEach(function (i) {
+                        c.children.forEach(i => {
                             if (i.value == value) {
                                 match = i;
                             }
@@ -3529,7 +3047,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         return match && match.label || value;
     },
-    $sceneInfo: function $sceneInfo(s) {
+    $sceneInfo(s) {
         var scene = [];
         s = s * 1;
         switch (s) {
@@ -3678,12 +3196,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 scene.push('未知入口');
                 break;
         }
-        var str = scene[1] || scene[0];
+        let str = scene[1] || scene[0];
         return str;
     },
-
     // 合并两个对象
-    $merge: function $merge(obj, src) {
+    $merge: function (obj, src) {
         for (var key in src) {
             if (src.hasOwnProperty(key)) obj[key] = src[key];
         }
@@ -3691,21 +3208,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // 解析浏览器地址栏请求参数
-    $parseQuery: function $parseQuery() {
-        var query = {};
-        var search = window.location.search;
+    $parseQuery: function () {
+        let query = {};
+        let search = window.location.search;
         if (search.startsWith('?')) {
             search = search.substr(1, search.length);
             search = search.split('&');
 
-            search.forEach(function (s) {
-                var idx = s.indexOf('=');
+            search.forEach(s => {
+                let idx = s.indexOf('=');
                 if (idx !== -1) {
-                    var prop = s.substr(0, idx);
-                    var val = s.substr(idx + 1, s.length);
+                    let prop = s.substr(0, idx);
+                    let val = s.substr(idx + 1, s.length);
 
                     if (query[prop]) {
-                        var arr = [].concat(query[prop]).concat(val);
+                        let arr = [].concat(query[prop]).concat(val);
                         query[prop] = arr;
                     } else {
                         query[prop] = val;
@@ -3718,12 +3235,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // base64编码
-    $base64Encode: function $base64Encode(obj) {
+    $base64Encode: function (obj) {
         if (obj == undefined || obj == null) {
             return '';
         }
 
-        if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) == 'object') {
+        if (typeof obj == 'object') {
             return __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].encode(JSON.stringify(obj));
         } else if (typeof obj == 'string') {
             return __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].encode(JSON.stringify(obj));
@@ -3733,12 +3250,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // base64解码
-    $base64Decode: function $base64Decode(str) {
+    $base64Decode: function (str) {
         if (!str) {
             return;
         }
 
-        var decoded = __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].decode(str);
+        let decoded = __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].decode(str);
         try {
             return JSON.parse(decoded);
         } catch (err) {
@@ -3753,23 +3270,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
          * 参数求和，sum(1,2,3) = 6
          * @returns {number}
          */
-        sum: function sum() {
+        sum: function () {
             if (arguments.length == 0) {
                 return 0;
             }
 
-            var args = [];
+            let args = [];
             if (arguments.length == 1 && arguments[0] instanceof Array) {
                 args = arguments[0];
             } else {
                 args = arguments;
             }
 
-            var sum = 0;
+            let sum = 0;
             for (var i = 0; i < args.length; i++) {
-                if (_typeof(args[i] == 'number')) {
+                if (typeof (args[i] == 'number')) {
                     sum += parseFloat(args[i]);
-                } else if (_typeof(args[i] == 'string') && !isNaN(args[i])) {
+                } else if (typeof (args[i] == 'string') && !isNaN(args[i])) {
                     sum += parseFloat(args[i]);
                 }
             }
@@ -3779,7 +3296,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     $history: {
-        back: function back() {
+        back: function () {
             if (document.referrer) {
                 window.location.href = document.referrer;
             } else {
@@ -3793,7 +3310,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param privilege 业务权限值
      * @returns {boolean} true：具备，false：不具备
      */
-    $hasPrivilege: function $hasPrivilege(privilege) {
+    $hasPrivilege: function (privilege) {
         if (!privilege) {
             return true;
         }
@@ -3811,7 +3328,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param privilege 业务权限值
      * @returns {boolean} true：具备，false：不具备
      */
-    $hasBizPrivilege: function $hasBizPrivilege(type, privilege) {
+    $hasBizPrivilege: function (type, privilege) {
         if (!privilege) {
             return true;
         }
@@ -3828,13 +3345,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return DSP.user.currPosition.bizPrivileges[type].indexOf(privilege) != -1;
     },
     // 根据单位确定计算方式，并返回金额
-    $price: function $price(unit, product) {
-        var price = product.price,
-            quantity = product.quantity,
-            ratio = product.ratio,
-            width = product.width,
-            height = product.height;
-
+    $price: function (unit, product) {
+        var { price, quantity, ratio, width, height } = product;
         var base = (price || 0) * (ratio || 0) * (quantity || 0);
         var area = ((width || 0) * 0.001 * (height || 0) * 0.001 || 0).toFixed(4);
         var obj = {
@@ -3855,12 +3367,399 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // 将java的LocalDateTime时间格式变成时间戳
-    $localDateTimeNumber: function $localDateTimeNumber(el) {
-        var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 's';
-
-        el = new Date((el.year + '-' + el.monthValue + '-' + el.dayOfMonth + ' ' + el.hour + ':' + el.minute + ':' + el.second).replace(/-/g, '/'));
+    $localDateTimeNumber: function (el, type = 's') {
+        el = new Date(`${el.year}-${el.monthValue}-${el.dayOfMonth} ${el.hour}:${el.minute}:${el.second}`.replace(/-/g, '/'));
         el = el.getTime();
         return el;
+    }
+});
+
+/***/ }),
+
+/***/ 351:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__ = __webpack_require__(10);
+/* jshint esversion: 6 */
+
+
+
+let self = new __WEBPACK_IMPORTED_MODULE_0__scripts_module_vue__["default"]({
+    el: '#app',
+    delimiters: ['{[', ']}'],
+    data: {
+        // 校验规则
+        $validator: {
+            rule: {
+                information: {
+                    templateNo: {
+                        required: true,
+                        //返回Promise对象
+                        remote: function ($data, value) {
+                            let pass = {
+                                id: self.information && self.information.id || null,
+                                templateNo: value
+                            };
+                            return __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__["default"].get(`/api/wechat/admin/share/template/check/template/no`, { params: pass }).then(response => {
+                                //返回false，表示验证未通过；返回true，表示验证通过。
+                                return response && response.success && !response.data;
+                            });
+                        }
+                    },
+                    backgroundImage: { required: true }
+                }
+            }
+        },
+        // src图片路径 w宽度 h高度 x左坐标  y坐标 text文字 f是否显示 d默认的图片
+        informationOne: [{
+            l: '分享文章配图',
+            f: 'articleImageValid',
+            w: 'articleImageWidth',
+            h: 'articleImageHigh',
+            x: 'articleImageX',
+            y: 'articleImageY',
+            d: 'http://ftp.sfygroup.shop/upload/wechat/20190618/20190618103450670_e90db12c0a0f45d0b476048a059172da.png',
+            type: 'img'
+        }, {
+            l: '分享文章标题',
+            f: 'articleTitleValid',
+            // w:'articleTitleWidth',
+            // h:'articleTitleHigh',
+            x: 'articleTitleX',
+            y: 'articleTitleY',
+            s: 'articleTitleSize',
+            type: 'div'
+        }, {
+            l: '分享人头像',
+            f: 'avatarUrlValid',
+            w: 'avatarUrlWidth',
+            h: 'avatarUrlWidth',
+            x: 'avatarUrlX',
+            y: 'avatarUrlY',
+            d: 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=436058079,3311955223&fm=26&gp=0.jpg',
+            type: 'img'
+        }, {
+            l: '分享人昵称',
+            f: 'nickNameValid',
+            // w:'nickNameWidth',
+            // h:'nickNameHigh',
+            x: 'nickNameX',
+            y: 'nickNameY',
+            s: 'nickNameSize',
+            type: 'div'
+        }, {
+            l: '前景图1',
+            f: 'foreground1Valid',
+            w: 'foreground1Width',
+            h: 'foreground1High',
+            src: 'foreground1',
+            x: 'foreground1X',
+            y: 'foreground1Y',
+            type: 'img'
+        }, {
+            l: '前景图2',
+            f: 'foreground2Valid',
+            src: 'foreground2',
+            w: 'foreground2Width',
+            h: 'foreground2High',
+            x: 'foreground2X',
+            y: 'foreground2Y',
+            type: 'img'
+        }, {
+            w: 'appletCodeWidth',
+            h: 'appletCodeWidth',
+            x: 'appletCodeX',
+            y: 'appletCodeY',
+            d: '/images/qrcode.jpeg',
+            type: 'img'
+        }],
+        //templateType      one 单图   more多图
+        templateType: null,
+        //   用以显示的其他参数
+        qt: {
+            // 单图模版的样式
+            'templateMobile': ''
+        },
+        information: {
+            templateNo: null, //海报编号
+            backgroundImage: null, //背景图
+            posterWidth: null, //海报宽
+            posterHigh: null, //海报高
+            //分享文章配图    也就是文章的海报配图
+            articleImageValid: false,
+
+            articleImageWidth: 750, //分享文章配图宽
+            articleImageHigh: 600, //分享文章配图高
+            articleImageX: 0, //分享文章配图X
+            articleImageY: 0, //分享文章配图Y
+            //文章标题
+            articleTitle: null,
+            articleTitleValid: false, //文章标题是否显示
+            // articleTitleWidth:null,     //文章尺寸
+            articleTitleSize: 35,
+            articleTitleX: 0,
+            articleTitleY: 0,
+            //分享人头像
+            avatarUrl: null,
+            avatarUrlValid: false, //分享人头像是否显示
+            avatarUrlWidth: 50, //分享人头像尺寸
+            avatarUrlX: 100, //分享人头像位置
+            avatarUrlY: 400, //分享人头像位置
+            //分享人昵称
+            nickNameValid: false,
+            nickNameX: 0,
+            nickNameY: 0,
+            // nickNameWidth:null,
+            // nickNameHigh:null,
+            nickNameSize: 28,
+            nickNameLength: 6,
+            //前景图1
+            foreground1: null,
+            foreground1Valid: false,
+            foreground1Width: null,
+            foreground1High: null,
+            foreground1X: 0,
+            foreground1Y: 0,
+            //前景图2
+            foreground2: null,
+            foreground2Valid: false,
+            foreground2Width: null,
+            foreground2High: null,
+            foreground2X: 0,
+            foreground2Y: 0,
+            //小程序码
+            appletCode: '小程序码',
+            appletCodeType: 'APPLET',
+            appletCodeWidth: 100,
+            appletCodeX: 160,
+            appletCodeY: 600,
+            templateType: 'one'
+        },
+        imgUrl: null,
+        loading: {
+            save: false,
+            clickpreview: false,
+
+            viewPreview: false
+        },
+        previewImg: null
+    },
+    methods: {
+        move(e) {
+            let odiv = e.target;
+            let x = e.target.getAttribute('data-x');
+            let y = e.target.getAttribute('data-y');
+            let scale = 1;
+            if (self.information.posterWidth > 420) {
+                scale = 420 / self.information.posterWidth;
+            }
+            //算出鼠标相对元素的位置
+            let disX = e.clientX / scale - odiv.offsetLeft;
+            let disY = e.clientY / scale - odiv.offsetTop;
+
+            //元素的宽高
+            let odivW = e.target.offsetWidth;
+            let odivH = e.target.offsetHeight;
+
+            let fuW = self.information.posterWidth || 420;
+            let fuH = self.information.posterHigh || 746;
+            document.onmousemove = e => {
+                //鼠标按下并移动的事件
+                //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
+                let left = e.clientX / scale - disX > fuW - odivW ? fuW - odivW : e.clientX / scale - disX < 0 ? 0 : e.clientX / scale - disX;
+                let top = e.clientY / scale - disY > fuH - odivH ? fuH - odivH : e.clientY / scale - disY < 0 ? 0 : e.clientY / scale - disY;
+                left = parseInt(left);
+                top = parseInt(top);
+                //绑定元素位置到positionX和positionY上面
+                this.information[x] = left;
+                this.information[y] = top;
+
+                //移动当前元素
+                odiv.style.left = left + 'px';
+                odiv.style.top = top + 'px';
+            };
+            document.onmouseup = e => {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            };
+        },
+        beforeUpload(file) {
+            //限制上传格式
+            let imgtype = ['image/jpeg', 'image/png'];
+            if (imgtype.indexOf(file.type) < 0) {
+                this.$message.error('只支持png/jpg格式图片');
+                return false;
+            }
+            //限制上传大小
+            if (file.size / 512 / 1024 > 1) {
+                this.$message.error('文件大小不能超过0.5MB!');
+                return false;
+            }
+
+            return true;
+        },
+        //上传失败后
+        uploadFailed(response, file, fileList) {
+            this.$message.error(`文件上传失败，请稍后重试`);
+        },
+        uploadSucceed(response, file, fileList) {
+            this.$message.success(`文件上传成功`);
+            this.information[this.imgUrl] = response && response.data && response.data.relativePath;
+            if (this.imgUrl === 'backgroundImage') {
+                setTimeout(() => {
+                    let fu = document.getElementsByClassName('template-mobile')[0];
+                    self.information.posterWidth = fu.offsetWidth;
+                    self.information.posterHigh = fu.offsetHeight;
+                    if (fu.offsetWidth > 420) {
+                        self.qt.templateMobile = `transform-origin: 0px 0px;transform:scale(${420 / fu.offsetWidth})`;
+                    }
+                }, 100);
+            } else {
+                let a = '[data-w="' + this.imgUrl + 'Width"]';
+                setTimeout(() => {
+                    let ele = document.querySelector(a);
+                    self.information[self.imgUrl + 'Width'] = ele.naturalWidth;
+                    self.information[self.imgUrl + 'High'] = ele.naturalHeight;
+                }, 100);
+            }
+        },
+
+        addSave() {
+            let self = this;
+            if (this.information.id && DSP.type === 'edit') {
+                this.editSave();
+                return;
+            }
+            this.$data.$validator.validateAll().then(pass => {
+                if (pass) {
+                    delete self.information.id;
+                    delete self.information.timeCreated;
+                    delete self.information.timeUpdated;
+                    console.log(this.information);
+                    self.loading.save = true;
+                    if (!this.information.previewImage) {
+                        this.information.previewImage = {
+                            avatarUrl: "string",
+                            nickName: "string",
+                            realmNo: "string",
+                            userNo: "string"
+                        };
+                    }
+                    let obj = JSON.parse(JSON.stringify(this.information));
+                    if (obj.appletCodeType !== 'WECHAT_SERVICE_ACCOUNT') {
+                        delete obj.appId;
+                    }
+                    __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__["default"].post('/api/wechat/admin/share/template/add', obj).then(res => {
+                        if (res.code === '000') {
+                            this.$message.success('保存成功');
+                            window.location = '/cms/template#eyJ0b3RhbFNpemUiOjAsInBhZ2VTaXplIjoxNTAsImN1cnJlbnRQYWdlIjoxLCJ0ZW1wbGF0ZVR5cGUiOiJvbmUifQ==';
+                        } else {
+                            self.loading.save = false;
+                            this.$message.error(res.message);
+                        }
+                    }).catch(err => {
+                        self.loading.save = false;
+                    });
+                }
+            });
+        },
+        editSave() {
+            let self = this;
+            this.$data.$validator.validateAll().then(pass => {
+                if (pass) {
+                    self.loading.save = true;
+                    delete self.information.timeCreated;
+                    delete self.information.timeUpdated;
+                    let obj = JSON.parse(JSON.stringify(this.information));
+                    if (obj.appletCodeType !== 'WECHAT_SERVICE_ACCOUNT') {
+                        delete obj.appId;
+                    }
+                    self.loading.save = true;
+                    __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__["default"].put(`/api/wechat/admin/share/template/${self.information.id}`, obj).then(res => {
+                        if (res.code === '000') {
+                            this.$message.success('保存成功');
+                            window.location = '/cms/template#eyJ0b3RhbFNpemUiOjAsInBhZ2VTaXplIjoxNTAsImN1cnJlbnRQYWdlIjoxLCJ0ZW1wbGF0ZVR5cGUiOiJvbmUifQ==';
+                        } else {
+                            self.loading.save = false;
+
+                            this.$message.error(res.message);
+                        }
+                    });
+                }
+            });
+        },
+        //等比例
+        wh(e, querySelector) {
+            let a = '[data-w="' + querySelector + 'Width"]';
+            let ele = document.querySelector(a);
+
+            if (ele && !(querySelector === 'articleImage' && DSP.type === 'add')) {
+                let bi = ele.naturalWidth / ele.naturalHeight;
+                if (e.indexOf('Width') > -1) {
+                    self.information[querySelector + 'High'] = parseInt(self.information[querySelector + 'Width'] / bi);
+                } else {
+                    self.information[querySelector + 'Width'] = parseInt(self.information[querySelector + 'High'] * bi);
+                }
+            }
+        },
+        //生成预览图
+        clickpreview(e) {
+            this.loading.clickpreview = true;
+            let query = {
+                avatarUrl: "string",
+                nickName: "string",
+                realmNo: "string",
+                userNo: "string"
+            };
+            __WEBPACK_IMPORTED_MODULE_1__scripts_module_axios__["default"].post(`/api/wechat/admin/share/template/generate/preview/image/${self.information.id}`, query).then(res => {
+                this.loading.clickpreview = false;
+                if (res.code === '000') {
+                    this.loading.viewPreview = true;
+                    this.previewImg = res.data.path;
+                }
+            }).catch(err => {
+                this.loading.clickpreview = false;
+            });
+        },
+        changeAppletCodeType(e) {
+            switch (this.information.appletCodeType) {
+                case 'APPLET':
+                    this.informationOne[6].d = '/images/qrcode.jpeg';
+                    break;
+                case 'WECHAT_SERVICE_ACCOUNT':
+                    this.informationOne[6].d = '/images/cms_qrcode.png';
+                    console.log(this.information);
+                    if (!this.information.appId) {
+                        this.$set(this.information, 'appId', DSP.gzh[0].appid);
+                    }
+                    break;
+                case 'POSTER_QRCODE':
+                    this.informationOne[6].d = '/images/qrcodewithlogo.jpg';
+                    break;
+            }
+        }
+    },
+    created() {
+        this.templateType = JSON.parse(JSON.stringify(DSP.templateType));
+
+        this.$set(this.information, 'templateType', DSP.templateType);
+        if (DSP.template) {
+            this.information = JSON.parse(JSON.stringify(DSP.template));
+            if (!this.information.appletCodeType) {
+                this.$set(this.information, 'appletCodeType', 'APPLET');
+            }
+            console.log(this.information.posterWidth);
+            if (this.information.posterWidth > 420) {
+                this.qt.templateMobile = `transform-origin: 0px 0px;transform:scale(${420 / this.information.posterWidth})`;
+            }
+            this.changeAppletCodeType();
+        }
+        if (DSP.type === 'add') {
+            delete this.information.id;
+        }
     }
 });
 
@@ -4106,7 +4005,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return {Base64: global.Base64}
 }));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
 
 /***/ }),
 
@@ -4356,12 +4255,12 @@ process.umask = function() { return 0; };
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var settle = __webpack_require__(17);
-var buildURL = __webpack_require__(19);
-var parseHeaders = __webpack_require__(20);
-var isURLSameOrigin = __webpack_require__(21);
+var settle = __webpack_require__(18);
+var buildURL = __webpack_require__(20);
+var parseHeaders = __webpack_require__(21);
+var isURLSameOrigin = __webpack_require__(22);
 var createError = __webpack_require__(6);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(22);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(23);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -4458,7 +4357,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(23);
+      var cookies = __webpack_require__(24);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -4544,7 +4443,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(18);
+var enhanceError = __webpack_require__(19);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.

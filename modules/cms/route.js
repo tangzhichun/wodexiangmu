@@ -191,3 +191,8 @@ router.get('/cms/innerRecommend',auth.privilege('CMS_INNERRECOMMEND'), function(
     res.locals.title = '专题详情';
     res.render('cms/pages/innerRecommend');
 });
+
+router.get('/cms/serviceManagement',auth.privilege('CMS_SERVICE_MANAGEMENT'), function(req, res, next) {
+    res.locals.title = '服务商管理';
+    res.render('cms/pages/serviceManagement');
+});

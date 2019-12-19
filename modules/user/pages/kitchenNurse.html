@@ -13,7 +13,7 @@
 
             <!--按钮区域-->
             <div class="pull-right">
-                <el-button size="small" type="primary" plain >
+                <el-button size="small" type="primary" plain @click="openServiceDate">
                     <i class="icon-calendar"></i> 设置服务日期
                 </el-button>
                 <el-button size="small" type="primary" plain @click="showFilterPanel">
@@ -30,7 +30,6 @@
                     stripe
                     style="width: 100%">
                 <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
-                <el-table-column  prop="serviceAppointNo" label="订单号"></el-table-column>
                 <el-table-column  label="联系人">
                     <template slot-scope="scope">
                         {[scope.row.contactName]}
@@ -38,6 +37,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column  prop="address" label="服务地址"></el-table-column>
+                <el-table-column  prop="serviceType" label="服务类别"></el-table-column>
                 <el-table-column  label="预约上门时间">
                     <template slot-scope="scope">
                         {[scope.row.appointTime | date]}
@@ -51,8 +51,8 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <a class="list-link " href="javascript:void(0)"  @click="openshouLiDialog(scope.row)">受理</a>
-                        <a class="list-link link-danger" href="javascript:void(0)">取消预约</a>
+                        <a class="list-link " href="javascript:void(0)"  @click="openDialog('shouliForm',scope.row,'shouLiDialog')">受理</a>
+                        <a class="list-link link-danger" href="javascript:void(0)" @click="openDialog('cancelForm',scope.row,'openCancelD')">取消预约</a>
                     </template>
                 </el-table-column>
             </el-table>
@@ -79,7 +79,6 @@
                     stripe
                     style="width: 100%">
                 <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
-                <el-table-column  prop="serviceAppointNo" label="订单号"></el-table-column>
                 <el-table-column  label="联系人">
                     <template slot-scope="scope">
                         {[scope.row.contactName]}
@@ -87,9 +86,11 @@
                     </template>
                 </el-table-column>
                 <el-table-column  prop="address" label="服务地址"></el-table-column>
+                <el-table-column  prop="serviceType" label="服务类别"></el-table-column>
+                <el-table-column  prop="serviceProvider" label="服务商"></el-table-column>
                 <el-table-column  label="预约上门时间">
                     <template slot-scope="scope">
-                        {[scope.row.assignServiceProviderTime]}
+                        {[scope.row.planServiceTime | datetimes]}
                     </template>
                 </el-table-column>
                 <el-table-column label="备注">
@@ -99,8 +100,15 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <a class="list-link " href="javascript:void(0)"  @click="openpaigongDialog(scope.row)">派工</a>
-                        <a class="list-link link-danger" href="javascript:void(0)">取消</a>
+                        <a class="list-link " href="javascript:void(0)"  @click="openDialog('paigongForm',scope.row,'paigongDialog')">派工</a>
+
+                        <el-dropdown placement="bottom" @command=" (e)=> {return handleCommand(scope.row,e)}">
+                            <a class="list-link " href="javascript:void(0)"  style="margin-right: 10px">更多</a>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="a">变更服务商</el-dropdown-item>
+                                <el-dropdown-item command="b">取消预约</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
                     </template>
                 </el-table-column>
             </el-table>
@@ -118,7 +126,7 @@
                 </el-pagination>
             </div>
         </div>
-        <!--待上门 ok--->
+        <!--待上门--->
         <div class="dsp-list_table" :key="query.currentTab" v-if="query.currentTab === 'WAIT_SERVICE'">
             <!--表格-->
             <el-table
@@ -127,21 +135,40 @@
                     stripe
                     style="width: 100%">
                 <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
-                <el-table-column  prop="name" label="订单号"></el-table-column>
-                <el-table-column  prop="mobile" label="联系人"></el-table-column>
-                <el-table-column  prop="email" label="服务地址"></el-table-column>
-                <el-table-column label="备注">
+                <el-table-column  label="联系人">
                     <template slot-scope="scope">
-                        {[scope.row.address.province]}
-                        {[scope.row.address.city]}
-                        {[scope.row.address.addr]}
+                        {[scope.row.contactName]}
+                        {[scope.row.contactMobile]}
                     </template>
                 </el-table-column>
-                <el-table-column  prop="address.province" label="派工"></el-table-column>
-                <el-table-column  prop="address.province" label="上门时间"></el-table-column>
+                <el-table-column  prop="address" label="服务地址"></el-table-column>
+                <el-table-column  prop="serviceType" label="服务类别"></el-table-column>
+                <el-table-column  prop="serviceProvider" label="派工">
+                    <template slot-scope="scope">
+                        {[$translate(meta.serviceProvider,scope.row.serviceProvider)]}<br>
+                        {[scope.row.staffName]} {[scope.row.staffMobile]}
+                    </template>
+                </el-table-column>
+                <el-table-column  label="预约上门时间">
+                    <template slot-scope="scope">
+                        {[scope.row.planServiceTime | datetimes]}
+                    </template>
+                </el-table-column>
+                <el-table-column label="备注">
+                    <template slot-scope="scope">
+                        {[scope.row.remark]}
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <a class="list-link link-danger" href="javascript:void(0)">取消</a>
+                        <a class="list-link " href="javascript:void(0)"  @click="openDialog('paigongForm',scope.row,'paigongDialog','ty')">重新派工</a>
+                        <el-dropdown placement="bottom" @command=" (e)=> {return handleCommand(scope.row,e)}">
+                            <a class="list-link " href="javascript:void(0)"  style="margin-right: 10px">更多</a>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="c">变更上门时间</el-dropdown-item>
+                                <el-dropdown-item command="b">取消预约</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
                     </template>
                 </el-table-column>
             </el-table>
@@ -160,26 +187,55 @@
             </div>
         </div>
         <!--待评价 -->
-        <div class="dsp-list_table" :key="query.currentTab" v-if="query.currentTab === 'tab4'">
+        <div class="dsp-list_table" :key="query.currentTab" v-if="query.currentTab === 'WAIT_EVALUATE'">
             <!--表格-->
             <el-table
                     :data="tableData[query.currentTab]"
                     v-loading="views.loading"
                     stripe
                     style="width: 100%">
-                <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
-                <el-table-column  prop="name" label="订单号"></el-table-column>
-                <el-table-column  prop="mobile" label="联系人"></el-table-column>
-                <el-table-column  prop="email" label="服务地址"></el-table-column>
-                <el-table-column label="备注">
-                    <template slot-scope="scope">
-                        {[scope.row.address.province]}
-                        {[scope.row.address.city]}
-                        {[scope.row.address.addr]}
+                <el-table-column type="expand" width="40" >
+                    <template slot-scope="props">
+                        <el-form label-position="left" inline class="demo-table-expand">
+                            <el-form-item label="交单时间">
+                                <div class="single-line">
+                                    {[ props.row.finishTime | datetimes]}
+                                </div>
+                            </el-form-item>
+                            <el-form-item label="交单附件">
+                                <div class="single-line">
+                                    <dsp-img v-for="(item,i) in props.row.finishImages" trigger="link" :title=`附件${i*1+1}` :src="DSP.globalConfig.fileBaseUrl+item.imageUrl"></dsp-img>
+
+                                </div>
+                            </el-form-item>
+                        </el-form>
                     </template>
                 </el-table-column>
-                <el-table-column  prop="email" label="派工"></el-table-column>
-                <el-table-column  prop="address.province" label="上门时间"></el-table-column>
+                <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
+                <el-table-column  label="联系人">
+                    <template slot-scope="scope">
+                        {[scope.row.contactName]}
+                        {[scope.row.contactMobile]}
+                    </template>
+                </el-table-column>
+                <el-table-column  prop="address" label="服务地址"></el-table-column>
+                <el-table-column  prop="serviceType" label="服务类别"></el-table-column>
+                <el-table-column label="备注">
+                    <template slot-scope="scope">
+                        {[scope.row.remark]}
+                    </template>
+                </el-table-column>
+                <el-table-column  prop="serviceProvider" label="派工">
+                    <template slot-scope="scope">
+                        {[$translate(meta.serviceProvider,scope.row.serviceProvider)]}<br>
+                        {[scope.row.staffName]} {[scope.row.staffMobile]}
+                    </template>
+                </el-table-column>
+                <el-table-column  label="上门时间">
+                    <template slot-scope="scope">
+                        {[scope.row.planServiceTime | datetimes]}
+                    </template>
+                </el-table-column>
             </el-table>
 
             <!--分页-->
@@ -196,7 +252,7 @@
             </div>
         </div>
         <!--已评价-->
-        <div class="dsp-list_table" :key="query.currentTab" v-if="query.currentTab === 'tab5'">
+        <div class="dsp-list_table" :key="query.currentTab" v-if="query.currentTab === 'EVALUATED'">
             <!--表格-->
             <el-table
                     :data="tableData[query.currentTab]"
@@ -206,6 +262,16 @@
                 <el-table-column type="expand" width="40" >
                     <template slot-scope="props">
                         <el-form label-position="left" inline class="demo-table-expand">
+                            <el-form-item label="交单附件">
+                                <div class="single-line">
+                                    <dsp-img v-for="(item,i) in props.row.finishImages" trigger="link" :title=`附件${i*1+1}` :src="DSP.globalConfig.fileBaseUrl+item.imageUrl"></dsp-img>
+                                </div>
+                            </el-form-item>
+                            <el-form-item label="交单时间">
+                                <div class="single-line">
+                                    {[ props.row.finishTime | datetimes]}
+                                </div>
+                            </el-form-item>
                             <el-form-item label="评价内容">
                                 <div class="single-line">
                                     来我家的工人师傅特别棒，水平一流，手艺和服务特别棒，索菲亚不愧为高水准的公司，所招收的工作人员很专业，家具因他们而美丽。很棒！下次还会选择。
@@ -213,25 +279,46 @@
                             </el-form-item>
                             <el-form-item label="评价图片">
                                 <div class="single-line">
-                                    来我家的工人师傅特别棒，水平一流，手艺和服务特别棒，索菲亚不愧为高水准的公司，所招收的工作人员很专业，家具因他们而美丽。很棒！下次还会选择。
+                                    <dsp-img v-for="(item,i) in props.row.finishImages" trigger="link" :title=`附件${i*1+1}` :src="DSP.globalConfig.fileBaseUrl+item.imageUrl"></dsp-img>
+                                </div>
+                            </el-form-item>
+                            <el-form-item label="评价时间">
+                                <div class="single-line">
+                                    {[ props.row.finishTime | datetimes]}
                                 </div>
                             </el-form-item>
                         </el-form>
                     </template>
                 </el-table-column>
-                <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
-                <el-table-column  prop="name" label="订单号"></el-table-column>
-                <el-table-column  prop="mobile" label="联系人"></el-table-column>
-                <el-table-column  prop="email" label="服务地址"></el-table-column>
-                <el-table-column label="备注">
+                    <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
+                <el-table-column  label="联系人">
                     <template slot-scope="scope">
-                        {[scope.row.address.province]}
-                        {[scope.row.address.city]}
-                        {[scope.row.address.addr]}
+                        {[scope.row.contactName]}
+                        {[scope.row.contactMobile]}
                     </template>
                 </el-table-column>
-                <el-table-column  prop="email" label="整体评价"></el-table-column>
-
+                <el-table-column  prop="address" label="服务地址"></el-table-column>
+                <el-table-column  prop="serviceType" label="服务类别"></el-table-column>
+                <el-table-column label="备注">
+                    <template slot-scope="scope">
+                        {[scope.row.remark]}
+                    </template>
+                </el-table-column>
+                <el-table-column  prop="serviceProvider" label="派工">
+                    <template slot-scope="scope">
+                        {[$translate(meta.serviceProvider,scope.row.serviceProvider)]}<br>
+                        {[scope.row.staffName]} {[scope.row.staffMobile]}
+                    </template>
+                </el-table-column>
+                <el-table-column  label="整体评价">
+                    <template slot-scope="scope">
+                        <span class="font-success" v-show="scope.row.evaluateScore == '5'">太棒了</span>
+                        <span class="font-warn" v-show="scope.row.evaluateScore == '4'">满意</span>
+                        <span class="font-warn" v-show="scope.row.evaluateScore == '3'">很一般</span>
+                        <span class="font-danger" v-show="scope.row.evaluateScore == '2'">不满意</span>
+                        <span class="font-danger" v-show="scope.row.evaluateScore == '1'">太差了</span>
+                    </template>
+                </el-table-column>
             </el-table>
 
             <!--分页-->
@@ -256,21 +343,17 @@
                     stripe
                     style="width: 100%">
                 <el-table-column label="序号" type="index" :index="indexMethod" width="80" class-name="index" ></el-table-column>
-                <el-table-column  prop="name" label="订单号"></el-table-column>
-                <el-table-column  prop="mobile" label="联系人"></el-table-column>
-                <el-table-column  prop="email" label="服务地址"></el-table-column>
-                <el-table-column  prop="address.province" label="预约上门时间"></el-table-column>
-                <el-table-column label="备注">
+                <el-table-column  prop="serviceAppointNo" label="订单号"></el-table-column>
+                <el-table-column  label="联系人">
                     <template slot-scope="scope">
-                        {[scope.row.address.province]}
-                        {[scope.row.address.city]}
-                        {[scope.row.address.addr]}
+                        {[scope.row.contactName]}
+                        {[scope.row.contactMobile]}
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column  prop="address" label="服务地址"></el-table-column>
+                <el-table-column label="备注">
                     <template slot-scope="scope">
-                        <a class="list-link " href="javascript:void(0)">派工</a>
-                        <a class="list-link link-danger" href="javascript:void(0)">取消</a>
+                        {[scope.row.remark]}
                     </template>
                 </el-table-column>
             </el-table>
@@ -328,7 +411,7 @@
         </div>
     </div>
 
-    <!--受理-->
+    <!--待受理 选择服务商 选择时间-->
     <el-dialog
             :show-close="false"
             :close-on-press-escape="false"
@@ -337,9 +420,9 @@
             :visible.sync="views.shouLiDialog"
             width="400px"
             >
-        <el-select v-model="shouliForm.fuwushang" placeholder="选择服务商" style="margin-top: 32px; ">
+        <el-select v-model="shouliForm.serviceProvider"  placeholder="选择服务商" style="margin-top: 32px; ">
             <el-option
-                    v-for="item in meta.fuwushang"
+                    v-for="item in meta.serviceProvider"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value">
@@ -347,7 +430,7 @@
         </el-select>
         <el-date-picker
                 style="width: 100%;margin: 30px 0"
-                v-model="shouliForm.time"
+                v-model="shouliForm.planServiceTime"
                 type="datetime"
                 prefix-icon="el-icon-time"
                  value-format="yyyy-MM-dd HH:mm:ss"
@@ -355,39 +438,147 @@
         </el-date-picker>
         <div slot="footer" class="dialog-footer right">
             <el-button @click="views.shouLiDialog = false">取 消</el-button>
-            <el-button type="primary" @click="savashouLi" :disabled = '!shouliForm.time || !shouliForm.fuwushang'>保 存</el-button>
+            <el-button type="primary" @click="savashouLi" :loading="views.saveLoading" :disabled = '!shouliForm.planServiceTime || !shouliForm.serviceProvider'>保 存</el-button>
         </div>
     </el-dialog>
-
-    <!--派工-->
+    <!--待派工 变更服务商-->
     <el-dialog
             :show-close="false"
             :close-on-press-escape="false"
             :close-on-click-modal="false"
-            title="派工"
-            :visible.sync="views.paigongDialog"
+            title="受理"
+            :visible.sync="views.editShouliFormD"
             width="400px"
     >
-        <el-select v-model="paigongForm.gongren" placeholder="工人" style="margin-top: 32px; ">
+        <el-select v-model="editShouliForm.serviceProvider"  placeholder="选择服务商" style="margin-top: 32px; ">
             <el-option
-                    v-for="item in meta.gongren"
+                    v-for="item in meta.serviceProvider"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value">
             </el-option>
         </el-select>
+        <div slot="footer" class="dialog-footer right">
+            <el-button @click="views.editShouliFormD = false">取 消</el-button>
+            <el-button type="primary" @click="savashouLi('edit')" :loading="views.saveLoading" :disabled = '!editShouliForm.serviceProvider'>保 存</el-button>
+        </div>
+    </el-dialog>
+    <!--派工-->
+    <el-dialog
+            :show-close="false"
+            :close-on-press-escape="false"
+            :close-on-click-modal="false"
+            :title="paigongForm.type === 'zhiyaoshijian' ? '选择预约上门时间' : '派工'"
+            :visible.sync="views.paigongDialog"
+            width="400px"
+    >
+        <el-input v-model="paigongForm.staffName" placeholder="工人姓名" style="margin: 10px 0" type="text"  maxlength="10" show-word-limit v-if=" paigongForm.type !== 'zhiyaoshijian'"></el-input>
+        <el-input v-model="paigongForm.staffMobile" placeholder="工人电话" style="margin: 10px 0" v-dsp-input-mobile="paigongForm.staffMobile"  v-if=" paigongForm.type !== 'zhiyaoshijian'"></el-input>
         <el-date-picker
-                style="width: 100%;margin: 30px 0"
-                v-model="paigongForm.time"
+                style="width: 100%;margin: 10px 0"
+                v-model="paigongForm.planServiceTime"
                 type="datetime"
                 prefix-icon="el-icon-time"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择上门日期">
         </el-date-picker>
         <div slot="footer" class="dialog-footer right">
             <el-button @click="views.paigongDialog = false">取 消</el-button>
-            <el-button type="primary" @click="savapaigong" :disabled = '!paigongForm.time || !paigongForm.gongren'>保 存</el-button>
+            <el-button type="primary" @click="savapaigong" :loading="views.saveLoading" :disabled = '(paigongForm.staffMobile && paigongForm.staffMobile.length !== 11) || !paigongForm.planServiceTime || !paigongForm.staffMobile || !paigongForm.staffName'>保 存</el-button>
         </div>
     </el-dialog>
+    <!--取消预约-->
+    <el-dialog
+            :show-close="false"
+            :close-on-press-escape="false"
+            :close-on-click-modal="false"
+            title="取消预约"
+            :visible.sync="views.openCancelD"
+            width="400px"
+    >
+        <el-input v-model="cancelForm.cancelReason" placeholder="请输入取消原因" style="margin: 30px 0"></el-input>
+        <div slot="footer" class="dialog-footer right">
+            <el-button @click="views.openCancelD = false">取 消</el-button>
+            <el-button type="primary" @click="saveCancelD" :disabled = '!cancelForm.cancelReason'  :loading="views.saveLoading">保 存</el-button>
+        </div>
+    </el-dialog>
+
+    <!--设置服务日期-->
+    <el-dialog
+                :close-on-press-escape="false"
+            width="1000px"
+            title="设置服务日期"
+            :close-on-click-modal="false"
+            :visible.sync="views.serviceDate"
+    >
+        <div class="data-con"  v-loading="views.dataLoding">
+            <div class="data-header data-line">
+                <div class="left-arrow-con arrow-con">
+                    <i class="el-icon-d-arrow-left margin-right" @click="changeDate('prevY')"></i>
+                    <i class="el-icon-arrow-left" @click="changeDate('prevM')"></i>
+                </div>
+                <div class="date-con">
+                    <!--{[rili.ym[0]+'年'+rili.ym[1]+'月']}-->
+                    <!--@change="changeDate"-->
+
+                    <el-date-picker
+                            v-model="rili.yM"
+                            value-format="yyyy-MM"
+                            format="yyyy年M月"
+                            type="month"
+                            @change="changeDate"
+                            placeholder="选择月"
+                            :clearable="false"
+                            :editable="false">
+                    </el-date-picker>
+                </div>
+                <div class="right-arrow-con arrow-con">
+                    <i class="el-icon-arrow-right margin-right" @click="changeDate('nextM')"></i>
+                    <i class="el-icon-d-arrow-right" @click="changeDate('nextY')"></i>
+                </div>
+            </div>
+            <div class="data-title data-line">
+                <div class="data-item">日</div>
+                <div class="data-item">一</div>
+                <div class="data-item">二</div>
+                <div class="data-item">三</div>
+                <div class="data-item">四</div>
+                <div class="data-item">五</div>
+                <div class="data-item">六</div>
+            </div>
+            <div class="data-content" style="min-height: 360px;">
+                <div class="data-line" v-for="(week,key) in daysObj">
+                    <div class="data-item" :class="{'no-data': !item.day, Y:item.a, N:!item.a}" v-for="item in daysObj[key]">
+
+                        <div class="item-con" v-if="item.day" >
+                            <span class="day">{[item.day]}</span>
+                            <p class="item-con-title " :class="{'tishu':!item.num || item.num < 1}">已约 <span class="ct" :class="{'tishu':!item.num || item.num < 1}">{[item.num || 0]}</span> 单</p>
+                        </div>
+                        <div v-if= 'item.worked === "N" && item.day' class="setData Y"  @click="setData(item)">
+                            <p>
+                                点击设置<br>
+                                可预约
+                            </p>
+                        </div>
+                        <!--现在是可预约变为不可预约-->
+                        <div v-else-if= 'item.day' class="setData N" @click="setData(item)">
+                            <p>点击设置<br>
+                                不可预约
+                            </p>
+                        </div>
+
+                        <img src="/images/bukeyuyue.png" v-if= 'item.worked === "N" && item.day' style="width: 52px;height: 53px;position: absolute;z-index: 10;right: 0;top: 0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div slot="footer" class="dialog-footer right">
+            <!--<el-button @click="views.serviceDate = false">取 消</el-button>-->
+            <!--<el-button type="primary" @click="saveCancelD">保 存</el-button>-->
+        </div>
+    </el-dialog>
+
 </div>
 
 <script src="/js/user/kitchenNurse.bundle.js"></script>

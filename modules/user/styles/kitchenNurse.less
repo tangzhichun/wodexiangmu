@@ -26,5 +26,221 @@
         }
       }
     }
+  .dsp-list_table .list-link{
+    margin-right: 10px;
+  }
+}
+.data-con {
 
+  .data-line {
+    display: flex;
+    font-size: 18px;
+
+    .data-item {
+      flex: 1;
+      cursor: pointer;
+      align-items: center;
+      text-align: center;
+    }
+
+    .el-input__prefix{
+      display: none;
+    }
+
+    input{
+      cursor: pointer;
+      text-align: center;
+      font-weight: bold;
+      font-size:18px;
+      color:#606266;
+      border: none;
+    }
+  }
+
+  .data-header {
+    height: 60px;
+    line-height: 60px;
+    justify-content: space-between;
+
+    .arrow-con{
+      font-size: 18px;
+      color :#909399;
+
+      .margin-right{
+        margin-right: 15px;
+      }
+
+      i{
+        &:hover{
+          color: #33a3ff;
+        }
+        cursor: pointer;
+      }
+    }
+  }
+
+  .data-title {
+    height: 60px;
+    line-height: 60px;
+    color: #606266;
+    border-bottom: 1px solid #ebeef5;
+  }
+
+  .data-content {
+    border-left: 1px solid #ebeef5;
+    color: #606266;
+
+    .data-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 88px;
+      border-right: 1px solid #ebeef5;
+      border-bottom: 1px solid #ebeef5;
+      position: relative;
+      .item-con{
+        width: calc(~"100% - 40px");
+      }
+
+      &.no-data {
+        line-height: 150px;
+        color: #c0c4cc;
+      }
+
+      .day {
+        display: block;
+        margin-bottom: 16px;
+        font-size: 14px;
+        color: #606266;
+      }
+      .item-con-title{
+        font-size: 12px;
+        color: #606266;
+        .ct{
+          color: #F78C38;
+        }
+        .ct.tishu{
+          color: #B1B1B1
+
+        }
+      }
+      .item-con-title.tishu{
+        color: #B1B1B1
+      }
+      cursor: pointer;
+
+      //不可预约变为可预约
+      .setData{
+        color: #fff;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        font-size: 14px;
+        text-align: center;
+        cursor: pointer;
+        align-items: center;
+        display: none;
+        z-index: 11;
+        p{
+          width: 100%;
+          text-align: center;
+        }
+
+      }
+      .setData.Y{
+        background: rgba(64,158,255,0.8);
+      }
+      .setData.N{
+        background: rgba(245,108,108,0.8);
+      }
+      &:hover .setData{
+        display: flex;
+      }
+    }
+  }
+
+  .progress-wrap{
+
+    &.margin-top{
+      margin-top: 12px;
+    }
+
+    .progress-con{
+      margin: 0 auto;
+      display: flex;
+      font-size: 0;
+      color: #606266;
+
+      .progress-bar-all{
+        display: flex;
+        margin-top: 8px;
+        width: 100%;
+        height: 8px;
+        background: #ebeef5;
+        border-radius: 100px;
+        overflow: hidden;
+      }
+
+      .progress-bar-part{
+        cursor: pointer;
+        height: 8px;
+      }
+
+      .icon{
+        margin-right: 10px;
+        line-height: 16px;
+        font-size: 14px;
+        color: #c0c4cc;
+      }
+
+      .progress{
+        width: 100%;
+      }
+
+      .el-progress-bar{
+        margin-top: 8px;
+      }
+
+      .desc{
+
+        .slash{
+          font-size:14px;
+        }
+
+        .el-input{
+          width:48px;
+          height:26px;
+          border-radius:2px;
+          box-sizing: border-box;
+        }
+
+        input{
+          padding: 0;
+          height: 100%;
+          border:1px solid #409eff;
+        }
+      }
+
+      .el-button{
+        padding: 0;
+        border: none;
+        font-size:12px;
+        color:#606266;
+        background: transparent;
+
+        &:hover{
+          color:#409eff;
+        }
+      }
+
+      .el-button+.el-button{
+        margin-left: 0;
+      }
+
+    }
+  }
+
+  .pop-dialog {
+    z-index: 2001;
+  }
 }

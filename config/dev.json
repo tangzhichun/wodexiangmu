@@ -1,0 +1,13 @@
+{
+  "oauth": {
+    "appId": "CONSOLE-DEV-WEB",
+    "appSecret": "eyJhbGciOiJIUzI1NiJ9.Q09OU09MRS1ERVYtV0VC.APG_YrZVo4-AUrJz-xIXbhovNU9sJbrO0R-IPxSjrts",
+    "url": "http://dev.dsp.com:4100"
+  },
+  "globalConfig": {
+    "fileBaseUrl": "http://dev.dsp.com/upload/",
+    "sso": {
+      "dsp": "http://dev.dsp.com"
+    }
+  }
+}

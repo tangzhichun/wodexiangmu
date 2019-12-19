@@ -65,7 +65,7 @@
 /************************************************************************/
 /******/ ({
 
-/***/ 31:
+/***/ 12:
 /***/ (function(module, exports) {
 
 var g;
@@ -100,29 +100,27 @@ module.exports = g;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_js_base64__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_js_base64___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_js_base64__);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /* jshint esversion: 6 */
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     // 业务字典翻译
-    $translate: function $translate(dict, value) {
+    $translate: function (dict, value) {
         if (!dict || !dict.length || !value) {
             return value;
         }
 
-        var match = null;
-        dict.forEach(function (d) {
+        let match = null;
+        dict.forEach(d => {
             if (d.value == value) {
                 match = d;
             } else if (d.children && d.children.length) {
-                d.children.forEach(function (c) {
+                d.children.forEach(c => {
                     if (c.value == value) {
                         match = c;
                     } else if (c.children && c.children.length) {
-                        c.children.forEach(function (i) {
+                        c.children.forEach(i => {
                             if (i.value == value) {
                                 match = i;
                             }
@@ -134,7 +132,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         return match && match.label || value;
     },
-    $sceneInfo: function $sceneInfo(s) {
+    $sceneInfo(s) {
         var scene = [];
         s = s * 1;
         switch (s) {
@@ -283,12 +281,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 scene.push('未知入口');
                 break;
         }
-        var str = scene[1] || scene[0];
+        let str = scene[1] || scene[0];
         return str;
     },
-
     // 合并两个对象
-    $merge: function $merge(obj, src) {
+    $merge: function (obj, src) {
         for (var key in src) {
             if (src.hasOwnProperty(key)) obj[key] = src[key];
         }
@@ -296,21 +293,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // 解析浏览器地址栏请求参数
-    $parseQuery: function $parseQuery() {
-        var query = {};
-        var search = window.location.search;
+    $parseQuery: function () {
+        let query = {};
+        let search = window.location.search;
         if (search.startsWith('?')) {
             search = search.substr(1, search.length);
             search = search.split('&');
 
-            search.forEach(function (s) {
-                var idx = s.indexOf('=');
+            search.forEach(s => {
+                let idx = s.indexOf('=');
                 if (idx !== -1) {
-                    var prop = s.substr(0, idx);
-                    var val = s.substr(idx + 1, s.length);
+                    let prop = s.substr(0, idx);
+                    let val = s.substr(idx + 1, s.length);
 
                     if (query[prop]) {
-                        var arr = [].concat(query[prop]).concat(val);
+                        let arr = [].concat(query[prop]).concat(val);
                         query[prop] = arr;
                     } else {
                         query[prop] = val;
@@ -323,12 +320,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // base64编码
-    $base64Encode: function $base64Encode(obj) {
+    $base64Encode: function (obj) {
         if (obj == undefined || obj == null) {
             return '';
         }
 
-        if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) == 'object') {
+        if (typeof obj == 'object') {
             return __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].encode(JSON.stringify(obj));
         } else if (typeof obj == 'string') {
             return __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].encode(JSON.stringify(obj));
@@ -338,12 +335,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // base64解码
-    $base64Decode: function $base64Decode(str) {
+    $base64Decode: function (str) {
         if (!str) {
             return;
         }
 
-        var decoded = __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].decode(str);
+        let decoded = __WEBPACK_IMPORTED_MODULE_0_js_base64__["Base64"].decode(str);
         try {
             return JSON.parse(decoded);
         } catch (err) {
@@ -358,23 +355,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
          * 参数求和，sum(1,2,3) = 6
          * @returns {number}
          */
-        sum: function sum() {
+        sum: function () {
             if (arguments.length == 0) {
                 return 0;
             }
 
-            var args = [];
+            let args = [];
             if (arguments.length == 1 && arguments[0] instanceof Array) {
                 args = arguments[0];
             } else {
                 args = arguments;
             }
 
-            var sum = 0;
+            let sum = 0;
             for (var i = 0; i < args.length; i++) {
-                if (_typeof(args[i] == 'number')) {
+                if (typeof (args[i] == 'number')) {
                     sum += parseFloat(args[i]);
-                } else if (_typeof(args[i] == 'string') && !isNaN(args[i])) {
+                } else if (typeof (args[i] == 'string') && !isNaN(args[i])) {
                     sum += parseFloat(args[i]);
                 }
             }
@@ -384,7 +381,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     $history: {
-        back: function back() {
+        back: function () {
             if (document.referrer) {
                 window.location.href = document.referrer;
             } else {
@@ -398,7 +395,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param privilege 业务权限值
      * @returns {boolean} true：具备，false：不具备
      */
-    $hasPrivilege: function $hasPrivilege(privilege) {
+    $hasPrivilege: function (privilege) {
         if (!privilege) {
             return true;
         }
@@ -416,7 +413,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param privilege 业务权限值
      * @returns {boolean} true：具备，false：不具备
      */
-    $hasBizPrivilege: function $hasBizPrivilege(type, privilege) {
+    $hasBizPrivilege: function (type, privilege) {
         if (!privilege) {
             return true;
         }
@@ -433,13 +430,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return DSP.user.currPosition.bizPrivileges[type].indexOf(privilege) != -1;
     },
     // 根据单位确定计算方式，并返回金额
-    $price: function $price(unit, product) {
-        var price = product.price,
-            quantity = product.quantity,
-            ratio = product.ratio,
-            width = product.width,
-            height = product.height;
-
+    $price: function (unit, product) {
+        var { price, quantity, ratio, width, height } = product;
         var base = (price || 0) * (ratio || 0) * (quantity || 0);
         var area = ((width || 0) * 0.001 * (height || 0) * 0.001 || 0).toFixed(4);
         var obj = {
@@ -460,10 +452,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
     // 将java的LocalDateTime时间格式变成时间戳
-    $localDateTimeNumber: function $localDateTimeNumber(el) {
-        var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 's';
-
-        el = new Date((el.year + '-' + el.monthValue + '-' + el.dayOfMonth + ' ' + el.hour + ':' + el.minute + ':' + el.second).replace(/-/g, '/'));
+    $localDateTimeNumber: function (el, type = 's') {
+        el = new Date(`${el.year}-${el.monthValue}-${el.dayOfMonth} ${el.hour}:${el.minute}:${el.second}`.replace(/-/g, '/'));
         el = el.getTime();
         return el;
     }
@@ -711,7 +701,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return {Base64: global.Base64}
 }));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
 
 /***/ })
 

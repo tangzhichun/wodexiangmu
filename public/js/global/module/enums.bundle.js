@@ -176,11 +176,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     /**************************             业务字典                  **************************/
     $dict: null,
-    dict: function dict(type) {
-        var self = this;
+    dict: function (type) {
+        let self = this;
         if (!self.$dict) {
-            var script = document.querySelector('script[type="text/json"][name="dict"]');
-            var text = script && script.innerText || '{}';
+            let script = document.querySelector('script[type="text/json"][name="dict"]');
+            let text = script && script.innerText || '{}';
             try {
                 self.$dict = JSON.parse(text);
             } catch (e) {}

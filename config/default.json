@@ -1,0 +1,303 @@
+{
+    "logPath": ".log/web/",
+
+    "oauth": {
+        "appId": "CONSOLE-DEV-WEB",
+        "appSecret": "eyJhbGciOiJIUzI1NiJ9.Q09OU09MRS1ERVYtV0VC.APG_YrZVo4-AUrJz-xIXbhovNU9sJbrO0R-IPxSjrts",
+        "url": "http://localhost:4100"
+    },
+    "globalConfig": {
+        "fileBaseUrl": "http://res.sfygroup.shop/upload/",
+        "wechatPage": {
+            "REFORM": [
+                {
+                    "pagePath": "partialRenovation",
+                    "pagePaths": "/pages/partialRenovation/main",
+                    "pageTitle": "局部翻新",
+                    "banners": [
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 340,
+                            "imageSize": "200",
+                            "group": "WUKONG_HEAD",
+                            "desc": "【局部翻新】顶部轮播图"
+
+                        },
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "WUKONG_1",
+                            "desc": "【局部翻新】广告1"
+                        }
+                    ]
+                },
+                {
+                    "pagePath": "appointment/measureWK",
+                    "pagePaths": "/pages/appointment/measureWK/main",
+                    "pageTitle": "预约测量",
+                    "banners": [
+                        {
+                            "sizeWidth": 590,
+                            "sizeHeight": 220,
+                            "imageSize": "200",
+                            "group": "USER_INFO_JU",
+                            "desc": "【预约测量】广告1"
+
+                        },
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "USER_INFO_JU_1",
+                            "desc": "【预约测量】广告2"
+
+                        },
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "USER_INFO_JU_TOP",
+                            "desc": "【预约测量】顶部"
+
+                        }
+                    ]
+                },
+                {
+                    "pagePath": "activity/signWK",
+                    "pagePaths": "/pages/activity/signWK/main",
+                    "pageTitle": "活动报名",
+                    "banners": [
+                        {
+                            "sizeWidth": 590,
+                            "sizeHeight": 220,
+                            "imageSize": "200",
+                            "group": "APPOINT_MEASURE_JU_1",
+                            "desc": "【活动报名】广告1"
+                        },
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "APPOINT_MEASURE_JU_2",
+                            "desc": "【活动报名】广告2"
+                        }
+                    ]
+                },
+                {
+                    "pagePath": "product/list",
+                    "pagePaths": "/pages/product/list/main",
+                    "pageTitle": "产品套餐列表",
+                    "banners": [
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "WUKONG_LIST_TAIL",
+                            "desc": "【产品套餐列表】底部广告"
+                        }
+                    ]
+                },
+                {
+                    "pagePath": "case/detail",
+                    "pagePaths": "/pages/case/detail/main",
+                    "pageTitle": "客户案例详情",
+                    "banners": [
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "WK_DETAIL_1",
+                            "desc": "【客户案例详情】广告1"
+                        },
+                        {
+                            "sizeWidth": 690,
+                            "sizeHeight": 220,
+                            "imageSize": "200",
+                            "group": "WK_DETAIL_2",
+                            "desc": "【客户案例详情】广告2"
+                        }
+                    ]
+                },
+                {
+                    "pagePath": "product/detail",
+                    "pagePaths": "/pages/product/detail/main",
+                    "hidden": true,
+                    "pageTitle": "产品套餐详情",
+                    "banners": []
+                }
+            ],
+            "DESIGN": [
+                {
+                    "pagePath": "customer",
+                    "pagePaths": "/pages/customer/main",
+                    "pageTitle": "首页",
+                    "banners": [
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 500,
+                            "imageSize": "200",
+                            "group": "INDEX_HEAD",
+                            "desc": "【全屋定制】顶部轮播图"
+
+                        },
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "INDEX_1",
+                            "desc": "【全屋定制】广告1"
+
+                        },
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "INDEX_2",
+                            "desc": "【全屋定制】广告2"
+
+                        },
+                        {
+                            "sizeWidth": 204,
+                            "sizeHeight": 180,
+                            "imageSize": "200",
+                            "group": "COLUMN_BANNER_1",
+                            "desc": "多系列广告位-第一排第一个"
+                        },
+                        {
+                            "sizeWidth": 204,
+                            "sizeHeight": 180,
+                            "imageSize": "200",
+                            "group": "COLUMN_BANNER_2",
+                            "desc": "多系列广告位-第一排第二个"
+                        },
+                        {
+                            "sizeWidth": 202,
+                            "sizeHeight": 180,
+                            "imageSize": "200",
+                            "group": "COLUMN_BANNER_3",
+                            "desc": "多系列广告位-第一排第三个"
+                        },
+                        {
+                            "sizeWidth": 204,
+                            "sizeHeight": 180,
+                            "imageSize": "200",
+                            "group": "COLUMN_BANNER_4",
+                            "desc": "多系列广告位-第二排第一个"
+                        },
+                        {
+                            "sizeWidth": 426,
+                            "sizeHeight": 180,
+                            "imageSize": "200",
+                            "group": "COLUMN_BANNER_5",
+                            "desc": "多系列广告位-第二排第二个"
+                        }
+                    ]
+                },
+                {
+                    "pagePath": "appointment/measure",
+                    "pagePaths": "/pages/appointment/measure/main",
+                    "pageTitle": "预约测量",
+                    "banners": [
+                        {
+                            "sizeWidth": 590,
+                            "sizeHeight": 220,
+                            "imageSize": "200",
+                            "group": "USER_INFO_U",
+                            "desc": "【预约测量】广告1"
+                        },
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "USER_INFO_U_1",
+                            "desc": "【预约测量】广告2"
+                        },
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "USER_INFO_U_TOP",
+                            "desc": "【预约测量】顶部"
+
+                        }
+                    ]
+                },
+                {
+                    "pagePath": "activity/sign",
+                    "pagePaths": "/pages/activity/sign/main",
+                    "pageTitle": "活动报名",
+                    "banners": [
+                        {
+                            "sizeWidth": 590,
+                            "sizeHeight": 220,
+                            "imageSize": "200",
+                            "group": "APPOINT_MEASURE_1",
+                            "desc": "【活动报名】广告1"
+                        },
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "APPOINT_MEASURE_2",
+                            "desc": "【活动报名】广告2"
+                        }
+                    ]
+                },
+                {
+                    "pagePath": "design/detail",
+                    "pagePaths": "/pages/design/detail/main",
+                    "pageTitle": "设计方案详情",
+                    "banners": [
+                        {
+                            "sizeWidth": 750,
+                            "sizeHeight": 260,
+                            "imageSize": "200",
+                            "group": "DETAIL_1",
+                            "desc": "【设计方案详情】广告1"
+                        }
+                    ]
+                },
+                {
+                    "pagePath": "product/detail",
+                    "pagePaths": "/pages/product/detail/main",
+                    "hidden": true,
+                    "pageTitle": "产品套餐详情",
+                    "banners": []
+                },
+                {
+                    "pagePath": "my/main",
+                    "pagePaths": "/pages/my/main/main",
+                    "pageTitle": "我的",
+                    "banners": [
+                        {
+                            "sizeWidth": 670,
+                            "sizeHeight": 230,
+                            "imageSize": "200",
+                            "group": "MINE_BOTTOM",
+                            "desc": "【我的】底部轮播图"
+                        }
+                    ]
+                },
+                {
+                    "pagePath": "promotion/center",
+                    "pagePaths": "/pages/promotion/center/main",
+                    "pageTitle": "推广中心",
+                    "banners": [
+                        {
+                            "sizeWidth": 688,
+                            "sizeHeight": 246,
+                            "imageSize": "200",
+                            "group": "PROMOTION_BOTTOM",
+                            "desc": "【推广中心】底部"
+                        }
+                    ]
+                }
+            ]
+        },
+        "sso": {
+            "dsp": "https://www.sfygroup.shop"
+        }
+    }
+}
+

@@ -35,3 +35,213 @@
   color: #C0C4CC;
   box-sizing: border-box;
 }
+.kitchenNurse .dsp-list_table .list-link {
+  margin-right: 10px;
+}
+.data-con .data-line {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 18px;
+}
+.data-con .data-line .data-item {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  cursor: pointer;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+.data-con .data-line .el-input__prefix {
+  display: none;
+}
+.data-con .data-line input {
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  color: #606266;
+  border: none;
+}
+.data-con .data-header {
+  height: 60px;
+  line-height: 60px;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.data-con .data-header .arrow-con {
+  font-size: 18px;
+  color: #909399;
+}
+.data-con .data-header .arrow-con .margin-right {
+  margin-right: 15px;
+}
+.data-con .data-header .arrow-con i {
+  cursor: pointer;
+}
+.data-con .data-header .arrow-con i:hover {
+  color: #33a3ff;
+}
+.data-con .data-title {
+  height: 60px;
+  line-height: 60px;
+  color: #606266;
+  border-bottom: 1px solid #ebeef5;
+}
+.data-con .data-content {
+  border-left: 1px solid #ebeef5;
+  color: #606266;
+}
+.data-con .data-content .data-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 88px;
+  border-right: 1px solid #ebeef5;
+  border-bottom: 1px solid #ebeef5;
+  position: relative;
+  cursor: pointer;
+}
+.data-con .data-content .data-item .item-con {
+  width: calc(100% - 40px);
+}
+.data-con .data-content .data-item.no-data {
+  line-height: 150px;
+  color: #c0c4cc;
+}
+.data-con .data-content .data-item .day {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #606266;
+}
+.data-con .data-content .data-item .item-con-title {
+  font-size: 12px;
+  color: #606266;
+}
+.data-con .data-content .data-item .item-con-title .ct {
+  color: #F78C38;
+}
+.data-con .data-content .data-item .item-con-title .ct.tishu {
+  color: #B1B1B1;
+}
+.data-con .data-content .data-item .item-con-title.tishu {
+  color: #B1B1B1;
+}
+.data-con .data-content .data-item .setData {
+  color: #fff;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: none;
+  z-index: 11;
+}
+.data-con .data-content .data-item .setData p {
+  width: 100%;
+  text-align: center;
+}
+.data-con .data-content .data-item .setData.Y {
+  background: rgba(64, 158, 255, 0.8);
+}
+.data-con .data-content .data-item .setData.N {
+  background: rgba(245, 108, 108, 0.8);
+}
+.data-con .data-content .data-item:hover .setData {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.data-con .progress-wrap.margin-top {
+  margin-top: 12px;
+}
+.data-con .progress-wrap .progress-con {
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 0;
+  color: #606266;
+}
+.data-con .progress-wrap .progress-con .progress-bar-all {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 8px;
+  width: 100%;
+  height: 8px;
+  background: #ebeef5;
+  border-radius: 100px;
+  overflow: hidden;
+}
+.data-con .progress-wrap .progress-con .progress-bar-part {
+  cursor: pointer;
+  height: 8px;
+}
+.data-con .progress-wrap .progress-con .icon {
+  margin-right: 10px;
+  line-height: 16px;
+  font-size: 14px;
+  color: #c0c4cc;
+}
+.data-con .progress-wrap .progress-con .progress {
+  width: 100%;
+}
+.data-con .progress-wrap .progress-con .el-progress-bar {
+  margin-top: 8px;
+}
+.data-con .progress-wrap .progress-con .desc .slash {
+  font-size: 14px;
+}
+.data-con .progress-wrap .progress-con .desc .el-input {
+  width: 48px;
+  height: 26px;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+.data-con .progress-wrap .progress-con .desc input {
+  padding: 0;
+  height: 100%;
+  border: 1px solid #409eff;
+}
+.data-con .progress-wrap .progress-con .el-button {
+  padding: 0;
+  border: none;
+  font-size: 12px;
+  color: #606266;
+  background: transparent;
+}
+.data-con .progress-wrap .progress-con .el-button:hover {
+  color: #409eff;
+}
+.data-con .progress-wrap .progress-con .el-button + .el-button {
+  margin-left: 0;
+}
+.data-con .pop-dialog {
+  z-index: 2001;
+}
